@@ -1,0 +1,58 @@
+name: task-cli
+services:
+  # DB
+  database:
+    build:
+      context: ./Database
+      dockerfile: Dockerfile
+    container_name: task-db
+    environment:
+      POSTGRES_DATABASE: POSTGRES_DATABASE
+      POSTGRES_HOST: task-db
+      POSTGRES_PASSWORD: default
+      POSTGRES_USER: postgres
+    ports: [5432:5432]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  # PGAdmin
+  pgadmin:
+    container_name: task-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@task.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    image: dpage/pgadmin4
+    ports: [5050:80]
+  # Backend
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    command: npm run ${CMD:-dev}
+    container_name: task-api
+    depends_on:
+      database:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: ./Backend/
+          target: app
+          ignore: [node_modules]
+    environment:
+      LOG_LEVEL: info
+      PORT: 3000
+      POSTGRES_DATABASE: POSTGRES_DATABASE
+      POSTGRES_HOST: task-db
+      POSTGRES_PASSWORD: default
+      POSTGRES_USER: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "curl localhost:3000/api/health | grep 'Task API is healthy'"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    ports: [3000:3000]
