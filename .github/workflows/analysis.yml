@@ -1,5 +1,7 @@
 name: Analysis
 
+on: push
+
 jobs: 
   trivy:
     name: Trivy Security Scan
