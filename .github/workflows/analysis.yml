@@ -1,0 +1,34 @@
+name: Analysis
+
+jobs: 
+  trivy:
+    name: Trivy Security Scan
+    if: ${{ ! github.event.pull_request.draft }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@0.22.0
+        with:
+          format: "sarif"
+          output: "trivy-results.sarif"
+          ignore-unfixed: true
+          scan-type: "fs"
+          scanners: "vuln,secret,config"
+      
+  results:
+    name: Analysis Results
+    if: always()
+    needs: [trivy]
+    runs-on: ubuntu-22.04
+    steps:
+      - run: |
+          # View results
+          echo "needs.*.result: ${{ toJson(needs.*.result) }}"
+      
+      - if: contains(needs.*.result, 'failure')
+        run: |
+          # Job failure found
+          echo "At least one job has failed"
+          exit 1 
