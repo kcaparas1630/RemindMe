@@ -1,0 +1,99 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+parameters:
+  - name: APP
+    description: Application name
+    value: Task-Application
+  - name: COMPONENT
+    description: Component name
+    value: backend
+  - name: GITHUB_USER
+    description: GitHub username
+    required: true
+  - name: TAG
+    description: Image tag
+    required: true
+  - name: DB_PASSWORD
+    description: Password for the PostgreSQL connection user
+    from: '[a-zA-Z0-9]{16}'
+    generate: expression
+objects:
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      labels:
+        app: ${APP}-${TAG}
+      name: ${APP}-${TAG}-${COMPONENT}
+    spec:
+      type: ClusterIP
+      ports:
+        - port: 80
+          targetPort: 3000
+          protocol: TCP
+          name: http-3000
+      selector:
+        service: ${APP}-${TAG}-${COMPONENT}
+  - kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      labels:
+        app: ${APP}-${TAG}
+        deployment: ${APP}-${TAG}-${COMPONENT}
+      name: ${APP}-${TAG}-${COMPONENT}
+    spec:
+      strategy:
+        type: RollingUpdate
+      selector:
+        matchLabels:
+          deployment: ${APP}-${TAG}-${COMPONENT}
+      template:
+        metadata:
+          labels:
+            app: ${APP}-${TAG}
+            deployment: ${APP}-${TAG}-${COMPONENT}
+            service: ${APP}-${TAG}-${COMPONENT}
+        spec:
+          containers:
+            - name: ${APP}-${TAG}-${COMPONENT}
+              image: 'ghcr.io/${GITHUB_USER}/${APP}-backend:${TAG}'
+              imagePullPolicy: Always
+              env:
+                - name: LOG_LEVEL
+                  value: info
+                - name: POSTGRES_HOST
+                  value: ${APP}-${TAG}-database
+                - name: POSTGRES_DB
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${TAG}-database
+                      key: database-name
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${TAG}-database
+                      key: database-password
+                - name: POSTGRES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-${TAG}-database
+                      key: database-user
+              ports:
+                - containerPort: 3000
+                  protocol: TCP
+              readinessProbe:
+                httpGet:
+                  path: /api/health
+                  port: 3000
+                  scheme: HTTP
+                initialDelaySeconds: 90
+                periodSeconds: 15
+                timeoutSeconds: 10
+                successThreshold: 3
+                failureThreshold: 30
+              resources:
+                limits:
+                  cpu: 150m
+                  memory: 150Mi
+                requests:
+                  cpu: 50m
+                  memory: 75Mi
