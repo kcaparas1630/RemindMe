@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Database Docker image
+      working-directory: Database
+      run: docker build . --file Dockerfile --tag database-image:$(date +%s)
+
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Backend Docker image
+      working-directory: Backend
+      run: docker build . --file Dockerfile --tag backend-image:$(date +%s)
