@@ -58,6 +58,8 @@ on:
   push:
     # Edit to the branch(es) you want to build and deploy on each push.
     branches: [ "main" ]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
 
 jobs:
   # 🖊️ EDIT if you want to run vulnerability check on your project before deploying
