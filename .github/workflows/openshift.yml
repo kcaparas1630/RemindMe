@@ -19,7 +19,7 @@ jobs:
         namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
         directory: Database
         parameters: |
-          -p APP=your-app-name
+          -p APP=Task-Application
           -p GITHUB_USER=${{ github.actor }}
           -p TAG=${{ github.sha }}
     
