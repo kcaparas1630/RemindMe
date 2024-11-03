@@ -7,12 +7,18 @@ on:
     branches: [ "main" ]
 
 jobs:
-
-  build:
-
+  database:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Build the Database Docker image
+      working-directory: Database
+      run: docker build . --file Dockerfile --tag database-image:$(date +%s)
+
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Backend Docker image
+      working-directory: Backend
+      run: docker build . --file Dockerfile --tag backend-image:$(date +%s)
