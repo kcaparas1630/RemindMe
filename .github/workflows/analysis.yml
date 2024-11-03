@@ -1,5 +1,11 @@
 name: Analysis
 
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
+
 jobs: 
   trivy:
     name: Trivy Security Scan
@@ -25,7 +31,7 @@ jobs:
     steps:
       - run: |
           # View results
-          echo "needs.*.result: ${{ toJson(needs.*.result) }}"
+          echo "Result: ${{ toJson(needs.*.result) }}"
       
       - if: contains(needs.*.result, 'failure')
         run: |
