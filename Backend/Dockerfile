@@ -4,11 +4,11 @@ FROM node:slim
 WORKDIR /app/
 
 # Copy package files first for better caching
-COPY package.json ./
-COPY tsconfig.json ./
+COPY ./Backend/package.json ./
+COPY ./Backend/tsconfig.json ./
 
 # Copy source code
-COPY src/ ./src/
+COPY ./Backend/src/ ./src/
 
 # Install dependencies and build
 RUN npm install && \
