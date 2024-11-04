@@ -3,7 +3,7 @@ FROM node:slim
 # COPY files and install dependencies
 WORKDIR /app/
 COPY . ./
-RUN npm ci && \
+RUN npm install && \
     npm run build
 
 # Set User
