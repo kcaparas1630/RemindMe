@@ -2,10 +2,9 @@ FROM node:slim
 
 # COPY files and install dependencies
 WORKDIR /app/
-COPY package.json package-lock.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
+COPY . ./
+RUN npm ci && \
+    npm run build
 
 # Set User
 RUN groupadd -r backendgroup && \
