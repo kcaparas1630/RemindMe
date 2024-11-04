@@ -136,13 +136,18 @@ jobs:
         openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
         insecure_skip_tls_verify: true
         namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+    
+    # Give permissions before deploying
+    - name: Set up project permissions
+      run: |
+        oc policy add-role-to-user admin ${{ secrets.OPENSHIFT_USER }} -n ${{ secrets.OPENSHIFT_NAMESPACE }}s
 
     # Deploy Database
     - name: Create and expose Database app
       id: deploy-and-expose-database
       uses: redhat-actions/oc-new-app@v1
       with:
-        app_name: ${{ env.APP_NAME }}-database
+        app_name: ${{ secrets.APP_NAME }}-database
         image: ${{ steps.push-database-image.outputs.registry-path }}
         namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
         port: ${{ secrets.DATABASE_PORT }}
@@ -155,7 +160,7 @@ jobs:
         app_name: ${{ secrets.APP_NAME }}-backend
         image: ${{ steps.push-backend-image.outputs.registry-path }}
         namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
-        port: ${{ secrets.APP_PORT }}
+        port: 5432
 
     - name: Print application URLs
       env:
