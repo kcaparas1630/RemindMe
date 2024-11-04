@@ -27,7 +27,7 @@ jobs:
           };
 
           const GHCR = "ghcr.io";
-          if (`${{ env.IMAGE_REGISTRY }}`.startsWith(GHCR)) {
+          if (`${{ secrets.IMAGE_REGISTRY }}`.startsWith(GHCR)) {
             core.info(`Image registry is ${GHCR} - no registry password required`);
           }
           else {
@@ -58,8 +58,8 @@ jobs:
     # Debug Pipeline
     - name: Check environment variables
       run: |
-        echo "Registry: $IMAGE_REGISTRY"
-        echo "Username: $IMAGE_REGISTRY_USER"
+        echo "Registry: ${{ secrets.IMAGE_REGISTRY }}"
+        echo "Username: ${{ secrets.IMAGE_REGISTRY_USER }}"
 
 
     - name: Check out repository
@@ -80,7 +80,7 @@ jobs:
       id: build-database-image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: ${{ env.APP_NAME }}-database
+        image: ${{ secrets.APP_NAME }}-database
         tags: ${{ env.IMAGE_TAGS }}
         dockerfiles: |
           ./Database/Dockerfile
@@ -90,7 +90,7 @@ jobs:
       id: build-backend-image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: ${{ env.APP_NAME }}-backend
+        image: ${{ secrets.APP_NAME }}-backend
         tags: ${{ env.IMAGE_TAGS }}
         dockerfiles: |
           ./Backend/Dockerfile
@@ -102,9 +102,9 @@ jobs:
       with:
         image: ${{ steps.build-database-image.outputs.image }}
         tags: ${{ steps.build-database-image.outputs.tags }}
-        registry: ${{ env.IMAGE_REGISTRY }}
-        username: ${{ env.IMAGE_REGISTRY_USER }}
-        password: ${{ env.IMAGE_REGISTRY_PASSWORD }}
+        registry: ${{ secrets.IMAGE_REGISTRY }}
+        username: ${{ secrets.IMAGE_REGISTRY_USER }}
+        password: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
 
     # Push Backend image
     - name: Push Backend image to registry
@@ -113,9 +113,9 @@ jobs:
       with:
         image: ${{ steps.build-backend-image.outputs.image }}
         tags: ${{ steps.build-backend-image.outputs.tags }}
-        registry: ${{ env.IMAGE_REGISTRY }}
-        username: ${{ env.IMAGE_REGISTRY_USER }}
-        password: ${{ env.IMAGE_REGISTRY_PASSWORD }}
+        registry: ${{ secrets.IMAGE_REGISTRY }}
+        username: ${{ secrets.IMAGE_REGISTRY_USER }}
+        password: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
 
     - name: Install oc
       uses: redhat-actions/openshift-tools-installer@v1
@@ -125,10 +125,10 @@ jobs:
     - name: Log in to OpenShift
       uses: redhat-actions/oc-login@v1
       with:
-        openshift_server_url: ${{ env.OPENSHIFT_SERVER }}
-        openshift_token: ${{ env.OPENSHIFT_TOKEN }}
+        openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+        openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
         insecure_skip_tls_verify: true
-        namespace: ${{ env.OPENSHIFT_NAMESPACE }}
+        namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
 
     # Deploy Database
     - name: Create and expose Database app
@@ -137,18 +137,18 @@ jobs:
       with:
         app_name: ${{ env.APP_NAME }}-database
         image: ${{ steps.push-database-image.outputs.registry-path }}
-        namespace: ${{ env.OPENSHIFT_NAMESPACE }}
-        port: ${{ env.DATABASE_PORT }}
+        namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+        port: ${{ secrets.DATABASE_PORT }}
 
     # Deploy Backend
     - name: Create and expose Backend app
       id: deploy-and-expose-backend
       uses: redhat-actions/oc-new-app@v1
       with:
-        app_name: ${{ env.APP_NAME }}-backend
+        app_name: ${{ secrets.APP_NAME }}-backend
         image: ${{ steps.push-backend-image.outputs.registry-path }}
-        namespace: ${{ env.OPENSHIFT_NAMESPACE }}
-        port: ${{ env.APP_PORT }}
+        namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+        port: ${{ secrets.APP_PORT }}
 
     - name: Print application URLs
       env:
