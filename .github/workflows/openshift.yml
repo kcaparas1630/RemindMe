@@ -105,6 +105,7 @@ jobs:
         registry: ${{ secrets.IMAGE_REGISTRY }}
         username: ${{ secrets.IMAGE_REGISTRY_USER }}
         password: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
+        additional-args: --format oci
 
     # Push Backend image
     - name: Push Backend image to registry
@@ -116,6 +117,7 @@ jobs:
         registry: ${{ secrets.IMAGE_REGISTRY }}
         username: ${{ secrets.IMAGE_REGISTRY_USER }}
         password: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
+        additional-args: --format oci
 
     - name: Install oc
       uses: redhat-actions/openshift-tools-installer@v1
