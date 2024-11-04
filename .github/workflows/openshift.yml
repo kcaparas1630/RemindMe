@@ -133,15 +133,10 @@ jobs:
       uses: redhat-actions/oc-login@v1
       with:
         openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
-        openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+        openshift_token: ${{ secrets.OPENSHIFT_SA_TOKEN }}
         insecure_skip_tls_verify: true
         namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
-    
-    # Give permissions before deploying
-    - name: Set up project permissions
-      run: |
-        oc policy add-role-to-user admin ${{ secrets.OPENSHIFT_USER }} -n ${{ secrets.OPENSHIFT_NAMESPACE }}s
-
+  
     # Deploy Database
     - name: Create and expose Database app
       id: deploy-and-expose-database
