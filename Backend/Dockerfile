@@ -4,7 +4,7 @@ FROM node:slim
 WORKDIR /app/
 
 # Copy package files first for better caching
-COPY package*.json ./
+COPY package.json ./
 COPY tsconfig.json ./
 
 # Copy source code
