@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  content: read
+  packages: write
+
 jobs:
   openshift-ci-cd:
     name: Build and deploy to OpenShift
@@ -80,7 +84,7 @@ jobs:
       id: build-database-image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: ${{ secrets.APP_NAME }}-database
+        image: ghcr.io/${{ github.repository_owner }}/${{ secrets.APP_NAME }}-database
         tags: ${{ env.IMAGE_TAGS }}
         dockerfiles: |
           ./Database/Dockerfile
@@ -90,7 +94,7 @@ jobs:
       id: build-backend-image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: ${{ secrets.APP_NAME }}-backend
+        image: ghcr.io/${{ github.repository_owner }}/${{ secrets.APP_NAME }}-backend
         tags: ${{ env.IMAGE_TAGS }}
         dockerfiles: |
           ./Backend/Dockerfile
