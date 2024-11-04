@@ -2,7 +2,15 @@ FROM node:slim
 
 # COPY files and install dependencies
 WORKDIR /app/
-COPY . ./
+
+# Copy package files first for better caching
+COPY package*.json ./
+COPY tsconfig.json ./
+
+# Copy source code
+COPY src/ ./src/
+
+# Install dependencies and build
 RUN npm install && \
     npm run build
 
