@@ -1,43 +1,43 @@
-# name: OpenShift Sandbox Deployment
-# on:
-#   push:
-#     branches: [ "main" ]
-#   pull_request:
-#     branches: [ "main" ]
+name: OpenShift Sandbox Deployment
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
-# jobs:
-#   deploy:
-#     name: Deploy Application
-#     runs-on: ubuntu-22.04
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v4
+jobs:
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#       - name: Authenticate with OpenShift
-#         uses: redhat-actions/oc-login@v1
-#         with:
-#           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
-#           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
-#           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+      - name: Authenticate with OpenShift
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
 
-#       - name: Deploy Database
-#         run: |
-#           # Process and apply the database template
-#           oc process -f Database/openshift.deploy.yml \
-#             -p TAG=${{ github.event.number || 'latest' }} \
-#             -p GITHUB_USER=${{ github.repository_owner }} \
-#             -p APP=Task-Application \
-#             | oc apply -f -
+      - name: Deploy Database
+        run: |
+          # Process and apply the database template
+          oc process -f Database/openshift.deploy.yml \
+            -p TAG=${{ github.event.number || 'latest' }} \
+            -p GITHUB_USER=${{ github.repository_owner }} \
+            -p APP=Task-Application \
+            | oc apply -f -
           
-#           # Wait for database deployment
-#           echo "Waiting for database deployment to be ready..."
-#           oc wait --for=condition=Available deployment/Task-Application-${{ github.event.number || 'latest' }}-database --timeout=180s || true
+          # Wait for database deployment
+          echo "Waiting for database deployment to be ready..."
+          oc wait --for=condition=Available deployment/Task-Application-${{ github.event.number || 'latest' }}-database --timeout=180s || true
 
-#       - name: Deploy Backend
-#         run: |
-#           # Process and apply the backend template
-#           oc process -f Backend/openshift.deploy.yml \
-#             -p TAG=${{ github.event.number || 'latest' }} \
-#             -p GITHUB_USER=${{ github.repository_owner }} \
-#             -p APP=Task-Application \
-#             | oc apply -f -
+      - name: Deploy Backend
+        run: |
+          # Process and apply the backend template
+          oc process -f Backend/openshift.deploy.yml \
+            -p TAG=${{ github.event.number || 'latest' }} \
+            -p GITHUB_USER=${{ github.repository_owner }} \
+            -p APP=Task-Application \
+            | oc apply -f -
