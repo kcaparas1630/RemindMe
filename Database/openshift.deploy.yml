@@ -31,6 +31,7 @@ objects:
       database-password: ${DB_PASSWORD}
       database-user: postgres
     type: Opaque
+  
   - kind: Service
     apiVersion: v1
     metadata:
@@ -43,10 +44,12 @@ objects:
       ports:
         - name: postgresql
           port: 5432
-          protocol: TCP
           targetPort: 5432
+          protocol: TCP
+          name: postgresql
       selector:
         deployment: ${APP}-${COMPONENT}-${TAG}
+  
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
