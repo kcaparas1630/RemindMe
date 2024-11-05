@@ -3,7 +3,7 @@ kind: Template
 parameters:
   - name: APP
     description: Application name
-    value: task-app
+    value: task-application
   - name: COMPONENT
     description: Component name
     value: backend
@@ -76,6 +76,8 @@ objects:
             tag: ${TAG}
             deployment: ${APP}-${COMPONENT}-${TAG}
         spec:
+          imagePullSecrets:
+            - name: github-registry-secret
           containers:
             - name: backend
               image: 'ghcr.io/${GITHUB_USER}/${APP}-backend:${TAG}'

@@ -66,32 +66,51 @@ jobs:
           username: ${{ secrets.IMAGE_REGISTRY_USER }}
           password: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
           extra-args: --format oci
-          
+
       - name: Authenticate with OpenShift
         uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+      
+      - name: Create Image Pull Secret
+        run: |
+          oc create secret docker-registry github-registry-secret \
+            --docker-server=ghcr.io \
+            --docker-username=${{ github.repository_owner }} \
+            --docker-password=${{ secrets.IMAGE_REGISTRY_PASSWORD }} \
+            --docker-email=${{ github.actor }}@users.noreply.github.com \
+            -n ${{ secrets.OPENSHIFT_NAMESPACE }} \
+            --dry-run=client -o yaml | oc apply -f -
+          
+          oc secrets link default github-registry-secret --for=pull
+
+      - name: Verify Image Access
+        run: |
+          oc whoami
+          oc registry login
+          podman login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
 
       - name: Deploy Database
         run: |
-          # Process and apply the database template
+          echo "Processing database template..."
           oc process -f Database/openshift.deploy.yml \
-            -p TAG=${{ github.event.number || 'latest' }} \
+            -p TAG=${GITHUB_SHA::12} \
             -p GITHUB_USER=${{ github.repository_owner }} \
             -p APP=task-application \
+            -p COMPONENT=database \
             | oc apply -f -
           
-          # Wait for database deployment
-          echo "Waiting for database deployment to be ready..."
-          oc wait --for=condition=Available deployment/Task-Application-${{ github.event.number || 'latest' }}-database --timeout=180s || true
+          echo "Waiting for database deployment..."
+          oc wait --for=condition=Available deployment/task-application-database-${GITHUB_SHA::12} --timeout=180s || true
 
       - name: Deploy Backend
         run: |
-          # Process and apply the backend template
+          echo "Processing backend template..."
           oc process -f Backend/openshift.deploy.yml \
-            -p TAG=${{ github.event.number || 'latest' }} \
+            -p TAG=${GITHUB_SHA::12} \
             -p GITHUB_USER=${{ github.repository_owner }} \
             -p APP=task-application \
+            -p COMPONENT=backend \
             | oc apply -f -

@@ -3,7 +3,7 @@ kind: Template
 parameters:
   - name: APP
     description: Application name
-    value: task
+    value: task-application
   - name: COMPONENT
     description: Component name
     value: database
@@ -73,6 +73,8 @@ objects:
             tag: ${TAG}
             deployment: ${APP}-${COMPONENT}-${TAG}
         spec:
+          imagePullSecrets:
+            - name: github-registry-secret
           containers:
             - name: database
               image: 'ghcr.io/${GITHUB_USER}/${APP}-database:${TAG}'
