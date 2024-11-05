@@ -98,7 +98,7 @@ jobs:
           oc process -f Database/openshift.deploy.yml \
             -p TAG=${GITHUB_SHA::12} \
             -p GITHUB_USER=${{ github.repository_owner }} \
-            -p APP=task-application \
+            -p APP=task-app \
             -p COMPONENT=database \
             | oc apply -f -
           
@@ -111,6 +111,6 @@ jobs:
           oc process -f Backend/openshift.deploy.yml \
             -p TAG=${GITHUB_SHA::12} \
             -p GITHUB_USER=${{ github.repository_owner }} \
-            -p APP=task-application \
+            -p APP=task-app \
             -p COMPONENT=backend \
             | oc apply -f -

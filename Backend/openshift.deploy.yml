@@ -3,7 +3,7 @@ kind: Template
 parameters:
   - name: APP
     description: Application name
-    value: task-application
+    value: task-app
   - name: COMPONENT
     description: Component name
     value: backend
