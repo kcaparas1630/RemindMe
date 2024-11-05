@@ -12,6 +12,8 @@ services:
       POSTGRES_PASSWORD: default
       POSTGRES_USER: postgres
     ports: [5432:5432]
+    volumes:
+      - "/db-data:/var/lib/postgresql/data"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 1m30s
