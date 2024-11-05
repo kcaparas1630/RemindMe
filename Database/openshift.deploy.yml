@@ -3,7 +3,7 @@ kind: Template
 parameters:
   - name: APP
     description: Application name
-    value: task-app
+    value: task
   - name: COMPONENT
     description: Component name
     value: database
