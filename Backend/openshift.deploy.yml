@@ -12,37 +12,56 @@ parameters:
     required: true
   - name: TAG
     description: Image tag
-    required: true
-  - name: DB_PASSWORD
-    description: Password for the PostgreSQL connection user
-    from: '[a-zA-Z0-9]{16}'
-    generate: expression
+    value: latest
 objects:
   - kind: Service
     apiVersion: v1
     metadata:
       labels:
         app: ${APP}-${TAG}
+        component: ${COMPONENT}
       name: ${APP}-${TAG}-${COMPONENT}
     spec:
       type: ClusterIP
       ports:
-        - port: 80
+        - name: http
+          port: 80
           targetPort: 3000
           protocol: TCP
-          name: http-3000
       selector:
-        service: ${APP}-${TAG}-${COMPONENT}
+        deployment: ${APP}-${TAG}-${COMPONENT}
+  
+  - kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP}-${TAG}
+        component: ${COMPONENT}
+      name: ${APP}-${TAG}-${COMPONENT}
+    spec:
+      port:
+        targetPort: http
+      to:
+        kind: Service
+        name: ${APP}-${TAG}-${COMPONENT}
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
       labels:
         app: ${APP}-${TAG}
-        deployment: ${APP}-${TAG}-${COMPONENT}
+        component: ${COMPONENT}
       name: ${APP}-${TAG}-${COMPONENT}
     spec:
+      replicas: 1
       strategy:
         type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 0
+          maxSurge: 1
       selector:
         matchLabels:
           deployment: ${APP}-${TAG}-${COMPONENT}
@@ -51,10 +70,10 @@ objects:
           labels:
             app: ${APP}-${TAG}
             deployment: ${APP}-${TAG}-${COMPONENT}
-            service: ${APP}-${TAG}-${COMPONENT}
+            component: ${COMPONENT}
         spec:
           containers:
-            - name: ${APP}-${TAG}-${COMPONENT}
+            - name: backend
               image: 'ghcr.io/${GITHUB_USER}/${APP}-backend:${TAG}'
               imagePullPolicy: Always
               env:
@@ -77,19 +96,31 @@ objects:
                     secretKeyRef:
                       name: ${APP}-${TAG}-database
                       key: database-user
+                - name: NODE_ENV
+                  value: production
               ports:
-                - containerPort: 3000
+                - name: http
+                  containerPort: 3000
                   protocol: TCP
               readinessProbe:
                 httpGet:
                   path: /api/health
-                  port: 3000
+                  port: http
                   scheme: HTTP
-                initialDelaySeconds: 90
-                periodSeconds: 15
-                timeoutSeconds: 10
-                successThreshold: 3
-                failureThreshold: 30
+                initialDelaySeconds: 15
+                periodSeconds: 10
+                timeoutSeconds: 5
+                successThreshold: 1
+                failureThreshold: 3
+              livenessProbe:
+                httpGet:
+                  path: /api/health
+                  port: http
+                  scheme: HTTP
+                initialDelaySeconds: 30
+                periodSeconds: 20
+                timeoutSeconds: 5
+                failureThreshold: 3
               resources:
                 limits:
                   cpu: 150m
@@ -97,3 +128,15 @@ objects:
                 requests:
                   cpu: 50m
                   memory: 75Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+                capabilities:
+                  drop: ["ALL"]
+          securityContext:
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          terminationGracePeriodSeconds: 30
