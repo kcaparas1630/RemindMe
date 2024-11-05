@@ -11,8 +11,8 @@ parameters:
     description: GitHub username
     required: true
   - name: TAG
-    description: Image tag
-    value: latest
+    description: Image tag; e.g. PR number, latest or prod
+    required: true
   - name: DB_PASSWORD
     description: Password for the PostgreSQL connection user
     from: '[a-zA-Z0-9]{16}'

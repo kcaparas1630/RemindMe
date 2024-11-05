@@ -11,9 +11,10 @@ services:
       POSTGRES_HOST: task-db
       POSTGRES_PASSWORD: default
       POSTGRES_USER: postgres
-    ports: [5432:5432]
+    ports:
+      - "5432:5432"
     volumes:
-      - "/db-data:/var/lib/postgresql/data"
+      - db-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 1m30s
@@ -57,4 +58,8 @@ services:
       timeout: 30s
       retries: 5
       start_period: 30s
-    ports: [3000:3000]
+    ports:
+      - 3000:3000
+
+volumes:
+  db-data: {}

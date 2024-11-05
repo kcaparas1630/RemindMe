@@ -96,7 +96,7 @@ jobs:
         run: |
           echo "Processing database template..."
           oc process -f Database/openshift.deploy.yml \
-            -p TAG=${GITHUB_SHA::12} \
+            -p TAG=${{ github.event.number }} \
             -p GITHUB_USER=${{ github.repository_owner }} \
             -p APP=task-app \
             -p COMPONENT=database \
@@ -106,10 +106,11 @@ jobs:
           oc wait --for=condition=Available deployment/task-application-database-${GITHUB_SHA::12} --timeout=180s || true
 
       - name: Deploy Backend
+
         run: |
           echo "Processing backend template..."
           oc process -f Backend/openshift.deploy.yml \
-            -p TAG=${GITHUB_SHA::12} \
+            -p TAG=${{ github.event.number }} \
             -p GITHUB_USER=${{ github.repository_owner }} \
             -p APP=task-app \
             -p COMPONENT=backend \
