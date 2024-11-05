@@ -3,7 +3,7 @@ kind: Template
 parameters:
   - name: APP
     description: Application name
-    value: Task-Application
+    value: task-app
   - name: COMPONENT
     description: Component name
     value: backend
@@ -18,9 +18,10 @@ objects:
     apiVersion: v1
     metadata:
       labels:
-        app: ${APP}-${TAG}
+        app: ${APP}
         component: ${COMPONENT}
-      name: ${APP}-${TAG}-${COMPONENT}
+        tag: ${TAG}
+      name: ${APP}-${COMPONENT}-${TAG}
     spec:
       type: ClusterIP
       ports:
@@ -29,21 +30,22 @@ objects:
           targetPort: 3000
           protocol: TCP
       selector:
-        deployment: ${APP}-${TAG}-${COMPONENT}
+        deployment: ${APP}-${COMPONENT}-${TAG}
   
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
       labels:
-        app: ${APP}-${TAG}
+        app: ${APP}
         component: ${COMPONENT}
-      name: ${APP}-${TAG}-${COMPONENT}
+        tag: ${TAG}
+      name: ${APP}-${COMPONENT}-${TAG}
     spec:
       port:
         targetPort: http
       to:
         kind: Service
-        name: ${APP}-${TAG}-${COMPONENT}
+        name: ${APP}-${COMPONENT}-${TAG}
       tls:
         termination: edge
         insecureEdgeTerminationPolicy: Redirect
@@ -52,9 +54,10 @@ objects:
     apiVersion: apps/v1
     metadata:
       labels:
-        app: ${APP}-${TAG}
+        app: ${APP}
         component: ${COMPONENT}
-      name: ${APP}-${TAG}-${COMPONENT}
+        tag: ${TAG}
+      name: ${APP}-${COMPONENT}-${TAG}
     spec:
       replicas: 1
       strategy:
@@ -64,13 +67,14 @@ objects:
           maxSurge: 1
       selector:
         matchLabels:
-          deployment: ${APP}-${TAG}-${COMPONENT}
+          deployment: ${APP}-${COMPONENT}-${TAG}
       template:
         metadata:
           labels:
-            app: ${APP}-${TAG}
-            deployment: ${APP}-${TAG}-${COMPONENT}
+            app: ${APP}
             component: ${COMPONENT}
+            tag: ${TAG}
+            deployment: ${APP}-${COMPONENT}-${TAG}
         spec:
           containers:
             - name: backend
@@ -80,21 +84,21 @@ objects:
                 - name: LOG_LEVEL
                   value: info
                 - name: POSTGRES_HOST
-                  value: ${APP}-${TAG}-database
+                  value: ${APP}-database-${TAG}
                 - name: POSTGRES_DB
                   valueFrom:
                     secretKeyRef:
-                      name: ${APP}-${TAG}-database
+                      name: ${APP}-database-${TAG}
                       key: database-name
                 - name: POSTGRES_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: ${APP}-${TAG}-database
+                      name: ${APP}-database-${TAG}
                       key: database-password
                 - name: POSTGRES_USER
                   valueFrom:
                     secretKeyRef:
-                      name: ${APP}-${TAG}-database
+                      name: ${APP}-database-${TAG}
                       key: database-user
                 - name: NODE_ENV
                   value: production
