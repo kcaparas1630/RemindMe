@@ -1,0 +1,40 @@
+name: .Deploys
+
+on:
+  workflow_call:
+    inputs:
+      target:
+        description: Deployment target
+        required: false
+        type: string
+
+jobs:
+  database:
+    name: Database
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Deploy Database
+        uses: redhat-actions/oc-new-app@v1
+        with:
+          oc_namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+          oc_server: ${{ secrets.OPENSHIFT_SERVER }}
+          oc_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          file: Database/openshift.deploy.yml
+          overwrite: false
+          parameters:
+            -p TAG=${{ github.event.number }}
+  backend:
+    name: Backend
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Deploy Backend
+        uses: redhat-actions/oc-new-app@v1
+        with:
+          oc_namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+          oc_server: ${{ secrets.OPENSHIFT_SERVER }}
+          oc_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          file: Backend/openshift.deploy.yml
+          overwrite: true
+          paremeters:
+            -p TAG=${{ github.event.number }}
+          
