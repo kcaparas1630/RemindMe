@@ -133,7 +133,7 @@ jobs:
       uses: redhat-actions/oc-login@v1
       with:
         openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
-        openshift_token: ${{ secrets.OPENSHIFT_SA_TOKEN }}
+        openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
         insecure_skip_tls_verify: true
         namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
   
@@ -147,6 +147,14 @@ jobs:
         namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
         port: ${{ secrets.DATABASE_PORT }}
 
+    # Apply securityContext to Database deployment
+    - name: Patch Database app with security context
+      run: |
+        oc patch deployment ${{ secrets.APP_NAME }}-database \
+          --namespace=${{ secrets.OPENSHIFT_NAMESPACE }} \
+          --type='json' \
+          -p='[{"op": "add", "path": "/spec/template/spec/securityContext", "value": {"runAsNonRoot": true, "allowPrivilegeEscalation": false, "seccompProfile": {"type": "RuntimeDefault"}, "capabilities": {"drop": ["ALL"]}}}]'
+
     # Deploy Backend
     - name: Create and expose Backend app
       id: deploy-and-expose-backend
@@ -156,6 +164,15 @@ jobs:
         image: ${{ steps.push-backend-image.outputs.registry-path }}
         namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
         port: 5432
+
+    # Apply securityContext to Backend deployment
+    - name: Patch Backend app with security context
+      run: |
+        oc patch deployment ${{ secrets.APP_NAME }}-backend \
+          --namespace=${{ secrets.OPENSHIFT_NAMESPACE }} \
+          --type='json' \
+          -p='[{"op": "add", "path": "/spec/template/spec/securityContext", "value": {"runAsNonRoot": true, "allowPrivilegeEscalation": false, "seccompProfile": {"type": "RuntimeDefault"}, "capabilities": {"drop": ["ALL"]}}}]'
+
 
     - name: Print application URLs
       env:
