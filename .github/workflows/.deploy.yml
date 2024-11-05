@@ -21,7 +21,13 @@ jobs:
       - name: Determine image tags
         if: env.IMAGE_TAGS == ''
         run: |
-          TAG=${{ github.event.pull_request.number }}
+          if [ "${{ github.event.pull_request.number }}" ]; then
+            TAG=${{ github.event.pull_request.number }}
+          else
+            TAG=latest
+          fi
+          echo "IMAGE_TAGS=${TAG} ${GITHUB_SHA::12}" | tee -a $GITHUB_ENV
+
 
       # Build Database image
       - name: Build Database image
