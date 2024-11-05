@@ -1,5 +1,4 @@
-name: .Deploys
-
+name: OpenShift Deployment
 on:
   push:
     branches: [ "main" ]
@@ -17,28 +16,49 @@ jobs:
     name: Database
     runs-on: ubuntu-22.04
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+          insecure_skip_tls_verify: true
+
       - name: Deploy Database
         uses: redhat-actions/oc-new-app@v1
         with:
-          oc_namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
-          oc_server: ${{ secrets.OPENSHIFT_SERVER }}
-          oc_token: ${{ secrets.OPENSHIFT_TOKEN }}
-          file: Database/openshift.deploy.yml
-          overwrite: false
-          parameters:
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+          template: Database/openshift.deploy.yml
+          parameters: |
             -p TAG=${{ github.event.number }}
+            -p GITHUB_USER=${{ github.repository_owner }}
+            -p APP=Task-Application
+
   backend:
     name: Backend
     runs-on: ubuntu-22.04
+    needs: database
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+          insecure_skip_tls_verify: true
+
       - name: Deploy Backend
         uses: redhat-actions/oc-new-app@v1
         with:
-          oc_namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
-          oc_server: ${{ secrets.OPENSHIFT_SERVER }}
-          oc_token: ${{ secrets.OPENSHIFT_TOKEN }}
-          file: Backend/openshift.deploy.yml
-          overwrite: true
-          paremeters:
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+          template: Backend/openshift.deploy.yml
+          parameters: |
             -p TAG=${{ github.event.number }}
-          
+            -p GITHUB_USER=${{ github.repository_owner }}
+            -p APP=Task-Application
