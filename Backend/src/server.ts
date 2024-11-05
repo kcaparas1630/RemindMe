@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import router from './routes/task';
+import checkHealth from './routes/health';
 import cors from 'cors';
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Testing');
 });
 app.use('/api/task', router);
+app.use('/api/health', checkHealth);
 
 app.listen(port, () => {
     console.log(`[Server]: Server is running at http://localhost:${port}`);
