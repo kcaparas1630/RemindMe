@@ -3,8 +3,8 @@ services:
   # DB
   database:
     build:
-      context: ./Database
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Database/Dockerfile
     container_name: task-db
     environment:
       POSTGRES_DATABASE: POSTGRES_DATABASE
@@ -32,8 +32,8 @@ services:
   # Backend
   backend:
     build:
-      context: ./Backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Backend/Dockerfile
     command: npm run ${CMD:-dev}
     container_name: task-api
     depends_on:
