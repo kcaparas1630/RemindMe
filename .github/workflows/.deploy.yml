@@ -6,11 +6,11 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    name: Build Image
+  deploy:
+    name: Deploy Application
     runs-on: ubuntu-22.04
     steps:
-      - name: Check out repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Determine app name
@@ -43,10 +43,6 @@ jobs:
           dockerfiles: |
             ./Backend/Dockerfile
 
-  push:
-    name: Push image to registry
-    runs-on: ubuntu-22.04
-    steps:
       # Push Database image
       - name: Push Database image to registry
         id: push-database-image
@@ -70,14 +66,7 @@ jobs:
           username: ${{ secrets.IMAGE_REGISTRY_USER }}
           password: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
           extra-args: --format oci
-
-  deploy:
-    name: Deploy Application
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
+          
       - name: Authenticate with OpenShift
         uses: redhat-actions/oc-login@v1
         with:
