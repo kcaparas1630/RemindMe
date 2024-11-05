@@ -3,9 +3,16 @@ FROM node:slim
 # COPY files and install dependencies
 WORKDIR /app/
 
-COPY . ./
-RUN npm ci && \
-  npm run build
+# Copy package files first for better caching
+COPY ./Backend/package.json ./
+COPY ./Backend/tsconfig.json ./
+
+# Copy source code
+COPY ./Backend/src/ ./src/
+
+# Install dependencies and build
+RUN npm install && \
+    npm run build
 
 # Set User
 RUN groupadd -r backendgroup && \
