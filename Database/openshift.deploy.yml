@@ -74,10 +74,6 @@ objects:
         spec:
           imagePullSecrets:
             - name: github-registry-secret
-          # Add security context at pod level
-          securityContext:
-            fsGroup: 26
-            fsGroupChangePolicy: "OnRootMismatch"
           containers:
             - name: database
               image: 'ghcr.io/${GITHUB_USER}/${APP}-database:${TAG}'
@@ -111,7 +107,6 @@ objects:
               securityContext:
                 allowPrivilegeEscalation: false
                 runAsNonRoot: true
-                runAsUser: 26
                 seccompProfile:
                   type: RuntimeDefault
                 capabilities:
