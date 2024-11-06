@@ -1,4 +1,4 @@
-FROM postgis/postgis:15-master
+FROM postgres:13.16-bookworm
 
 # Copy startup scripts
 COPY --chown=postgres:postgres ./Database/db/* /docker-entrypoint-initdb.d/
