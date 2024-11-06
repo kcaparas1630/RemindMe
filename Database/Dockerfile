@@ -1,18 +1,27 @@
 FROM postgres:13.16-bookworm
 
+# Set permissions for OpenShift random UID compatibility
+USER root
+RUN mkdir -p /var/lib/postgresql/data && \
+    chown -R 1001:0 /var/lib/postgresql && \
+    chmod -R 777 /var/lib/postgresql && \
+    chmod -R 777 /var/run/postgresql
+
 # Copy startup scripts
-COPY --chown=postgres:postgres ./Database/db/* ./docker-entrypoint-initdb.d/
+COPY ./Database/db/* /docker-entrypoint-initdb.d/
+RUN chown -R 1001:0 /docker-entrypoint-initdb.d && \
+    chmod -R 777 /docker-entrypoint-initdb.d
 
-
-# User, port and Healthcheck
-USER postgres
+# Switch to non-root user (OpenShift will run with random UID)
+USER 1001
 
 # Set Maintainer labels
 LABEL maintainer="Kent Caparas<kentcaparas12@gmail.com>"
 LABEL description="Docker image to run Postgres Database"
 LABEL version="1.0"
 
-# Expose Port 5432 to inter-container communication. Backend communicating here.
+# Expose Port 5432 to inter-container communication
 EXPOSE 5432
 
-HEALTHCHECK --interval=5s --timeout=5s --retries=5 CMD [ "pg_isready", "-U", "postgres"]
+# Healthcheck
+HEALTHCHECK --interval=5s --timeout=5s --retries=5 CMD [ "pg_isready", "-U", "postgres" ]
