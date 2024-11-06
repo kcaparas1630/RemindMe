@@ -1,23 +1,18 @@
 FROM postgres:13.16-bookworm
 
-# Set permissions for OpenShift random UID compatibility
+# Create required directories with appropriate permissions
 USER root
 RUN mkdir -p /var/lib/postgresql/data && \
-    chown -R 1006170000:0 /var/lib/postgresql && \
     chmod -R 777 /var/lib/postgresql && \
     chmod -R 777 /var/run/postgresql && \
     chmod g+w /etc/passwd
 
-# Copy startup scripts
+# Copy startup scripts with appropriate permissions
 COPY ./Database/db/* /docker-entrypoint-initdb.d/
-RUN chown -R 1006170000:0 /docker-entrypoint-initdb.d && \
-    chmod -R 777 /docker-entrypoint-initdb.d
+RUN chmod -R 777 /docker-entrypoint-initdb.d
 
-# Update postgres user UID
-RUN usermod -u 1006170000 postgres
-
-# Switch to non-root user
-USER 1006170000
+# Ensure PGDATA directory is accessible
+ENV PGDATA=/var/lib/postgresql/data
 
 # Set Maintainer labels
 LABEL maintainer="Kent Caparas<kentcaparas12@gmail.com>"
@@ -26,6 +21,9 @@ LABEL version="1.0"
 
 # Expose Port 5432
 EXPOSE 5432
+
+# Switch to non-root user (OpenShift will assign the UID)
+USER 1001
 
 # Healthcheck
 HEALTHCHECK --interval=5s --timeout=5s --retries=5 CMD [ "pg_isready", "-U", "postgres" ]
