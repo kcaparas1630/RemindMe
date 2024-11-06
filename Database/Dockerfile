@@ -1,7 +1,7 @@
 FROM postgres:13.16-bookworm
 
 # Copy startup scripts
-COPY --chown=postgres:postgres ./Database/db/* /docker-entrypoint-initdb.d/
+COPY --chown=postgres:postgres ./Database/db/* ./docker-entrypoint-initdb.d/
 
 
 # User, port and Healthcheck
