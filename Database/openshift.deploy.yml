@@ -155,7 +155,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
           dnsPolicy: ClusterFirst
-          schedulerName: default-sheduler
+          schedulerName: default-scheduler
     - apiVersion: v1
       kind: Service
       metadata:
