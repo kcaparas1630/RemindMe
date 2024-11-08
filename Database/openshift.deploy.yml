@@ -92,10 +92,6 @@ objects:
             app: ${APP}-${TARGET}
             deployment: ${APP}-${TARGET}-${COMPONENT}
         spec:
-          volumes:
-            - name: ${APP}-${TARGET}-${COMPONENT}
-              persistentVolumeClaim:
-                claimName: ${APP}-${TARGET}-${COMPONENT}
           containers:
             - name: ${APP}-${TARGET}
               image: ghcr.io/${GITHUB_USER}/${APP}-database:${TAG}
@@ -149,9 +145,6 @@ objects:
                     secretKeyRef:
                       name: ${APP}-${TARGET}-${COMPONENT}
                       key: database-user
-              volumeMounts:
-                - name: ${APP}-${TARGET}-${COMPONENT}
-                  mountPath: "/var/lib/postgresql"
               terminationMessagePath: "/dev/termination-log"
               terminationMessagePolicy: File
               imagePullPolicy: Always
