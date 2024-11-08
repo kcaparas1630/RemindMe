@@ -103,6 +103,7 @@ jobs:
           echo "Processing database template..."
           oc process -f Database/openshift.deploy.yml \
             -p TAG=${{ github.event.number }} \
+            -p TARGET=${{ github.event.number }} \
             -p GITHUB_USER=${{ github.repository_owner }} \
             -p APP=task-app \
             -p COMPONENT=database \
