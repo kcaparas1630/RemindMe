@@ -1,10 +1,9 @@
 FROM postgres:13.16-bookworm
 
 # Create required directories with appropriate permissions
-USER root
 RUN mkdir -p /var/lib/postgresql/data && \
     chmod -R 777 /var/lib/postgresql && \
-    chmod -R 777 /var/run/postgresql && \
+    chmod -R 777 /run/postgresql && \
     chmod g+w /etc/passwd
 
 # Copy startup scripts with appropriate permissions
@@ -26,4 +25,4 @@ EXPOSE 5432
 USER 1001
 
 # Healthcheck
-HEALTHCHECK --interval=5s --timeout=5s --retries=5 CMD [ "pg_isready", "-U", "postgres" ]
+HEALTHCHECK --interval=30s --timeout=10s --retries=5 CMD ["pg_isready", "-U", "postgres"]

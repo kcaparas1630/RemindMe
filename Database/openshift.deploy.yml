@@ -114,33 +114,7 @@ objects:
               volumeMounts:
                 - name: postgres-data
                   mountPath: /var/lib/postgresql/data
-          # Add initContainers to set permissions if needed
-          initContainers:
-            - name: init-chmod-data
-              image: busybox
-              command: ['sh', '-c', 'chmod -R 777 /var/lib/postgresql/data']
-              volumeMounts:
-                - name: postgres-data
-                  mountPath: /var/lib/postgresql/data
-              securityContext:
-                runAsNonRoot: true
-                allowPrivilegeEscalation: false
           volumes:
             - name: postgres-data
               persistentVolumeClaim:
                 claimName: ${APP}-${COMPONENT}-${TAG}-pvc
-                
-  - kind: PersistentVolumeClaim
-    apiVersion: v1
-    metadata:
-      name: ${APP}-${COMPONENT}-${TAG}-pvc
-      labels:
-        app: ${APP}
-        component: ${COMPONENT}
-        tag: ${TAG}
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 1Gi
