@@ -22,7 +22,7 @@ parameters:
     generate: expression
 
 objects:
-  - apiversion: networking.k8s.io/v1
+  - apiVersion: networking.k8s.io/v1
     kind: NetworkPolicy
     metadata:
       name: allow-from-openshift-ingress
