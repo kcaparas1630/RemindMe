@@ -13,13 +13,16 @@ parameters:
   - name: TAG
     description: Image tag; e.g. PR number, latest or prod
     required: true
+  - name: TARGET
+    description: Target environment
+    required: true
   - name: DB_PASSWORD
     description: Password for the PostgreSQL connection user
     from: '[a-zA-Z0-9]{16}'
     generate: expression
 
 objects:
-  - apiversion: networking.k8s.io/v1
+  - apiVersion: networking.k8s.io/v1
     kind: NetworkPolicy
     metadata:
       name: allow-from-openshift-ingress
@@ -38,7 +41,7 @@ objects:
     metadata:
       name: allow-same-namespace
       labels:
-      template: nr-spar-backend-network-security-policy
+        template: nr-spar-backend-network-security-policy
     spec:
       policyTypes:
         - Ingress
@@ -65,7 +68,7 @@ objects:
       resources:
         requests:
           storage: 128Mi
-      storageClassname: netapp-file-standard
+      storageClassName: netapp-file-standard
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
@@ -90,7 +93,7 @@ objects:
             deployment: ${APP}-${TARGET}-${COMPONENT}
         spec:
           volumes:
-            - name: ${APP}=${TARGET}-${COMPONENT}
+            - name: ${APP}-${TARGET}-${COMPONENT}
               persistentVolumeClaim:
                 claimName: ${APP}-${TARGET}-${COMPONENT}
           containers:
@@ -117,14 +120,14 @@ objects:
                 failureThreshold: 5
                 initialDelaySeconds: 10
                 periodSeconds: 15
-                timeoutSeconds: 1o0
+                timeoutSeconds: 100
               livenessProbe:
                 exec:
                   command:
                     - /usr/bin/env
                     - bash
                     - "-c"
-                    - psql -q $POSTGRES_USER -d $POSTGRES_DB -c 'SELECT 1'
+                    - psql -q -U $POSTGRES_USER -d $POSTGRES_DB -c 'SELECT 1'
                 successThreshold: 1
                 failureThreshold: 5
                 initialDelaySeconds: 10
@@ -156,136 +159,20 @@ objects:
           terminationGracePeriodSeconds: 30
           dnsPolicy: ClusterFirst
           schedulerName: default-scheduler
-    - apiVersion: v1
-      kind: Service
-      metadata:
-        labels:
-          app: ${APP}-${TARGET}
-        name: ${APP}-${TARGET}-${COMPONENT}
-      spec:
-        ports:
-          - name: postgresql
-            nodePort: 0
-            port: 5432
-            protocol: TCP
-            targetPort: 5432
-        selector:
-          deployment: ${APP}-${TARGET}-${COMPONENT}
-        sessionAffinity: None
-        type: ClusterIP
-# objects:
-#   - kind: Secret
-#     apiVersion: v1
-#     metadata:
-#       name: ${APP}-${COMPONENT}-${TAG}
-#       labels:
-#         app: ${APP}
-#         component: ${COMPONENT}
-#         tag: ${TAG}
-#     stringData:
-#       database-name: ${APP}
-#       database-password: ${DB_PASSWORD}
-#       database-user: postgres
-#     type: Opaque
- 
-#   - kind: Service
-#     apiVersion: v1
-#     metadata:
-#       labels:
-#         app: ${APP}
-#         component: ${COMPONENT}
-#         tag: ${TAG}
-#       name: ${APP}-${COMPONENT}-${TAG}
-#     spec:
-#       ports:
-#         - name: postgresql
-#           port: 5432
-#           targetPort: 5432
-#           protocol: TCP
-#       selector:
-#         deployment: ${APP}-${COMPONENT}-${TAG}
- 
-#   - kind: Deployment
-#     apiVersion: apps/v1
-#     metadata:
-#       labels:
-#         app: ${APP}
-#         component: ${COMPONENT}
-#         tag: ${TAG}
-#       name: ${APP}-${COMPONENT}-${TAG}
-#     spec:
-#       replicas: 1
-#       selector:
-#         matchLabels:
-#           deployment: ${APP}-${COMPONENT}-${TAG}
-#       strategy:
-#         type: Recreate
-#       template:
-#         metadata:
-#           labels:
-#             app: ${APP}
-#             component: ${COMPONENT}
-#             tag: ${TAG}
-#             deployment: ${APP}-${COMPONENT}-${TAG}
-#         spec:
-#           imagePullSecrets:
-#             - name: github-registry-secret
-#           containers:
-#             - name: database
-#               image: 'ghcr.io/${GITHUB_USER}/${APP}-database:${TAG}'
-#               imagePullPolicy: Always
-#               env:
-#                 - name: POSTGRES_DB
-#                   valueFrom:
-#                     secretKeyRef:
-#                       name: ${APP}-${COMPONENT}-${TAG}
-#                       key: database-name
-#                 - name: POSTGRES_PASSWORD
-#                   valueFrom:
-#                     secretKeyRef:
-#                       name: ${APP}-${COMPONENT}-${TAG}
-#                       key: database-password
-#                 - name: POSTGRES_USER
-#                   valueFrom:
-#                     secretKeyRef:
-#                       name: ${APP}-${COMPONENT}-${TAG}
-#                       key: database-user
-#               ports:
-#                 - containerPort: 5432
-#                   protocol: TCP
-#               resources:
-#                 limits:
-#                   cpu: 200m
-#                   memory: 256Mi
-#                 requests:
-#                   cpu: 50m
-#                   memory: 128Mi
-#               securityContext:
-#                 allowPrivilegeEscalation: false
-#                 runAsNonRoot: true
-#                 seccompProfile:
-#                   type: RuntimeDefault
-#                 capabilities:
-#                   drop: ["ALL"]
-#               volumeMounts:
-#                 - name: postgres-data
-#                   mountPath: /var/lib/postgresql/data
-#           volumes:
-#             - name: postgres-data
-#               persistentVolumeClaim:
-#                 claimName: ${APP}-${COMPONENT}-${TAG}-pvc
-                
-#   - kind: PersistentVolumeClaim
-#     apiVersion: v1
-#     metadata:
-#       name: ${APP}-${COMPONENT}-${TAG}-pvc
-#       labels:
-#         app: ${APP}
-#         component: ${COMPONENT}
-#         tag: ${TAG}
-#     spec:
-#       accessModes:
-#         - ReadWriteOnce
-#       resources:
-#         requests:
-#           storage: 1Gi
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: ${APP}-${TARGET}
+      name: ${APP}-${TARGET}-${COMPONENT}
+    spec:
+      ports:
+        - name: postgresql
+          nodePort: 0
+          port: 5432
+          protocol: TCP
+          targetPort: 5432
+      selector:
+        deployment: ${APP}-${TARGET}-${COMPONENT}
+      sessionAffinity: None
+      type: ClusterIP
