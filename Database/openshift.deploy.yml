@@ -118,3 +118,18 @@ objects:
             - name: postgres-data
               persistentVolumeClaim:
                 claimName: ${APP}-${COMPONENT}-${TAG}-pvc
+                
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: ${APP}-${COMPONENT}-${TAG}-pvc
+      labels:
+        app: ${APP}
+        component: ${COMPONENT}
+        tag: ${TAG}
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
