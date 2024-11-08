@@ -1,4 +1,5 @@
 FROM postgres:13.16-bookworm
+#deploy
 
 # Create required directories with appropriate permissions
 USER root
