@@ -93,7 +93,7 @@ objects:
             deployment: ${APP}-${TARGET}-${COMPONENT}
         spec:
           volumes:
-            - name: ${APP}=${TARGET}-${COMPONENT}
+            - name: ${APP}-${TARGET}-${COMPONENT}
               persistentVolumeClaim:
                 claimName: ${APP}-${TARGET}-${COMPONENT}
           containers:
