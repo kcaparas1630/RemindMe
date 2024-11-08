@@ -11,3 +11,5 @@ app.use(cors());
 
 
 app.use('/api', routers.taskRouter);
+
+export default app;
