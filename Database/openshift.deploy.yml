@@ -56,19 +56,6 @@ objects:
       database-password: ${DB_PASSWORD}
       database-port: "5432"
       database-user: postgres
-  - kind: PersistentVolumeClaim
-    apiVersion: v1
-    metadata:
-      name: ${APP}-${TARGET}-${COMPONENT}
-      labels:
-        app: ${APP}-${TARGET}
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 128Mi
-      storageClassName: netapp-file-standard
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
