@@ -159,20 +159,20 @@ objects:
           terminationGracePeriodSeconds: 30
           dnsPolicy: ClusterFirst
           schedulerName: default-scheduler
-    - apiVersion: v1
-      kind: Service
-      metadata:
-        labels:
-          app: ${APP}-${TARGET}
-        name: ${APP}-${TARGET}-${COMPONENT}
-      spec:
-        ports:
-          - name: postgresql
-            nodePort: 0
-            port: 5432
-            protocol: TCP
-            targetPort: 5432
-        selector:
-          deployment: ${APP}-${TARGET}-${COMPONENT}
-        sessionAffinity: None
-        type: ClusterIP
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: ${APP}-${TARGET}
+      name: ${APP}-${TARGET}-${COMPONENT}
+    spec:
+      ports:
+        - name: postgresql
+          nodePort: 0
+          port: 5432
+          protocol: TCP
+          targetPort: 5432
+      selector:
+        deployment: ${APP}-${TARGET}-${COMPONENT}
+      sessionAffinity: None
+      type: ClusterIP
