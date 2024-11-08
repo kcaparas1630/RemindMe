@@ -13,16 +13,13 @@ parameters:
   - name: TAG
     description: Image tag; e.g. PR number, latest or prod
     required: true
-  - name: TARGET
-    description: Target environment
-    required: true
   - name: DB_PASSWORD
     description: Password for the PostgreSQL connection user
     from: '[a-zA-Z0-9]{16}'
     generate: expression
 
 objects:
-  - apiVersion: networking.k8s.io/v1
+  - apiversion: networking.k8s.io/v1
     kind: NetworkPolicy
     metadata:
       name: allow-from-openshift-ingress
@@ -41,7 +38,7 @@ objects:
     metadata:
       name: allow-same-namespace
       labels:
-        template: nr-spar-backend-network-security-policy
+      template: nr-spar-backend-network-security-policy
     spec:
       policyTypes:
         - Ingress
@@ -68,7 +65,7 @@ objects:
       resources:
         requests:
           storage: 128Mi
-      storageClassName: netapp-file-standard
+      storageClassname: netapp-file-standard
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
@@ -93,7 +90,7 @@ objects:
             deployment: ${APP}-${TARGET}-${COMPONENT}
         spec:
           volumes:
-            - name: ${APP}-${TARGET}-${COMPONENT}
+            - name: ${APP}=${TARGET}-${COMPONENT}
               persistentVolumeClaim:
                 claimName: ${APP}-${TARGET}-${COMPONENT}
           containers:
@@ -120,14 +117,14 @@ objects:
                 failureThreshold: 5
                 initialDelaySeconds: 10
                 periodSeconds: 15
-                timeoutSeconds: 100
+                timeoutSeconds: 1o0
               livenessProbe:
                 exec:
                   command:
                     - /usr/bin/env
                     - bash
                     - "-c"
-                    - psql -q -U $POSTGRES_USER -d $POSTGRES_DB -c 'SELECT 1'
+                    - psql -q $POSTGRES_USER -d $POSTGRES_DB -c 'SELECT 1'
                 successThreshold: 1
                 failureThreshold: 5
                 initialDelaySeconds: 10
@@ -159,20 +156,20 @@ objects:
           terminationGracePeriodSeconds: 30
           dnsPolicy: ClusterFirst
           schedulerName: default-scheduler
-  - apiVersion: v1
-    kind: Service
-    metadata:
-      labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
-    spec:
-      ports:
-        - name: postgresql
-          nodePort: 0
-          port: 5432
-          protocol: TCP
-          targetPort: 5432
-      selector:
-        deployment: ${APP}-${TARGET}-${COMPONENT}
-      sessionAffinity: None
-      type: ClusterIP
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        labels:
+          app: ${APP}-${TARGET}
+        name: ${APP}-${TARGET}-${COMPONENT}
+      spec:
+        ports:
+          - name: postgresql
+            nodePort: 0
+            port: 5432
+            protocol: TCP
+            targetPort: 5432
+        selector:
+          deployment: ${APP}-${TARGET}-${COMPONENT}
+        sessionAffinity: None
+        type: ClusterIP
