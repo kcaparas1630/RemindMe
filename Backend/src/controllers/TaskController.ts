@@ -24,6 +24,7 @@ const postTask = (req: Request, res: Response) => {
     res.status(201).json({
         success: true,
         message: 'Task has successfully been added',
+        data: newTask,
     });
 };
-export default getTask;
+export { getTask, postTask };
