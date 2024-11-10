@@ -10,7 +10,7 @@ const getTask = async (req: Request, res: Response): Promise<void> => {
 
 const postTask = async (req: Request, res: Response): Promise<void> => {
     try {
-        let id = 1;
+        let id = 1; // will update based on the current id in database
         const { task_name, task_description, task_progress } = req.body;
         console.log('Received data:', { task_name, task_description, task_progress });
 
