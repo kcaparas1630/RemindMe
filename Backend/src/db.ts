@@ -1,6 +1,8 @@
-import pg from 'pg'
+import pg, { QueryResult } from 'pg'
 
 const { Client } = pg;
+
+
 
 const client = new Client({
     user: process.env.POSTGRES_USER,
@@ -20,6 +22,20 @@ const connectClient = async () => {
 
 connectClient();
 
-const query = (text: any, params?: any[]): Promise<any> => client.query(text, params);
+const query = (text: any, params?: any[]): Promise<QueryResult> => client.query(text, params);
+const addData = async (
+    id: number,
+    task_name: string,
+    task_description: string,
+    task_progress: string
+): Promise<QueryResult> => {
+    const queryText: string = `
+        INSERT INTO task (id, task_name, task_description, task_progress)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+    `;
+    const values: any[] = [id,task_name, task_description, task_progress];
+    return query(queryText, values);
+}
 
-export default query;
+export { query, addData };
