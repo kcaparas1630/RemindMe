@@ -14,15 +14,15 @@ const postTask = async (req: Request, res: Response): Promise<void> => {
         const { task_name, task_description, task_progress } = req.body;
         console.log('Received data:', { task_name, task_description, task_progress });
 
-        // Validation check
-        if (!task_name || !task_description || !task_progress) {
-            console.log('Validation failed');
-            res.status(400).json({
-                success: false,
-                message: 'Missing required fields',
-            });
-            return;
-        }
+        // // Validation check
+        // if (!task_name || !task_description || !task_progress) {
+        //     console.log('Validation failed');
+        //     res.status(400).json({
+        //         success: false,
+        //         message: 'Missing required fields',
+        //     });
+        //     return;
+        // }
 
         const result = await addData(
             id,
