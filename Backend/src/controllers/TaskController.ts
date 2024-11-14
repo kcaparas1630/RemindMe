@@ -13,8 +13,15 @@ const postTask = async (req: Request, res: Response): Promise<void> => {
         let id = 1; // will update based on the current id in database
         const { task_name, task_description, task_progress } = req.body;
         console.log('Received data:', { task_name, task_description, task_progress });
-
-        // // Validation check
+        
+        const task = await query('Select * from task');
+        const taskRowCount = task.rowCount;
+        
+        // Validate if not null
+        if (taskRowCount) {
+            id += taskRowCount;
+        }
+        // // Validation checkfrom task
         // if (!task_name || !task_description || !task_progress) {
         //     console.log('Validation failed');
         //     res.status(400).json({
