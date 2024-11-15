@@ -24,17 +24,17 @@ connectClient();
 
 const query = (text: any, params?: any[]): Promise<QueryResult> => client.query(text, params);
 const addData = async (
-    id: number,
     task_name: string,
     task_description: string,
-    task_progress: string
+    task_progress: string,
+    task_completed: Date | null
 ): Promise<QueryResult> => {
     const queryText: string = `
-        INSERT INTO task (id, task_name, task_description, task_progress)
+        INSERT INTO task (task_name, task_description, task_progress, task_completed)
         VALUES ($1, $2, $3, $4)
-        RETURNING *
+        RETURNING id, task_name, task_description, task_progress, task_completed
     `;
-    const values: any[] = [id,task_name, task_description, task_progress];
+    const values: any[] = [task_name, task_description, task_progress, task_completed];
     return query(queryText, values);
 }
 
