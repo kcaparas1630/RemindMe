@@ -1,43 +1,67 @@
 import { Request, Response } from 'express';
 import TaskInterface from '../Interface/taskInterface';
 import { addData, query } from '../db';
+import TaskProgressContants from '../Constants/TaskProgress';
 
-const getTask = async (req: Request, res: Response): Promise<void> => {
+const getAllTask = async (req: Request, res: Response): Promise<void> => {
     const task = await query('Select * from task');
     const body = task.rows.map((row: any) => row);
     res.status(200).send(body);
 };
 
+const getTaskByName = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    try {
+      const task_name = req.body.task_name;
+  
+      if (!task_name) {
+        res.status(400).json({ error: "Task name is required" });
+        return;
+      }
+  
+      const result = await query(
+        "SELECT * FROM task WHERE task_name = $1",
+        [task_name]
+      );
+  
+      if (result.rowCount === 0) {
+        res.status(404).json({ error: "Task not found" });
+        return;
+      }
+  
+      res.status(200).json(result.rows[0]);
+    } catch (error) {
+      res.status(500).json({
+        error: "Failed to fetch task",
+        message: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  };
+  
+const taskProgressCompleteChecker = (taskProgress: string): boolean => {
+    return taskProgress.toUpperCase() === TaskProgressContants.COMPLETED;
+};
 const postTask = async (req: Request, res: Response): Promise<void> => {
     try {
-        let id = 1; // will update based on the current id in database
         const { task_name, task_description, task_progress } = req.body;
         console.log('Received data:', { task_name, task_description, task_progress });
-        
-        const task = await query('Select * from task');
-        const taskRowCount = task.rowCount;
-        
-        // Validate if not null
-        if (taskRowCount) {
-            id += taskRowCount;
+        const isTaskComplete = taskProgressCompleteChecker(task_progress);
+        let task_completed: Date | null = null;
+
+        // if task complete, assign the date today.
+        if ( isTaskComplete ) {
+            task_completed = new Date();
         }
-        // // Validation checkfrom task
-        // if (!task_name || !task_description || !task_progress) {
-        //     console.log('Validation failed');
-        //     res.status(400).json({
-        //         success: false,
-        //         message: 'Missing required fields',
-        //     });
-        //     return;
-        // }
 
         const result = await addData(
-            id,
             task_name,
             task_description,
-            task_progress
+            task_progress,
+            task_completed
         );
-
+        
         // Send success response
         res.status(201).json({
             success: true,
@@ -55,4 +79,4 @@ const postTask = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export { getTask, postTask };
+export { getAllTask, getTaskByName, postTask };
