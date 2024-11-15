@@ -14,16 +14,16 @@ const getTaskByName = async (
     res: Response
   ): Promise<void> => {
     try {
-      const taskName = req.body.name;
+      const task_name = req.body.task_name;
   
-      if (!taskName) {
+      if (!task_name) {
         res.status(400).json({ error: "Task name is required" });
         return;
       }
   
       const result = await query(
         "SELECT * FROM task WHERE task_name = $1",
-        [taskName]
+        [task_name]
       );
   
       if (result.rowCount === 0) {
