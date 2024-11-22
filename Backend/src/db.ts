@@ -40,14 +40,17 @@ const addTaskData = async (
 
 const addUserData = async (
     first_name: string,
-    last_name: string
+    last_name: string,
+    username: string,
+    user_password: string,
+    user_email: string
 ): Promise<QueryResult> => {
     const queryText: string = `
-        INSERT INTO taskUser (first_name, last_name)
-        VALUES ($1, $2)
-        RETURNING id, first_name, last_name
+        INSERT INTO taskUser (first_name, last_name, username, user_password, user_email)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING id, first_name, last_name, username, user_password, user_email
     `;
-    const values: any[] = [first_name, last_name];
+    const values: any[] = [first_name, last_name, username, user_password, user_email];
     return query(queryText, values);
 }
 
