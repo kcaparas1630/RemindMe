@@ -6,6 +6,7 @@ const userValidationSchema = object({
         first_name: string().required('First name is required'),
         last_name: string().required('Last name is required'),
         username: string().required('Username is required'),
+        // password complies to OWASP security
         user_password: string().min(8).max(64).matches(
             /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:'",.<>\?])/,
             'Password must contain at least one Uppercase letter, one Lowercase letter, one Number, and one Special character'
