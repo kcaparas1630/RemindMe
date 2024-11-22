@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { addUserData, query } from '../db';
 
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
-    const userQuery = await query('Select * from user');
+    const userQuery = await query('Select * from taskUser');
     const body = userQuery.rows.map((row: any) => row);
     res.status(200).send(body);
 };
@@ -17,7 +17,7 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
         }
 
         const result = await query (
-            "SELECT * FROM user WHERE id = $1",
+            "SELECT * FROM taskUser WHERE id = $1",
             [userId]
         );
 
