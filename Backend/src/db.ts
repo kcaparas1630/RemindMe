@@ -23,7 +23,7 @@ const connectClient = async () => {
 connectClient();
 
 const query = (text: any, params?: any[]): Promise<QueryResult> => client.query(text, params);
-const addData = async (
+const addTaskData = async (
     task_name: string,
     task_description: string,
     task_progress: string,
@@ -38,4 +38,17 @@ const addData = async (
     return query(queryText, values);
 }
 
-export { query, addData };
+const addUserData = async (
+    first_name: string,
+    last_name: string
+): Promise<QueryResult> => {
+    const queryText: string = `
+        INSERT INTO user (first_name, last_name)
+        VALUES ($1, $2)
+        RETURNING id, first_name, last_name
+    `;
+    const values: any[] = [first_name, last_name];
+    return query(queryText, values);
+}
+
+export { query, addTaskData, addUserData };

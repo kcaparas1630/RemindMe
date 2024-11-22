@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import TaskInterface from '../Interface/taskInterface';
-import { addData, query } from '../db';
+import { addTaskData, query } from '../db';
 import TaskProgressContants from '../Constants/TaskProgress';
 
 const getAllTask = async (req: Request, res: Response): Promise<void> => {
@@ -55,7 +55,7 @@ const postTask = async (req: Request, res: Response): Promise<void> => {
             task_completed = new Date();
         }
 
-        const result = await addData(
+        const result = await addTaskData(
             task_name,
             task_description,
             task_progress,
