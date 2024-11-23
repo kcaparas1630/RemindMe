@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { addUserData, query } from '../db';
 import { hashPassword, verifyHashPassword } from '../Helper/hash';
 import checkUserExists from '../Helper/UserExists';
-
+import passport from 'passport';
+import { BasicStrategy } from 'passport-http';
 
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
     const userQuery = await query('Select * from taskUser');
@@ -43,7 +44,7 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
         const { first_name, last_name, username, user_password, user_email } = req.body;
         console.log('Received data:', { first_name, last_name, username, user_password, user_email });
         const hashedPasssword = await hashPassword(user_password);
-
+        
         const userExists = await checkUserExists(username, user_email);
 
         if (userExists) {
@@ -116,5 +117,38 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
         });
     }
 };
+
+passport.use(new BasicStrategy(
+    async (userName:string, userPassword:string, done:any) => {
+        try {
+            const userResult = await query(
+                'SELECT id, username, user_password, first_name, last_name FROM taskUser WHERE username = $1',
+                [userName]
+            );
+
+            if (userResult.rows.length === 0) {
+                return done(null, false, { 
+                    message: 'User not found' 
+                });
+            }
+
+            const user = userResult.rows[0];
+
+            const isPasswordCorrect = await verifyHashPassword(userPassword, user.user_password);
+
+            if (!isPasswordCorrect) {
+                return done(null, false, { 
+                    message: 'Incorrect username or password' 
+                });
+            }
+
+            // valid password, return user
+            return done(null, userResult);
+
+        } catch (error:any) {
+            return done(error);
+        }
+    }
+));
 
 export { getAllUser, getUserById, registerUser, loginUser };
