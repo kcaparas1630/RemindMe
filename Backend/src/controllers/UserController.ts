@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { addUserData, query } from '../db';
-import { hashPassword } from '../Helper/hash';
+import { hashPassword, verifyHashPassword } from '../Helper/hash';
 
 
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
@@ -65,4 +65,45 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export { getAllUser, getUserById, registerUser };
+const loginUser = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const {username, user_password} = req.body;
+        const userResult = await query(
+            'SELECT id, username, user_password, first_name, last_name FROM taskUser WHERE username = $1',
+            [username]
+        );
+        // check if user exists
+        if (userResult.rows.length === 0) {
+            res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+            return;
+        }
+        const user = userResult.rows[0];
+
+        // verify password
+        const isPasswordCorrect = await verifyHashPassword(user_password, user.user_password);
+
+        if (!isPasswordCorrect) {
+            res.status(401).send({
+                success: false,
+                message: 'Invalid Credentials'
+            })
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Login Successful'
+        })
+        
+    } catch (error) {
+         res.status(500).json({
+            error: 'Failed to register user',
+            message: error instanceof Error ? error.message : 'Unknown Error'
+        });
+    }
+};
+
+export { getAllUser, getUserById, registerUser, loginUser };

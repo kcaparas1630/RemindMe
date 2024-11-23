@@ -1,7 +1,7 @@
 import { object, string } from "yup";
 
 
-const userValidationSchema = object({
+const userRegisterValidationSchema = object({
     body: object({
         first_name: string().required('First name is required'),
         last_name: string().required('Last name is required'),
@@ -15,4 +15,11 @@ const userValidationSchema = object({
     })
 });
 
-export default userValidationSchema;
+const userLoginValidationSchema = object({
+    body: object({
+        username: string().required('Username is required'),
+        user_password: string().required('Password is required')
+    })
+});
+
+export { userRegisterValidationSchema, userLoginValidationSchema };
