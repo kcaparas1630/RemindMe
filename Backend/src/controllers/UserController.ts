@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { addUserData, query } from '../db';
 import { hashPassword, verifyHashPassword } from '../Helper/hash';
+import checkUserExists from '../Helper/UserExists';
 
 
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
@@ -42,6 +43,16 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
         const { first_name, last_name, username, user_password, user_email } = req.body;
         console.log('Received data:', { first_name, last_name, username, user_password, user_email });
         const hashedPasssword = await hashPassword(user_password);
+
+        const userExists = await checkUserExists(username, user_email);
+
+        if (userExists) {
+            res.status(409).json({
+                success: false,
+                message: 'User already exists'
+            });
+            return;
+        }
 
         const result = await addUserData(
             first_name,
