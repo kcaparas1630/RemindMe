@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { addUserData, query } from '../db';
+import { hashPassword } from '../Helper/hash';
+
 
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
     const userQuery = await query('Select * from taskUser');
@@ -35,4 +37,32 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-export { getAllUser, getUserById };
+const registerUser = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { first_name, last_name, username, user_password, user_email } = req.body;
+        console.log('Received data:', { first_name, last_name, username, user_password, user_email });
+        const hashedPasssword = await hashPassword(user_password);
+
+        const result = await addUserData(
+            first_name,
+            last_name,
+            username,
+            hashedPasssword,
+            user_email
+        );
+
+        // Send success response
+        res.status(201).json({
+            success: true,
+            message: 'User has succesfully been added',
+            data: result.rows[0],
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: 'Failed to register user',
+            message: error instanceof Error ? error.message : 'Unknown Error'
+        });
+    }
+};
+
+export { getAllUser, getUserById, registerUser };
