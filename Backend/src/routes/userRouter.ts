@@ -7,7 +7,8 @@ const router  = Router();
 
 router.route('/user')
     .get(getAllUser)
-    .post(validate(userValidationSchema), registerUser);
+
+router.route('/user/register').post(validate(userValidationSchema), registerUser);
 
 // special getter for getting user id
 router.get('/user/:id', getUserById);
