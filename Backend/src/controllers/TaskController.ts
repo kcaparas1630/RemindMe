@@ -45,7 +45,7 @@ const taskProgressCompleteChecker = (taskProgress: string): boolean => {
 };
 const postTask = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { task_name, task_description, task_progress } = req.body;
+        const { task_name, task_description, task_progress, task_due_date } = req.body;
         console.log('Received data:', { task_name, task_description, task_progress });
         const isTaskComplete = taskProgressCompleteChecker(task_progress);
         let task_completed: Date | null = null;
@@ -59,6 +59,7 @@ const postTask = async (req: Request, res: Response): Promise<void> => {
             task_name,
             task_description,
             task_progress,
+            task_due_date,
             task_completed
         );
         
