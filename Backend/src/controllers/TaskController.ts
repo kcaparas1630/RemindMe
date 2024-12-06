@@ -43,7 +43,6 @@ const getTaskByName = async (
 const taskProgressCompleteChecker = (taskProgress: string): boolean => {
     return taskProgress.toUpperCase() === TaskProgressContants.COMPLETED;
 };
-
 const postTask = async (req: Request, res: Response): Promise<void> => {
     try {
         const { task_name, task_description, task_progress, task_due_date } = req.body;
