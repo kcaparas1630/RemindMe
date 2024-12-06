@@ -1,12 +1,13 @@
 import pg, { QueryResult } from 'pg'
+import { env } from 'process';
 
 const { Client } = pg;
 
 const client = new Client({
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    host: process.env.POSTGRES_HOST,
-    database: process.env.POSTGRES_DATABASE,
+    user: env.POSTGRES_USER,
+    password: env.POSTGRES_PASSWORD,
+    host: env.POSTGRES_HOST,
+    database: env.POSTGRES_DATABASE,
 });
 
 const connectClient = async () => {
@@ -20,7 +21,9 @@ const connectClient = async () => {
 
 connectClient();
 
-const query = (text: any, params?: any[]): Promise<QueryResult> => client.query(text, params);
+const query = (text: string, params?: (string | Date| null)[]): Promise<QueryResult> => {
+    return client.query(text, params);
+}
 const addTaskData = async (
     task_name: string,
     task_description: string,
@@ -33,7 +36,7 @@ const addTaskData = async (
         VALUES ($1, $2, $3, $4, $5)
         RETURNING id, task_name, task_description, task_progress, task_due_date, task_completed
     `;
-    const values: any[] = [task_name, task_description, task_progress, task_due_date, task_completed];
+    const values: (string | Date | null)[] = [task_name, task_description, task_progress, task_due_date, task_completed];
     return query(queryText, values);
 }
 
@@ -49,7 +52,7 @@ const addUserData = async (
         VALUES ($1, $2, $3, $4, $5)
         RETURNING id, first_name, last_name, username, user_password, user_email
     `;
-    const values: any[] = [first_name, last_name, username, user_password, user_email];
+    const values: string[] = [first_name, last_name, username, user_password, user_email];
     return query(queryText, values);
 }
 

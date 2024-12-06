@@ -1,7 +1,7 @@
 import { AnySchema } from "yup";
 import { Request, Response, NextFunction } from "express";
 
-const validate = (schema: AnySchema) => async (
+const validate = (schema: AnySchema) => {return async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -13,9 +13,15 @@ const validate = (schema: AnySchema) => async (
             params: req.params,
         });
         next();
-    } catch (e:any) {
-        res.status(400).send(e.message);
+    } catch (e:unknown | string | null) {
+        if (e instanceof Error) {
+            res.status(400).send(e.message);
+        } else if (typeof e === 'string') {
+            res.status(400).send(e);
+        } else {
+            res.status(400).send('An unknown error occurred');
+        }
     }
-}
+}}
 
 export default validate;
