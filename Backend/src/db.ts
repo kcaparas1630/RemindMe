@@ -31,7 +31,7 @@ const addTaskData = async (
     task_completed: Date | null
 ): Promise<QueryResult> => {
     const queryText: string = `
-        INSERT INTO task (task_name, task_description, task_progress, task_due_date task_completed)
+        INSERT INTO task (task_name, task_description, task_progress, task_due_date, task_completed)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING id, task_name, task_description, task_progress, task_due_date, task_completed
     `;
