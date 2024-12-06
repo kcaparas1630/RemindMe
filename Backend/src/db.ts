@@ -2,8 +2,6 @@ import pg, { QueryResult } from 'pg'
 
 const { Client } = pg;
 
-
-
 const client = new Client({
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
@@ -27,14 +25,15 @@ const addTaskData = async (
     task_name: string,
     task_description: string,
     task_progress: string,
+    task_due_date: Date,
     task_completed: Date | null
 ): Promise<QueryResult> => {
     const queryText: string = `
-        INSERT INTO task (task_name, task_description, task_progress, task_completed)
-        VALUES ($1, $2, $3, $4)
-        RETURNING id, task_name, task_description, task_progress, task_completed
+        INSERT INTO task (task_name, task_description, task_progress, task_due_date, task_completed)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING id, task_name, task_description, task_progress, task_due_date, task_completed
     `;
-    const values: any[] = [task_name, task_description, task_progress, task_completed];
+    const values: any[] = [task_name, task_description, task_progress, task_due_date, task_completed];
     return query(queryText, values);
 }
 

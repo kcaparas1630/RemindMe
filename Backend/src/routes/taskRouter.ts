@@ -1,8 +1,7 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { getAllTask, getTaskByName, postTask } from '../controllers/TaskController';
 import validate from '../middleware/validation-schema';
 import taskValidationSchema from '../dto/createTask-schema';
-import passport from 'passport';
 import handleAuth from '../Helper/handleAuth';
 
 const router = Router();
