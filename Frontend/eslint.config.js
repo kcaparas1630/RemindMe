@@ -23,6 +23,12 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      "no-unused-vars": "error",
+      "no-undef": "error",
+      "arrow-body-style": ["error", "always"],
+      "no-console": "error", // no consoles especially in prod.
+      "no-use-before-define": "error",
+      "no-useless-assignment": "error",
     },
   },
 )
