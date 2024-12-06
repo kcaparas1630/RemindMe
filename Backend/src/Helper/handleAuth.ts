@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import passport from "passport";
+import User from "../Interface/userInteface";
 
 const handleAuth = (req: Request, res: Response, next: NextFunction) => {
-    passport.authenticate('basic', { session: false }, (err: any, user: any, info: any) => {
+    passport.authenticate('basic', { session: false }, (err: Error | null, user: User, info: { message: string}) => {
         if (err) {
             return next(err);
         }

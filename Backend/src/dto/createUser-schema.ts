@@ -8,7 +8,7 @@ const userRegisterValidationSchema = object({
         username: string().required('Username is required'),
         // password complies to OWASP security
         user_password: string().min(8).max(64).matches(
-            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:'",.<>\?])/,
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[[\]{};:'",.<>?])/,
             'Password must contain at least one Uppercase letter, one Lowercase letter, one Number, and one Special character'
         ).required('Password is required'),
         user_email: string().email('Email must be a valid email').required('Email is required')

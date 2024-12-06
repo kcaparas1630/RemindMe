@@ -4,10 +4,13 @@ import { hashPassword, verifyHashPassword } from '../Helper/hash';
 import checkUserExists from '../Helper/UserExists';
 import passport from 'passport';
 import { BasicStrategy } from 'passport-http';
+import DoneFunction from '../Interface/doneFuncType';
 
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
     const userQuery = await query('Select * from taskUser');
-    const body = userQuery.rows.map((row: any) => row);
+    const body = userQuery.rows.map((row: object) => {
+        return row;
+    });
     res.status(200).send(body);
 };
 
@@ -31,7 +34,7 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
         }
 
         res.status(200).json(result.rows[0]);
-    } catch (error: any) {
+    } catch (error: unknown | null) {
         res.status(500).json({
             error: "Failed to fetch user",
             message: error instanceof Error ? error.message : "Unknown error",
@@ -119,7 +122,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 passport.use(new BasicStrategy(
-    async (userName:string, userPassword:string, done:any) => {
+    async (userName:string, userPassword:string, done:DoneFunction) => {
         try {
             const userResult = await query(
                 'SELECT id, username, user_password, first_name, last_name FROM taskUser WHERE username = $1',
@@ -143,10 +146,13 @@ passport.use(new BasicStrategy(
             }
 
             // valid password, return user
-            return done(null, userResult);
+            return done(null, user);
 
-        } catch (error:any) {
-            return done(error);
+        } catch (error:unknown | null) {
+            if (error instanceof Error) {
+                return done(error);
+            }
+            return done(new Error('An unknown error occurred'));
         }
     }
 ));

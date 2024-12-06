@@ -1,4 +1,4 @@
-import Yup, { date, object, string } from "yup";
+import { date, object, string } from "yup";
 
 const taskValidationSchema = object({
     body: object({

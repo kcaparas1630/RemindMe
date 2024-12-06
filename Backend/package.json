@@ -7,6 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "start": "node dist/server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
     "dev": "concurrently \"tsc -w\" \"nodemon dist/server.js\"",
     "serve": "concurrently \"tsc -w\" \"nodemon dist/server.js\""
   },
@@ -29,9 +32,11 @@
     "passport": "^0.7.0",
     "passport-http": "^0.3.0",
     "pg": "^8.13.1",
+    "prettier": "^3.4.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.16.0",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
@@ -39,7 +44,11 @@
     "@types/morgan": "^1.9.9",
     "@types/pg": "^8.11.10",
     "concurrently": "^9.0.1",
+    "eslint": "^9.16.0",
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.13.0",
     "nodemon": "^3.1.7",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript-eslint": "^8.17.0"
   }
 }
