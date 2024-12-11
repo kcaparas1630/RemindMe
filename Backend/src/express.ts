@@ -8,13 +8,11 @@ import rateLimit from 'express-rate-limit';
 import passport from 'passport';
 import * as routers from './routes/index';
 
-
 const app = express();
 const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: 10, // limit each ip to 10 requests per window/minute
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 10, // limit each ip to 10 requests per window/minute
 });
-
 
 // Middleware
 app.use(express.json());
@@ -26,6 +24,6 @@ app.use(cors());
 app.use(limiter);
 app.use(passport.initialize());
 //Routes
-app.use('/api', [routers.taskRouter, routers.userRouter ]);
+app.use('/api', [routers.taskRouter, routers.userRouter]);
 
 export default app;
