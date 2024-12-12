@@ -54,7 +54,7 @@ const addUserData = async (
   user_email: string
 ): Promise<QueryResult> => {
   const queryText: string = `
-        INSERT INTO taskUser (first_name, last_name, username, user_password, user_email)
+        INSERT INTO taskuser (first_name, last_name, username, user_password, user_email)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING id, first_name, last_name, username, user_password, user_email
     `;

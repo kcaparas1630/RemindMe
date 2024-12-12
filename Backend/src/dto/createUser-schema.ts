@@ -10,7 +10,8 @@ const userRegisterValidationSchema = object({
       .min(8)
       .max(64)
       .matches(
-        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[[\]{};:'",.<>?])/,
+        // eslint-disable-next-line no-useless-escape
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:'",.<>\?])/,
         'Password must contain at least one Uppercase letter, one Lowercase letter, one Number, and one Special character'
       )
       .required('Password is required'),
