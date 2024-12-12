@@ -1,9 +1,10 @@
 import './App.css'
+import Login from './Views/Auth/Components/Login';
 
 const  App = () => {
   
   return (
-    <h1>Hello</h1>
+    <Login />
   )
 }
 
