@@ -7,7 +7,7 @@ import { BasicStrategy } from 'passport-http';
 import DoneFunction from '../Interface/doneFuncType';
 
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
-  const userQuery = await query('Select * from taskUser');
+  const userQuery = await query('Select * from taskuser');
   const body = userQuery.rows.map((row: object) => {
     return row;
   });
@@ -23,7 +23,7 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const result = await query('SELECT * FROM taskUser WHERE id = $1', [userId]);
+    const result = await query('SELECT * FROM taskuser WHERE id = $1', [userId]);
 
     if (result.rowCount === 0) {
       res.status(404).json({ error: 'User not found' });
@@ -44,7 +44,8 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
     const { first_name, last_name, username, user_password, user_email } = req.body;
     console.log('Received data:', { first_name, last_name, username, user_password, user_email });
     const hashedPasssword = await hashPassword(user_password);
-
+    const lowerCaseEmail = user_email.toLowerCase();
+    console.log(lowerCaseEmail);
     const userExists = await checkUserExists(username, user_email);
 
     if (userExists) {
@@ -74,8 +75,9 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { username, user_password } = req.body;
+    console.log("Received Data: ", username, user_password)
     const userResult = await query(
-      'SELECT id, username, user_password, first_name, last_name FROM taskUser WHERE username = $1',
+      'SELECT username, user_password FROM taskuser WHERE username = $1',
       [username]
     );
     // check if user exists
@@ -115,7 +117,7 @@ passport.use(
   new BasicStrategy(async (userName: string, userPassword: string, done: DoneFunction) => {
     try {
       const userResult = await query(
-        'SELECT id, username, user_password, first_name, last_name FROM taskUser WHERE username = $1',
+        'SELECT id, username, user_password, first_name, last_name FROM taskuser WHERE username = $1',
         [userName]
       );
 
