@@ -7,7 +7,7 @@ const InputContainer = styled.div`
     gap: 12px;
 `;
 const StyledInput = styled.input`
-    width: 100%;
+    width: 97%;
     height: 100%;
     min-height: 25px;
     border-radius: 4px;
