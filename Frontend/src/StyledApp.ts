@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 
 const StyledApp  = styled.main<{isDarkMode: boolean}>`
     label: StyledApp;
+    width: 100vw;
+    
     background-color: ${(props) => {
         return props.isDarkMode ? '#212529' : '#F8F9FA'}
     };
