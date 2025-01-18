@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import StyledApp from './StyledApp';
 import Login from './Views/Auth/Components/Login';
-import Header from './Commons/Headers';
+
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     const savedDarkMode = localStorage.getItem('isDarkMode');
