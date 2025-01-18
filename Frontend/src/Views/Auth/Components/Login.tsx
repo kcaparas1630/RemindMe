@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Container, LoginFormContainer } from '../Styled-Components/StyledLogin';
 import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
@@ -10,8 +10,19 @@ interface LoginProps {
 }
 
 const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
+  const [userName, setUsername] = useState<string>('');
+  const [userPassword, setUserPassword] = useState<string>('');
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserPassword(e.target.value);
+  }
   const handleClick = () => {
-    console.log('clicked'); // for now
+    console.log('username: ', userName);
+    console.log('password: ', userPassword);
   };
 
   return (
@@ -27,11 +38,15 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
           type="text"
           inputName="Username"
           placeholder="Enter your Username"
+          value={userName}
+          onChange={handleUsernameChange}
         />
         <InputField
           type="password"
           inputName="Password"
           placeholder="Enter your Password"
+          value={userPassword}
+          onChange={handlePasswordChange}
         />
         <Button
           type="submit"
