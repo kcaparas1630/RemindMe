@@ -15,5 +15,5 @@ COPY --chown=${APP_USER} . ./
 RUN npm i && \
   npm run build
 
-# Run in production mode, `npm run dev` for dev mode
-CMD ["npm", "run", "serve", "--no-update-notifier", "--max-old-space-size=50"]
+# Back to simple command now that config is in vite.config.ts
+CMD ["npm", "run", "dev"]
