@@ -54,13 +54,37 @@ services:
       POSTGRES_PASSWORD: default
       POSTGRES_USER: postgres
     healthcheck:
-      test: ["CMD-SHELL", "curl localhost:3000/api/health | grep 'Task API is healthy'"]
-      interval: 1m30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
+      test: ["CMD-SHELL", "curl -v localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
     ports:
       - 3000:3000
-
+  #Frontend
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    command: npm run dev
+    container_name: task-frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: ./Frontend
+          target: /app
+          ignore: [node_modules]
+    environment:
+      VITE_BACKEND_URL: http://localhost:3000/api
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5173 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    ports: [5173:5173]
 volumes:
   db-data: {}

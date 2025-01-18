@@ -1,4 +1,4 @@
-FROM node:slim
+FROM node:20.16.0
 
 # COPY files and install dependencies
 WORKDIR /app/
