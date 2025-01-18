@@ -21,8 +21,8 @@ const userRegisterValidationSchema = object({
 
 const userLoginValidationSchema = object({
   body: object({
-    username: string().required('Username is required'),
-    user_password: string().required('Password is required'),
+    userName: string().required('Username is required'),
+    userPassword: string().required('Password is required'),
   }),
 });
 

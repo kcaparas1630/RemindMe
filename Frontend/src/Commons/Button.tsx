@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import styled from '@emotion/styled';
 
 const StyledButton = styled.button<{ isDarkMode: boolean }>`
@@ -27,18 +27,14 @@ type ButtonType = 'button' | 'submit' | 'reset';
 interface ButtonProps {
   name: string;
   type: ButtonType;
-  onClick: () => void;
+  disabled: boolean;
   isDarkMode: boolean;
+  children: ReactNode;
 }
-const Button: FC<ButtonProps> = ({ name, type, onClick, isDarkMode }) => {
+const Button: FC<ButtonProps> = (props) => {
+  const {name, children} = props
   return (
-    <StyledButton
-      isDarkMode={isDarkMode}
-      id={name}
-      value={name}
-      type={type}
-      onClick={onClick}
-    >{name}</StyledButton>
+    <StyledButton {...props}>{children || name}</StyledButton>
   );
 };
 
