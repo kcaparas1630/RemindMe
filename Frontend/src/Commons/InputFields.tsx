@@ -15,10 +15,6 @@ interface InputFieldProps {
   error?: boolean | undefined | string;
 }
 
-const capitalizeFirstLetter = (string: string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
 const InputField: FC<InputFieldProps> = (props) => {
   const { inputName, labelName } = props;
   return (
