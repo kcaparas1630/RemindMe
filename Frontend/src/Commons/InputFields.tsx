@@ -1,19 +1,26 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { InputContainer, StyledInput, StyledLabel } from "./StyledCommons/StyledInput";
 
-type InputFieldType = 'text' | 'password' | 'email';
-
+// Assuming this is in the InputField component file
 interface InputFieldProps {
+  type: string;
   inputName: string;
+  labelName: string;
   placeholder: string;
-  type: InputFieldType;
+  value: string;
+  // eslint-disable-next-line no-unused-vars
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  // eslint-disable-next-line no-unused-vars
+  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+  error?: boolean | undefined | string;
 }
 
-const InputField: FC<InputFieldProps> = ({ inputName, placeholder, type }) => {
+const InputField: FC<InputFieldProps> = (props) => {
+  const { inputName, labelName } = props;
   return (
     <InputContainer>
-      <StyledLabel htmlFor={inputName}>{inputName}</StyledLabel>
-      <StyledInput type={type} id={inputName} name={inputName} placeholder={placeholder} />
+      <StyledLabel htmlFor={inputName}>{labelName}:</StyledLabel>
+      <StyledInput id={inputName} name={inputName} {...props} />
     </InputContainer>
   );
 };
