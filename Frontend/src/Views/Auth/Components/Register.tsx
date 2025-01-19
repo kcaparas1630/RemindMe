@@ -2,12 +2,14 @@ import { FC, useState } from 'react';
 import axios from 'axios';
 import { Formik } from 'formik';
 import validationSchema from '../Schema/RegisterSchema';
+import { ThemeProvider } from '@emotion/react';
 import {
   Container,
   LoginFormContainer,
   ErrorMessage,
   InputWrapper,
   StyledForm,
+  RouterText
 } from '../Styled-Components/StyledAuth';
 import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
@@ -167,6 +169,9 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
                       <ErrorMessage>{errors.userEmail}</ErrorMessage>
                     )}
                   </InputWrapper>
+                  <ThemeProvider theme={{ isDarkMode: isDarkMode }}>
+                    <RouterText to="/login">Already have an account?</RouterText>
+                  </ThemeProvider>
                   <Button
                     type="submit"
                     name="Submit"
