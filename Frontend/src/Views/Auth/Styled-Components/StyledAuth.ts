@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Form } from 'formik';
+import { NavLink } from 'react-router-dom';
 
 const Container = styled.section`
   label: ContainerWrapper;
@@ -56,5 +57,19 @@ const InputWrapper = styled.div`
   width: 100%;
 `;
 
+const RouterText = styled(NavLink)`
+  font-size: 1rem;
+  color: ${({ theme }) => {
+    return theme.isDarkMode ? '#DEE2E6' : '#333333'
+  }};
+  text-align: right;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
-export { Container, LoginFormContainer, ErrorMessage, InputWrapper, StyledForm };
+export { Container, LoginFormContainer, ErrorMessage, InputWrapper, StyledForm, RouterText };

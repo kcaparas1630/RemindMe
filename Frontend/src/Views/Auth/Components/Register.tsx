@@ -14,12 +14,12 @@ import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
 import RegisterFormProps from '../../../Interface/RegisterFormProps';
 
-interface LoginProps {
+interface RegisterProps {
   isDarkMode: boolean;
   toggleTheme: () => void;
 }
 
-const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
+const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
   const [formData] = useState<RegisterFormProps>({
     firstName: '',
     lastName: '',
@@ -185,4 +185,4 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
   );
 };
 
-export default Login;
+export default Register;
