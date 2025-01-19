@@ -43,8 +43,8 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
     try {
       setError(null);
       setSubmitting(true);
-
-      await axios.post('http://localhost:3000/user/register', {
+      console.log(values.firstName, values.lastName, values.userEmail, values.userName, values.userPassword);
+      await axios.post('http://localhost:3000/api/user/register', {
         firstName: values.firstName,
         lastName: values.lastName,
         userName: values.userName,

@@ -41,12 +41,12 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
 
 const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { first_name, last_name, username, user_password, user_email } = req.body;
-    console.log('Received data:', { first_name, last_name, username, user_password, user_email });
-    const hashedPasssword = await hashPassword(user_password);
-    const lowerCaseEmail = user_email.toLowerCase();
+    const { firstName, lastName, userName, userPassword, userEmail } = req.body;
+    console.log('Received data:', { firstName, lastName, userName, userPassword, userEmail });
+    const hashedPasssword = await hashPassword(userPassword);
+    const lowerCaseEmail = userEmail.toLowerCase();
     console.log(lowerCaseEmail);
-    const userExists = await checkUserExists(username, user_email);
+    const userExists = await checkUserExists(userName, userEmail);
 
     if (userExists) {
       res.status(403).json({
@@ -56,7 +56,7 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const result = await addUserData(first_name, last_name, username, hashedPasssword, user_email);
+    const result = await addUserData(firstName, lastName, userName, hashedPasssword, userEmail);
 
     // Send success response
     res.status(201).json({
@@ -74,11 +74,11 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 
 const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { username, user_password } = req.body;
-    console.log("Received Data: ", username, user_password)
+    const { userName, userPassword } = req.body;
+    console.log("Received Data: ", userName, userPassword)
     const userResult = await query(
       'SELECT username, user_password FROM taskuser WHERE username = $1',
-      [username]
+      [userName]
     );
     // check if user exists
     if (userResult.rows.length === 0) {
@@ -91,7 +91,8 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     const user = userResult.rows[0];
 
     // verify password
-    const isPasswordCorrect = await verifyHashPassword(user_password, user.user_password);
+    const isPasswordCorrect = await verifyHashPassword(userPassword, user.userPassword);
+    console.log(isPasswordCorrect);
 
     if (!isPasswordCorrect) {
       res.status(401).send({
@@ -107,7 +108,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     });
   } catch (error) {
     res.status(500).json({
-      error: 'Failed to register user',
+      error: 'Failed to login user',
       message: error instanceof Error ? error.message : 'Unknown Error',
     });
   }
