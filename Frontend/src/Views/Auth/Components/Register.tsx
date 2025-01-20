@@ -16,6 +16,7 @@ import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
 import RegisterFormProps from '../../../Interface/RegisterFormProps';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 interface RegisterProps {
   isDarkMode: boolean;
@@ -31,7 +32,7 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
     userEmail: '',
   });
   const [, setError] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   const notify = () => {
     return toast('Register Successful');
   }
@@ -56,6 +57,9 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
         userEmail: values.userEmail,
       });
       notify();
+      setTimeout(() => {
+        navigate('/login');
+      }, 5000);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data?.message;
