@@ -24,6 +24,11 @@ const ModalContent = styled.div<{ isDarkMode: boolean }>`
   border-radius: 8px;
   text-align: center;
   max-width: 400px;
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 export { ModalOverlay, ModalContent };

@@ -15,7 +15,6 @@ import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
 import RegisterFormProps from '../../../Interface/RegisterFormProps';
-import { ToastContainer, toast } from 'react-toastify';
 import Modal from '../../../Commons/Modal';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,8 +34,8 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
   });
   const [, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
- 
   const handleRegister = async (
     values: RegisterFormProps,
 
@@ -49,15 +48,16 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
     try {
       setError(null);
       setSubmitting(true);
-      // For modal use
+      setIsLoading(true);
+      
       setFormData({
         firstName: values.firstName,
         lastName: values.lastName,
         userName: values.userName,
         userPassword: values.userPassword,
         userEmail: values.userEmail,
+      });
 
-      })
       await axios.post('http://localhost:3000/api/user/register', {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -67,10 +67,11 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
       });
 
       setIsModalOpen(true);
-      setTimeout(() => {
-        setIsModalOpen(false);
-        navigate('/login');
-      }, 3000);
+      // setTimeout(() => {
+      //   setIsModalOpen(false);
+      //   setIsLoading(false);
+      //   navigate('/login');
+      // }, 3000);
 
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -83,6 +84,7 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
       } else {
         setError('An unexpected error occurred');
       }
+      setIsLoading(false);
     } finally {
       setSubmitting(false);
     }
@@ -95,7 +97,6 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
         toggleTheme={toggleTheme}
       />
       <Container>
-        <ToastContainer />
         <LoginFormContainer isDarkMode={isDarkMode}>
           <h1>Task Dashboard Register</h1>
           <Formik
@@ -212,6 +213,7 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
         isOpen={isModalOpen}
         message={`${formData.firstName}, your registration is successful! Please login with your credentials.`}
         isDarkMode={isDarkMode}
+        isLoading={isLoading}
       />
     </>
   );
