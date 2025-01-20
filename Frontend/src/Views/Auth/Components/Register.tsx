@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import axios from 'axios';
 import { Formik } from 'formik';
-import validationSchema from '../Schema/LoginSchema';
+import validationSchema from '../Schema/RegisterSchema';
 import { ThemeProvider } from '@emotion/react';
 import {
   Container,
@@ -9,24 +9,36 @@ import {
   ErrorMessage,
   InputWrapper,
   StyledForm,
-  RouterText,
+  RouterText
 } from '../Styled-Components/StyledAuth';
 import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
-import LoginFormProps from '../../../Interface/LoginFormProps';
+import RegisterFormProps from '../../../Interface/RegisterFormProps';
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
-interface LoginProps {
+interface RegisterProps {
   isDarkMode: boolean;
   toggleTheme: () => void;
 }
 
-const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
-  const [formData] = useState<LoginFormProps>({ userName: '', userPassword: '' });
+const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
+  const [formData] = useState<RegisterFormProps>({
+    firstName: '',
+    lastName: '',
+    userName: '',
+    userPassword: '',
+    userEmail: '',
+  });
   const [, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const notify = () => {
+    return toast('Register Successful');
+  }
 
-  const handleLogin = async (
-    values: LoginFormProps,
+  const handleRegister = async (
+    values: RegisterFormProps,
 
     {
       setSubmitting,
@@ -37,11 +49,17 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
     try {
       setError(null);
       setSubmitting(true);
-
-      await axios.post('http://localhost:3000/api/user/login', {
+      await axios.post('http://localhost:3000/api/user/register', {
+        firstName: values.firstName,
+        lastName: values.lastName,
         userName: values.userName,
         userPassword: values.userPassword,
+        userEmail: values.userEmail,
       });
+      notify();
+      setTimeout(() => {
+        navigate('/login');
+      }, 5000);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data?.message;
@@ -65,13 +83,14 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
         toggleTheme={toggleTheme}
       />
       <Container>
+        <ToastContainer />
         <LoginFormContainer isDarkMode={isDarkMode}>
-          <h1>Task Dashboard Login</h1>
+          <h1>Task Dashboard Register</h1>
           <Formik
             initialValues={formData}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting, setErrors }) => {
-              handleLogin(values, { setSubmitting, setErrors });
+              handleRegister(values, { setSubmitting, setErrors });
             }}
           >
             {({
@@ -85,6 +104,36 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
             }) => {
               return (
                 <StyledForm onSubmit={handleSubmit}>
+                  <InputWrapper>
+                    <InputField
+                      type="text"
+                      inputName="firstName"
+                      labelName="Firstname"
+                      placeholder="Enter your First name"
+                      value={values.firstName}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={errors.firstName && touched.firstName}
+                    />
+                    {errors.firstName && touched.firstName && (
+                      <ErrorMessage>{errors.firstName}</ErrorMessage>
+                    )}
+                  </InputWrapper>
+                  <InputWrapper>
+                    <InputField
+                      type="text"
+                      inputName="lastName"
+                      labelName="Lastname"
+                      placeholder="Enter your Last name"
+                      value={values.lastName}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={errors.lastName && touched.lastName}
+                    />
+                    {errors.lastName && touched.lastName && (
+                      <ErrorMessage>{errors.lastName}</ErrorMessage>
+                    )}
+                  </InputWrapper>
                   <InputWrapper>
                     <InputField
                       type="text"
@@ -115,8 +164,23 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
                       <ErrorMessage>{errors.userPassword}</ErrorMessage>
                     )}
                   </InputWrapper>
+                  <InputWrapper>
+                    <InputField
+                      type="email"
+                      inputName="userEmail"
+                      labelName="Email"
+                      placeholder="Enter your Email"
+                      value={values.userEmail}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={errors.userEmail && touched.userEmail}
+                    />
+                    {errors.userEmail && touched.userEmail && (
+                      <ErrorMessage>{errors.userEmail}</ErrorMessage>
+                    )}
+                  </InputWrapper>
                   <ThemeProvider theme={{ isDarkMode: isDarkMode }}>
-                    <RouterText to="/register">No Account yet?</RouterText>
+                    <RouterText to="/login">Already have an account?</RouterText>
                   </ThemeProvider>
                   <Button
                     type="submit"
@@ -124,7 +188,7 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
                     disabled={isSubmitting}
                     isDarkMode={isDarkMode}
                   >
-                    {isSubmitting ? 'Logging in' : 'Submit'}
+                    {isSubmitting ? 'Registering...' : 'Submit'}
                   </Button>
                 </StyledForm>
               );
@@ -136,4 +200,4 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
   );
 };
 
-export default Login;
+export default Register;

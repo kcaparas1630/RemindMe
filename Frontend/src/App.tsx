@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import StyledApp from './StyledApp';
 import Login from './Views/Auth/Components/Login';
+import Register from './Views/Auth/Components/Register';
 
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
@@ -19,7 +21,13 @@ const App = () => {
   
   return (
     <StyledApp isDarkMode={isDarkMode}>
-      <Login isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path='/login' element={<Login isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
+          <Route path='/register' element={<Register isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
+        </Routes>
+      </BrowserRouter>
     </StyledApp>
   );
 };

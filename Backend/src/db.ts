@@ -25,40 +25,40 @@ const query = (text: string, params?: (string | Date | null)[]): Promise<QueryRe
   return client.query(text, params);
 };
 const addTaskData = async (
-  task_name: string,
-  task_description: string,
-  task_progress: string,
-  task_due_date: Date,
-  task_completed: Date | null
+  taskName: string,
+  taskDescription: string,
+  taskProgress: string,
+  taskDueDate: Date,
+  taskCompleted: Date | null
 ): Promise<QueryResult> => {
   const queryText: string = `
-        INSERT INTO task (task_name, task_description, task_progress, task_due_date, task_completed)
+        INSERT INTO task ("taskName", "taskDescription", "taskProgress", "taskDueDate", "taskCompleted")
         VALUES ($1, $2, $3, $4, $5)
-        RETURNING id, task_name, task_description, task_progress, task_due_date, task_completed
-    `;
+        RETURNING id, "taskName", "taskDescription", "taskProgress", "taskDueDate", "taskCompleted"
+        `;
   const values: (string | Date | null)[] = [
-    task_name,
-    task_description,
-    task_progress,
-    task_due_date,
-    task_completed,
+    taskName,
+    taskDescription,
+    taskProgress,
+    taskDueDate,
+    taskCompleted,
   ];
   return query(queryText, values);
 };
 
 const addUserData = async (
-  first_name: string,
-  last_name: string,
-  username: string,
-  user_password: string,
-  user_email: string
+  firstName: string,
+  lastName: string,
+  userName: string,
+  userPassword: string,
+  userEmail: string
 ): Promise<QueryResult> => {
   const queryText: string = `
-        INSERT INTO taskuser (first_name, last_name, username, user_password, user_email)
+        INSERT INTO taskuser ("firstName", "lastName", "userName", "userPassword", "userEmail")
         VALUES ($1, $2, $3, $4, $5)
-        RETURNING id, first_name, last_name, username, user_password, user_email
+        RETURNING id, "firstName", "lastName", "userName", "userPassword", "userEmail"
     `;
-  const values: string[] = [first_name, last_name, username, user_password, user_email];
+  const values: string[] = [firstName, lastName, userName, userPassword, userEmail];
   return query(queryText, values);
 };
 
