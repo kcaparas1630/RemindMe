@@ -12,14 +12,14 @@ const getAllTask = async (req: Request, res: Response): Promise<void> => {
 
 const getTaskByName = async (req: Request, res: Response): Promise<void> => {
   try {
-    const task_name = req.body.task_name;
+    const taskName = req.body.task_name;
 
-    if (!task_name) {
+    if (!taskName) {
       res.status(400).json({ error: 'Task name is required' });
       return;
     }
 
-    const result = await query('SELECT * FROM task WHERE task_name = $1', [task_name]);
+    const result = await query('SELECT * FROM task WHERE task_name = $1', [taskName]);
 
     if (result.rowCount === 0) {
       res.status(404).json({ error: 'Task not found' });
@@ -40,22 +40,22 @@ const taskProgressCompleteChecker = (taskProgress: string): boolean => {
 };
 const postTask = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { task_name, task_description, task_progress, task_due_date } = req.body;
-    console.log('Received data:', { task_name, task_description, task_progress, task_due_date });
-    const isTaskComplete = taskProgressCompleteChecker(task_progress);
-    let task_completed: Date | null = null;
+    const { taskName, taskDescription, taskProgress, taskDueDate } = req.body;
+    console.log('Received data:', { taskName, taskDescription, taskProgress, taskDueDate });
+    const isTaskComplete = taskProgressCompleteChecker(taskProgress);
+    let taskCompleted: Date | null = null;
 
     // if task complete, assign the date today.
     if (isTaskComplete) {
-      task_completed = new Date();
+      taskCompleted = new Date();
     }
 
     const result = await addTaskData(
-      task_name,
-      task_description,
-      task_progress,
-      task_due_date,
-      task_completed
+      taskName,
+      taskDescription,
+      taskProgress,
+      taskDueDate,
+      taskCompleted
     );
 
     // Send success response

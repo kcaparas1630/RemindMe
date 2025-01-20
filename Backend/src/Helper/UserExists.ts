@@ -5,7 +5,7 @@ const checkUserExists = async (username: string, userEmail: string): Promise<boo
 
   // Query the database
   const userResult = await query(
-    'SELECT username, user_email FROM taskuser WHERE username = $1 OR user_email = $2',
+    'SELECT "userName", "userEmail" FROM taskuser WHERE "userName" = $1 OR "userEmail" = $2',
     [username, userEmail]
   );
 

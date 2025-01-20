@@ -77,7 +77,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     const { userName, userPassword } = req.body;
     console.log("Received Data: ", userName, userPassword)
     const userResult = await query(
-      'SELECT username, user_password FROM taskuser WHERE username = $1',
+      'SELECT "userName", "userPassword" FROM taskuser WHERE "userName" = $1',
       [userName]
     );
     // check if user exists
