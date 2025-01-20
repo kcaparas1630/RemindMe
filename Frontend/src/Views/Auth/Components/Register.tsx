@@ -15,6 +15,7 @@ import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
 import RegisterFormProps from '../../../Interface/RegisterFormProps';
+import { ToastContainer, toast } from 'react-toastify';
 
 interface RegisterProps {
   isDarkMode: boolean;
@@ -31,6 +32,10 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
   });
   const [, setError] = useState<string | null>(null);
 
+  const notify = () => {
+    return toast('Register Successful');
+  }
+
   const handleRegister = async (
     values: RegisterFormProps,
 
@@ -43,7 +48,6 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
     try {
       setError(null);
       setSubmitting(true);
-      console.log(values.firstName, values.lastName, values.userEmail, values.userName, values.userPassword);
       await axios.post('http://localhost:3000/api/user/register', {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -51,6 +55,7 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
         userPassword: values.userPassword,
         userEmail: values.userEmail,
       });
+      notify();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data?.message;
@@ -74,6 +79,7 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
         toggleTheme={toggleTheme}
       />
       <Container>
+        <ToastContainer />
         <LoginFormContainer isDarkMode={isDarkMode}>
           <h1>Task Dashboard Register</h1>
           <Formik
