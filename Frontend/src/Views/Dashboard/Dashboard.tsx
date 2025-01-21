@@ -13,6 +13,7 @@ const Dashboard: FC<DashboardProps> = ({ isDarkMode, toggleTheme }) => {
         themeMode={isDarkMode ? 'dark' : 'light'}
         toggleTheme={toggleTheme}
       />
+      <h1>You're in the dashboard hello!</h1>
     </>
   );
 };
