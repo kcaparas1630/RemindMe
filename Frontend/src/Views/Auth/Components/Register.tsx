@@ -67,11 +67,11 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
       });
 
       setIsModalOpen(true);
-      // setTimeout(() => {
-      //   setIsModalOpen(false);
-      //   setIsLoading(false);
-      //   navigate('/login');
-      // }, 3000);
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setIsLoading(false);
+        navigate('/login');
+      }, 3000);
 
     } catch (error) {
       if (axios.isAxiosError(error)) {
