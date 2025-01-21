@@ -15,6 +15,7 @@ import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
 import LoginFormProps from '../../../Interface/LoginFormProps';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginProps {
   isDarkMode: boolean;
@@ -24,7 +25,7 @@ interface LoginProps {
 const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
   const [formData] = useState<LoginFormProps>({ userName: '', userPassword: '' });
   const [, setError] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   const handleLogin = async (
     values: LoginFormProps,
 
@@ -42,6 +43,8 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
         userName: values.userName,
         userPassword: values.userPassword,
       });
+
+      navigate('/dashboard');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data?.message;

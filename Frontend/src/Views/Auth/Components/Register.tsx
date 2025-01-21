@@ -15,7 +15,7 @@ import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
 import RegisterFormProps from '../../../Interface/RegisterFormProps';
-import { ToastContainer, toast } from 'react-toastify';
+import Modal from '../../../Commons/Modal';
 import { useNavigate } from 'react-router-dom';
 
 interface RegisterProps {
@@ -24,7 +24,8 @@ interface RegisterProps {
 }
 
 const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
-  const [formData] = useState<RegisterFormProps>({
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<RegisterFormProps>({
     firstName: '',
     lastName: '',
     userName: '',
@@ -32,10 +33,8 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
     userEmail: '',
   });
   const [, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
-  const notify = () => {
-    return toast('Register Successful');
-  }
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRegister = async (
     values: RegisterFormProps,
@@ -49,6 +48,16 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
     try {
       setError(null);
       setSubmitting(true);
+      setIsLoading(true);
+      
+      setFormData({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        userName: values.userName,
+        userPassword: values.userPassword,
+        userEmail: values.userEmail,
+      });
+
       await axios.post('http://localhost:3000/api/user/register', {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -56,10 +65,14 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
         userPassword: values.userPassword,
         userEmail: values.userEmail,
       });
-      notify();
+
+      setIsModalOpen(true);
       setTimeout(() => {
+        setIsModalOpen(false);
+        setIsLoading(false);
         navigate('/login');
-      }, 5000);
+      }, 3000);
+
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data?.message;
@@ -71,6 +84,7 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
       } else {
         setError('An unexpected error occurred');
       }
+      setIsLoading(false);
     } finally {
       setSubmitting(false);
     }
@@ -83,7 +97,6 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
         toggleTheme={toggleTheme}
       />
       <Container>
-        <ToastContainer />
         <LoginFormContainer isDarkMode={isDarkMode}>
           <h1>Task Dashboard Register</h1>
           <Formik
@@ -196,6 +209,12 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
           </Formik>
         </LoginFormContainer>
       </Container>
+      <Modal 
+        isOpen={isModalOpen}
+        message={`${formData.firstName}, your registration is successful! Please login with your credentials.`}
+        isDarkMode={isDarkMode}
+        isLoading={isLoading}
+      />
     </>
   );
 };
