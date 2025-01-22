@@ -4,9 +4,6 @@ import dotenv from 'dotenv';
 import { hashPassword, verifyHashPassword } from '../Helper/hash';
 import checkUserExists from '../Helper/UserExists';
 import jwt from 'jsonwebtoken';
-// import passport from 'passport';
-// import { BasicStrategy } from 'passport-http';
-// import DoneFunction from '../Interface/doneFuncType';
 
 dotenv.config();
 
@@ -130,38 +127,5 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// passport.use(
-//   new BasicStrategy(async (userName: string, userPassword: string, done: DoneFunction) => {
-//     try {
-//       const userResult = await query(
-//         'SELECT id, username, user_password, first_name, last_name FROM taskuser WHERE username = $1',
-//         [userName]
-//       );
-
-//       if (userResult.rows.length === 0) {
-//         return done(null, false, {
-//           message: 'User not found',
-//         });
-//       }
-
-//       const user = userResult.rows[0];
-
-//       const isPasswordCorrect = await verifyHashPassword(userPassword, user.user_password);
-
-//       if (!isPasswordCorrect) {
-//         return done(null, false, {
-//           message: 'Incorrect username or password',
-//         });
-//       }
-//       // valid password, return user
-//       return done(null, user);
-//     } catch (error: unknown | null) {
-//       if (error instanceof Error) {
-//         return done(error);
-//       }
-//       return done(new Error('An unknown error occurred'));
-//     }
-//   })
-// );
 
 export { getAllUser, getUserById, registerUser, loginUser };
