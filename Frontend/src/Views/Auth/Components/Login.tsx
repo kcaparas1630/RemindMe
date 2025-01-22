@@ -39,10 +39,12 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
       setError(null);
       setSubmitting(true);
 
-      await axios.post('http://localhost:3000/api/user/login', {
+      const result = await axios.post('http://localhost:3000/api/user/login', {
         userName: values.userName,
         userPassword: values.userPassword,
       });
+
+      localStorage.setItem('loginToken', result.data);
 
       navigate('/dashboard');
     } catch (error) {

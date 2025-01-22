@@ -10,6 +10,11 @@ const App = () => {
     const savedDarkMode = localStorage.getItem('isDarkMode');
     return savedDarkMode !== null ? JSON.parse(savedDarkMode) : true;
   });
+  const [isAuthenticated] = useState<boolean>(() => {
+    const savedLoginToken = localStorage.getItem('loginToken');
+    return savedLoginToken !== null ? JSON.parse(savedLoginToken) : true;
+  });
+  console.log(isAuthenticated);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -27,7 +32,9 @@ const App = () => {
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path='/login' element={<Login isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
           <Route path='/register' element={<Register isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
-          <Route path='/dashboard' element={<Dashboard isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
+          {isAuthenticated && (
+            <Route path='/dashboard' element={<Dashboard isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
+          )}
         </Routes>
       </BrowserRouter>
     </StyledApp>
