@@ -4,26 +4,29 @@ import StyledApp from './StyledApp';
 import Login from './Views/Auth/Components/Login';
 import Register from './Views/Auth/Components/Register';
 import Dashboard from './Views/Dashboard/Dashboard';
+import ProtectedRoute from './ProtectedRoute';
 
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     const savedDarkMode = localStorage.getItem('isDarkMode');
-    return savedDarkMode !== null ? JSON.parse(savedDarkMode) : true;
+    return savedDarkMode !== null && savedDarkMode !== '';
   });
-  const [isAuthenticated] = useState<boolean>(() => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     const savedLoginToken = localStorage.getItem('loginToken');
-    return savedLoginToken !== null ? JSON.parse(savedLoginToken) : true;
+    return savedLoginToken !== null && savedLoginToken !== '';
   });
-  console.log(isAuthenticated);
+
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
     localStorage.setItem('isDarkMode', JSON.stringify(!isDarkMode));
   };
 
+  // check for token frequently and sets the value given.
   useEffect(() => {
-    localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
-  }, [isDarkMode]);
+    const token = localStorage.getItem('loginToken');
+    setIsAuthenticated(token !== null && token !== '');
+  }, []);
   
   return (
     <StyledApp isDarkMode={isDarkMode}>
@@ -32,9 +35,9 @@ const App = () => {
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path='/login' element={<Login isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
           <Route path='/register' element={<Register isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
-          {isAuthenticated && (
-            <Route path='/dashboard' element={<Dashboard isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
-          )}
+          <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+            <Route path="/dashboard" element={<Dashboard isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </StyledApp>

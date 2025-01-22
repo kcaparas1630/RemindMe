@@ -1,7 +1,9 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Header from '../../Commons/Headers';
 import TaskInterface from '../../Interface/TaskInterface';
 import { Table, TableHeader, TableCell } from './Styled-Components/StyledTable';
+import Button from '../../Commons/Button';
+import { useNavigate } from 'react-router-dom';
 interface DashboardProps {
   isDarkMode: boolean;
   toggleTheme: () => void;
@@ -10,6 +12,15 @@ interface DashboardProps {
 
 
 const Dashboard: FC<DashboardProps> = ({ isDarkMode, toggleTheme }) => {
+  const [isLogOutClicked, setIsLogoutClicked] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    setIsLogoutClicked(true);
+    localStorage.removeItem('loginToken');
+    navigate('/login');  
+  };
+
   const tasks: TaskInterface[] = [
     {
       taskName: 'task1',
@@ -59,6 +70,15 @@ const Dashboard: FC<DashboardProps> = ({ isDarkMode, toggleTheme }) => {
           })}
         </tbody>
       </Table>
+      <Button
+        type='button'
+        name='Logout'
+        disabled={isLogOutClicked}
+        isDarkMode={isDarkMode}
+        handleClick={logoutHandler}
+      >
+        Logout
+      </Button>
     </>
   );
 };
