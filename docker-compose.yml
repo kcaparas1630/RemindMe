@@ -46,13 +46,9 @@ services:
           path: ./Backend/
           target: app
           ignore: [node_modules]
-    environment:
-      LOG_LEVEL: info
-      PORT: 3000
-      POSTGRES_DATABASE: postgres
-      POSTGRES_HOST: task-db
-      POSTGRES_PASSWORD: default
-      POSTGRES_USER: postgres
+    env_file:
+      - ./Backend/.env
+
     healthcheck:
       test: ["CMD-SHELL", "curl -v localhost:3000/api/health"]
       interval: 10s

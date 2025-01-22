@@ -15,17 +15,15 @@ import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
 import LoginFormProps from '../../../Interface/LoginFormProps';
-import { useNavigate } from 'react-router-dom';
 
 interface LoginProps {
   isDarkMode: boolean;
-  toggleTheme: () => void;
+  toggleTheme: () => void; 
 }
 
 const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
   const [formData] = useState<LoginFormProps>({ userName: '', userPassword: '' });
   const [, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
   const handleLogin = async (
     values: LoginFormProps,
 
@@ -39,12 +37,14 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
       setError(null);
       setSubmitting(true);
 
-      await axios.post('http://localhost:3000/api/user/login', {
+      const result = await axios.post('http://localhost:3000/api/user/login', {
         userName: values.userName,
         userPassword: values.userPassword,
       });
 
-      navigate('/dashboard');
+      localStorage.setItem('loginToken', result.data);
+      // force a page reload to update authentication state
+      window.location.href = '/dashboard';
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data?.message;

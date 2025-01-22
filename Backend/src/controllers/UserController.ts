@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import { addUserData, query } from '../db';
+import dotenv from 'dotenv';
 import { hashPassword, verifyHashPassword } from '../Helper/hash';
 import checkUserExists from '../Helper/UserExists';
-import passport from 'passport';
-import { BasicStrategy } from 'passport-http';
-import DoneFunction from '../Interface/doneFuncType';
+import jwt from 'jsonwebtoken';
+
+dotenv.config();
 
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
   const userQuery = await query('Select * from taskuser');
@@ -74,8 +75,13 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
 
 const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
+    // eslint-disable-next-line no-undef
+    if (!process.env.JWT_SECRET) {
+      res.status(500).send('Server configuration error');
+      return;
+    }
     const { userName, userPassword } = req.body;
-    console.log("Received Data: ", userName, userPassword)
+    console.log('Received Data: ', userName, userPassword);
     const userResult = await query(
       'SELECT "userName", "userPassword" FROM taskuser WHERE "userName" = $1',
       [userName]
@@ -102,10 +108,17 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    res.status(200).json({
-      success: true,
-      message: 'Login Successful',
-    });
+    const token = jwt.sign(
+      {
+        sub: user._id,
+        email: user.email,
+      },
+      // eslint-disable-next-line no-undef
+      process.env.JWT_SECRET,
+      { expiresIn: '20m' }
+    );
+
+    res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({
       error: 'Failed to login user',
@@ -114,39 +127,5 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-passport.use(
-  new BasicStrategy(async (userName: string, userPassword: string, done: DoneFunction) => {
-    try {
-      const userResult = await query(
-        'SELECT id, username, user_password, first_name, last_name FROM taskuser WHERE username = $1',
-        [userName]
-      );
-
-      if (userResult.rows.length === 0) {
-        return done(null, false, {
-          message: 'User not found',
-        });
-      }
-
-      const user = userResult.rows[0];
-
-      const isPasswordCorrect = await verifyHashPassword(userPassword, user.user_password);
-
-      if (!isPasswordCorrect) {
-        return done(null, false, {
-          message: 'Incorrect username or password',
-        });
-      }
-
-      // valid password, return user
-      return done(null, user);
-    } catch (error: unknown | null) {
-      if (error instanceof Error) {
-        return done(error);
-      }
-      return done(new Error('An unknown error occurred'));
-    }
-  })
-);
 
 export { getAllUser, getUserById, registerUser, loginUser };

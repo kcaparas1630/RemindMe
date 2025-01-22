@@ -1,22 +1,84 @@
-import { Request, Response, NextFunction } from 'express';
-import passport from 'passport';
-import User from '../Interface/userInteface';
+// import { Request, Response, NextFunction } from 'express';
+// import passport from 'passport';
+// import User from '../Interface/userInteface';
 
-const handleAuth = (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate(
-    'basic',
-    { session: false },
-    (err: Error | null, user: User, info: { message: string }) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return res.status(401).json({ message: info.message || 'Authentication failed' });
-      }
-      req.user = user;
-      next();
-    }
-  )(req, res, next);
+// const handleAuth = (req: Request, res: Response, next: NextFunction) => {
+//   passport.authenticate(
+//     'basic',
+//     { session: false },
+//     (err: Error | null, user: User, info: { message: string }) => {
+//       if (err) {
+//         return next(err);
+//       }
+//       if (!user) {
+//         return res.status(401).json({ message: info.message || 'Authentication failed' });
+//       }
+//       req.user = user;
+//       next();
+//     }
+//   )(req, res, next);
+// };
+
+// export default handleAuth;
+
+import passport from 'passport';
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import { Request, Response, NextFunction } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
+import User from '../Interface/userInteface';
+import DoneFunction from '../Interface/doneFuncType';
+import { query } from '../db';
+
+// Check for JWT_SECRET early
+// eslint-disable-next-line no-undef
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET is not defined');
+}
+
+// JWT Strategy configuration
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: JWT_SECRET,
 };
 
-export default handleAuth;
+// Verify user function
+const verifyUser = async (payload: JwtPayload, done: DoneFunction) => {
+  try {
+    if (!payload.sub) {
+      return done(null, false, { message: 'Invalid token payload' });
+    }
+
+    const userResult = await query(
+      'SELECT id, username, first_name, last_name FROM taskuser WHERE username = $1',
+      [payload.sub]
+    );
+
+    if (userResult.rows.length === 0) {
+      return done(null, false, { message: 'User not found' });
+    }
+
+    return done(null, userResult.rows[0]);
+  } catch (error) {
+    return done(error instanceof Error ? error : new Error('Unknown error occurred'));
+  }
+};
+
+// Initialize JWT Strategy
+passport.use(new JwtStrategy(jwtOptions, verifyUser));
+
+// Middleware to protect routes
+export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
+  passport.authenticate('jwt', { session: false }, (err: Error | null, user: User | false) => {
+    if (err) {
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    req.user = user;
+    next();
+  })(req, res, next);
+};
+
+export default authenticateJWT;

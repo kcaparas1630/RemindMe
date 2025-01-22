@@ -25,5 +25,4 @@ app.use(limiter);
 app.use(passport.initialize());
 //Routes
 app.use('/api', [routers.taskRouter, routers.userRouter, routers.healthRouter]);
-
 export default app;
