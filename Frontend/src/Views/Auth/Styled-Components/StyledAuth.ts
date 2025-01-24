@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { Form } from 'formik';
 import { NavLink } from 'react-router-dom';
+import isDarkMode from '../../../Interface/isDarkMode';
 
 const Container = styled.section`
   label: ContainerWrapper;
@@ -11,7 +12,7 @@ const Container = styled.section`
   align-items: center;
 `;
 
-const LoginFormContainer = styled.div<{ isDarkMode: boolean }>`
+const LoginFormContainer = styled.div<isDarkMode>`
   label: LoginFormContainer;
   display: flex;
   flex-direction: column;
@@ -57,6 +58,7 @@ const InputWrapper = styled.div`
   width: 100%;
 `;
 
+// it's under ThemeProvider so theme props works. It's also defined in @emotion.d.ts
 const RouterText = styled(NavLink)`
   font-size: 1rem;
   color: ${({ theme }) => {
