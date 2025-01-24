@@ -1,3 +1,8 @@
+/**
+ * @param isDarkMode a boolean variable that indicates
+ * whether the user prefers light mode or dark mode.
+ * @author @Kcaparas
+ */
 import styled from '@emotion/styled';
 
 const StyledApp  = styled.main<{isDarkMode: boolean}>`

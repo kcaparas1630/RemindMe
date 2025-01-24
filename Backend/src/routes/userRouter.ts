@@ -17,6 +17,7 @@ router.route('/user').get(getAllUser);
 router.route('/user/register').post(validate(userRegisterValidationSchema), registerUser);
 router.route('/user/login').post(loginLimiter, validate(userLoginValidationSchema), loginUser);
 
+// protected route with jwt tokens
 router.get('/dashboard', authenticateJWT, (req: Request, res: Response) => {
     res.json({ message: 'Access granted to protected route' });
   });

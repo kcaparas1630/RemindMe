@@ -20,10 +20,27 @@ const connectClient = async () => {
 };
 
 connectClient();
-
+/**
+ *
+ *
+ * @param {string} text = Query Text. For example, 'Select * from table'
+ * @param {((string | Date | null)[])} [params] -- Params to based on the query Text, for example "userName" = [userName]
+ * @return {*}  {Promise<QueryResult>}
+ */
 const query = (text: string, params?: (string | Date | null)[]): Promise<QueryResult> => {
   return client.query(text, params);
 };
+
+/**
+ *
+ *  ADD TO DB TASK DATA
+ * @param {string} taskName
+ * @param {string} taskDescription
+ * @param {string} taskProgress
+ * @param {Date} taskDueDate
+ * @param {(Date | null)} taskCompleted
+ * @return {*}  {Promise<QueryResult>}
+ */
 const addTaskData = async (
   taskName: string,
   taskDescription: string,
@@ -46,6 +63,16 @@ const addTaskData = async (
   return query(queryText, values);
 };
 
+/**
+ *
+ *  ADD TO DB USER DATA
+ * @param {string} firstName
+ * @param {string} lastName
+ * @param {string} userName
+ * @param {string} userPassword
+ * @param {string} userEmail
+ * @return {*}  {Promise<QueryResult>}
+ */
 const addUserData = async (
   firstName: string,
   lastName: string,

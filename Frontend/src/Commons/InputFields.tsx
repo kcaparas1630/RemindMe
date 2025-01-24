@@ -1,19 +1,11 @@
-import React, { FC } from "react";
+/**
+ * @params props - a group consisting of attributes in the InputFieldProps
+ * @returns A ReactNode, rendered as an HTML element
+ * @author @Kcaparas
+ */
+import { FC } from "react";
 import { InputContainer, StyledInput, StyledLabel } from "./StyledCommons/StyledInput";
-
-// Assuming this is in the InputField component file
-interface InputFieldProps {
-  type: string;
-  inputName: string;
-  labelName: string;
-  placeholder: string;
-  value: string;
-  // eslint-disable-next-line no-unused-vars
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  // eslint-disable-next-line no-unused-vars
-  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  error?: boolean | undefined | string;
-}
+import InputFieldProps from "../Interface/InputFieldsProps";
 
 const InputField: FC<InputFieldProps> = (props) => {
   const { inputName, labelName } = props;

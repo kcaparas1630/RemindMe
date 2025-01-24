@@ -4,14 +4,17 @@ import TaskInterface from '../../Interface/TaskInterface';
 import { Table, TableHeader, TableCell } from './Styled-Components/StyledTable';
 import Button from '../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
-interface DashboardProps {
-  isDarkMode: boolean;
-  toggleTheme: () => void;
-}
+import GeneralProps from '../../Interface/GeneralProps';
 
-
-
-const Dashboard: FC<DashboardProps> = ({ isDarkMode, toggleTheme }) => {
+/**
+ * this is going to change still.
+ * 
+ * @param isDarkMode - a state that refers to the dark mode or light mode theme.
+ * @param toggleTheme - a function that handles the changing of isDarkMode
+ * @returns a ReactNode, renders an html element
+ * @author @Kcaparas
+ */
+const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const [isLogOutClicked, setIsLogoutClicked] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -45,7 +48,7 @@ const Dashboard: FC<DashboardProps> = ({ isDarkMode, toggleTheme }) => {
   return (
     <>
       <Header
-        themeMode={isDarkMode ? 'dark' : 'light'}
+        isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
       />
       <Table>

@@ -1,6 +1,14 @@
+/**
+ * @params isDarkMode - theme referring to dark or light mode.
+ * @params toggleTheme - function that handles the changing of theme.
+ * 
+ * @returns a ReactNode, renders an html element.
+ * 
+ * @author @Kcaparas
+ */
 import { FC, useState } from 'react';
 import axios from 'axios';
-import { Formik } from 'formik';
+import { Formik, FormikErrors } from 'formik';
 import validationSchema from '../Schema/RegisterSchema';
 import { ThemeProvider } from '@emotion/react';
 import {
@@ -17,13 +25,9 @@ import Header from '../../../Commons/Headers';
 import RegisterFormProps from '../../../Interface/RegisterFormProps';
 import Modal from '../../../Commons/Modal';
 import { useNavigate } from 'react-router-dom';
+import GeneralProps from '../../../Interface/GeneralProps';
 
-interface RegisterProps {
-  isDarkMode: boolean;
-  toggleTheme: () => void;
-}
-
-const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
+const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<RegisterFormProps>({
     firstName: '',
@@ -32,10 +36,17 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
     userPassword: '',
     userEmail: '',
   });
-  const [, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  /**
+   * 
+   * @param values - of interface RegisterFormProps, gets the values from the input fields under Formik
+   * @param setSubmitting - returns to true when user has clicked the submit button/ validation succeeded and handleRegister is called.
+   * @param errors - stores the error that the user made and displays it into one of the <ErrorMessages/>
+   * 
+   * @author @Kcaparas
+   */
   const handleRegister = async (
     values: RegisterFormProps,
 
@@ -43,13 +54,14 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
       setSubmitting,
       setErrors,
     }: // eslint-disable-next-line no-unused-vars
-    { setSubmitting: (isSubmitting: boolean) => void; setErrors: (errors: object) => void }
+    { setSubmitting: (isSubmitting: boolean) => void; setErrors: (errors: FormikErrors<RegisterFormProps>) => void }
   ): Promise<void> => {
     try {
-      setError(null);
+      setErrors({});
       setSubmitting(true);
       setIsLoading(true);
       
+      // only reason for this is because I need the formData state to render something in the Modal
       setFormData({
         firstName: values.firstName,
         lastName: values.lastName,
@@ -58,6 +70,10 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
         userEmail: values.userEmail,
       });
 
+      /* 
+        why not use the formData? Reason is that due to the nature of React, formData isn't updated yet, therefore, I will get undefined values
+        when I do firstName: formData.firstName. Since React updates are asynchronous.
+      */
       await axios.post('http://localhost:3000/api/user/register', {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -76,13 +92,14 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data?.message;
-        setError(serverError || 'Login failed');
+        setErrors(serverError || 'Login failed');
 
         if (error.response?.data?.errors) {
           setErrors(error.response.data.errors);
         }
       } else {
-        setError('An unexpected error occurred');
+        // refer to Login.tsx, requires an object property from registerformprops to work. Either property works.
+        setErrors({userName: 'An unexpected error occurred'});
       }
       setIsLoading(false);
     } finally {
@@ -93,7 +110,7 @@ const Register: FC<RegisterProps> = ({ isDarkMode, toggleTheme }) => {
   return (
     <>
       <Header
-        themeMode={isDarkMode ? 'dark' : 'light'}
+        isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
       />
       <Container>

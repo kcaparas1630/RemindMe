@@ -1,3 +1,9 @@
+/**
+ * Main Function that is the child of Main.tsx
+ * Includes Routing from authentication to Dashboard.
+ * 
+ * @author @Kcaparas
+ */
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import StyledApp from './StyledApp';
@@ -7,6 +13,7 @@ import Dashboard from './Views/Dashboard/Dashboard';
 import ProtectedRoute from './ProtectedRoute';
 
 const App = () => {
+  // Will create a localStorage custom hook.
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     const savedDarkMode = localStorage.getItem('isDarkMode');
     return savedDarkMode !== null && savedDarkMode !== '';

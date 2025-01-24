@@ -1,5 +1,6 @@
 import * as argon from 'argon2';
 
+// implementation of hashing using argon based on argon documentation.
 const hashPassword = async (password: string): Promise<string> => {
   const hashedPassword: string = await argon.hash(password, { type: argon.argon2id });
   return hashedPassword;

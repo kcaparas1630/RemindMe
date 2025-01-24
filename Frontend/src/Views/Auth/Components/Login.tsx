@@ -1,6 +1,13 @@
+/**
+ * @params isDarkMode - changing between dark or light mode
+ *         toggleTheme - function to change between dark or light mode
+ * @returns A ReactNode, renders an HTML element
+ * @author @Kcaparas
+ */
+
 import { FC, useState } from 'react';
 import axios from 'axios';
-import { Formik } from 'formik';
+import { Formik, FormikErrors } from 'formik';
 import validationSchema from '../Schema/LoginSchema';
 import { ThemeProvider } from '@emotion/react';
 import {
@@ -15,15 +22,19 @@ import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
 import LoginFormProps from '../../../Interface/LoginFormProps';
+import GeneralProps from '../../../Interface/GeneralProps';
 
-interface LoginProps {
-  isDarkMode: boolean;
-  toggleTheme: () => void; 
-}
-
-const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
+const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const [formData] = useState<LoginFormProps>({ userName: '', userPassword: '' });
-  const [, setError] = useState<string | null>(null);
+
+  /**
+   * 
+   * @param values - gets the values from input fields under formik.
+   * @param setSubmitting - a state that returns to true when the user has clicked the submit button/ handleLogin function was called and validation suceeded
+   * @param setErrors - a state that stores the errors and then displays unto the rendered ErrorMessage. Refer to line 113 and other <ErrorMessage /> calls
+   * 
+   * @author @Kcaparas
+   */
   const handleLogin = async (
     values: LoginFormProps,
 
@@ -31,10 +42,10 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
       setSubmitting,
       setErrors,
     }: // eslint-disable-next-line no-unused-vars
-    { setSubmitting: (isSubmitting: boolean) => void; setErrors: (errors: object) => void }
+    { setSubmitting: (isSubmitting: boolean) => void; setErrors: (errors: FormikErrors<LoginFormProps>) => void }
   ): Promise<void> => {
     try {
-      setError(null);
+      setErrors({});
       setSubmitting(true);
 
       const result = await axios.post('http://localhost:3000/api/user/login', {
@@ -48,13 +59,14 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data?.message;
-        setError(serverError || 'Login failed');
+        setErrors(serverError || 'Login failed');
 
         if (error.response?.data?.errors) {
           setErrors(error.response.data.errors);
         }
       } else {
-        setError('An unexpected error occurred');
+        // requires an object from LoginProps to work. Either field will work.
+        setErrors({ userName: 'An unexpected error occurred' });
       }
     } finally {
       setSubmitting(false);
@@ -64,7 +76,7 @@ const Login: FC<LoginProps> = ({ isDarkMode, toggleTheme }) => {
   return (
     <>
       <Header
-        themeMode={isDarkMode ? 'dark' : 'light'}
+        isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
       />
       <Container>
