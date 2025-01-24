@@ -1,6 +1,7 @@
 import { AnySchema } from 'yup';
 import { Request, Response, NextFunction } from 'express';
 
+// validate the router to protect any misinput data.
 const validate = (schema: AnySchema) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

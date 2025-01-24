@@ -4,9 +4,16 @@ import dotenv from 'dotenv';
 import { hashPassword, verifyHashPassword } from '../Helper/hash';
 import checkUserExists from '../Helper/UserExists';
 import jwt from 'jsonwebtoken';
+import User from '../Interface/userInteface';
 
 dotenv.config();
-
+/**
+ *
+ *  GET METHOD FOR USERS
+ * @param {Request} req
+ * @param {Response} res
+ * @return {*}  {Promise<void>}
+ */
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
   const userQuery = await query('Select * from taskuser');
   const body = userQuery.rows.map((row: object) => {
@@ -14,7 +21,13 @@ const getAllUser = async (req: Request, res: Response): Promise<void> => {
   });
   res.status(200).send(body);
 };
-
+/**
+ *
+ *  GET METHOD WITH ID
+ * @param {Request} req
+ * @param {Response} res
+ * @return {*}  {Promise<void>}
+ */
 const getUserById = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = req.body.id;
@@ -39,16 +52,36 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
     });
   }
 };
-
+/**
+ *
+ *  POST METHOD FOR USER
+ * @param {Request} req
+ * @param {Response} res
+ * @return {*}  {Promise<void>}
+ */
 const registerUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { firstName, lastName, userName, userPassword, userEmail } = req.body;
+    const {
+      firstName,
+      lastName,
+      userName,
+      userPassword,
+      userEmail,
+    }: {
+      // Made it as User['firstName'] so that when we change anything in the interface, it will not cause any error, or not be a hassle to change everything.
+      firstName: User['firstName'];
+      lastName: User['lastName'];
+      userName: User['userName'];
+      userPassword: User['userPassword'];
+      userEmail: User['userEmail'];
+    } = req.body;
     console.log('Received data:', { firstName, lastName, userName, userPassword, userEmail });
     const hashedPasssword = await hashPassword(userPassword);
     const lowerCaseEmail = userEmail.toLowerCase();
     console.log(lowerCaseEmail);
     const userExists = await checkUserExists(userName, userEmail);
 
+    // if user exists send status 403 (Forbidden)
     if (userExists) {
       res.status(403).json({
         success: false,
@@ -72,7 +105,13 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
     });
   }
 };
-
+/**
+ *
+ *  ALSO A POST METHOD FOR USER BUT FOR LOGIN PURPOSES
+ * @param {Request} req
+ * @param {Response} res
+ * @return {*}  {Promise<void>}
+ */
 const loginUser = async (req: Request, res: Response): Promise<void> => {
   try {
     // eslint-disable-next-line no-undef
@@ -80,13 +119,17 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
       res.status(500).send('Server configuration error');
       return;
     }
-    const { userName, userPassword } = req.body;
+    const {
+      userName,
+      userPassword,
+    }: { userName: User['userName']; userPassword: User['userPassword'] } = req.body;
     console.log('Received Data: ', userName, userPassword);
+    // Checks if user exists in the postgresql database using the userName params
     const userResult = await query(
       'SELECT "userName", "userPassword" FROM taskuser WHERE "userName" = $1',
       [userName]
     );
-    // check if user exists
+    // check the result if not null or empty string
     if (userResult.rows.length === 0) {
       res.status(401).json({
         success: false,
@@ -94,7 +137,8 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
       });
       return;
     }
-    const user = userResult.rows[0];
+    // assigns the userResult into a user variable.
+    const user: User = userResult.rows[0];
 
     // verify password
     const isPasswordCorrect = await verifyHashPassword(userPassword, user.userPassword);
@@ -111,7 +155,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     const token = jwt.sign(
       {
         sub: user._id,
-        email: user.email,
+        email: user.userEmail,
       },
       // eslint-disable-next-line no-undef
       process.env.JWT_SECRET,
@@ -126,6 +170,5 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     });
   }
 };
-
 
 export { getAllUser, getUserById, registerUser, loginUser };
