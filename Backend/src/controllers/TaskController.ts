@@ -44,6 +44,9 @@ const taskProgressCompleteChecker = (taskProgress: string): boolean => {
 // post method for task 
 const postTask = async (req: Request, res: Response): Promise<void> => {
   try {
+    /**
+     * Check for jwt token. return if none, else continue
+     */
     const { taskName, taskDescription, taskProgress, taskDueDate } = req.body;
     console.log('Received data:', { taskName, taskDescription, taskProgress, taskDueDate });
     const isTaskComplete = taskProgressCompleteChecker(taskProgress);
@@ -53,7 +56,7 @@ const postTask = async (req: Request, res: Response): Promise<void> => {
     if (isTaskComplete) {
       taskCompleted = new Date();
     }
-
+  
     /**
      * Can also pass req.body, but for clarity, I've passed in the destructured elements.
      * For example,
