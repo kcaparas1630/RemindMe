@@ -6,7 +6,12 @@ import { Formik, FormikErrors } from "formik";
 import GeneralProps from "../../Interface/General/GeneralProps";
 import TaskFormProps from "../../Interface/TaskFormProps";
 import taskValidationSchema from "./Schema/TaskSchema";
-
+import {
+    FormContainer,
+    ErrorMessage,
+    InputWrapper,
+    StyledForm,
+  } from '../../Styled-Components/StyledForms';
 const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
     const [formData] = useState<TaskFormProps>({
         taskName: '',

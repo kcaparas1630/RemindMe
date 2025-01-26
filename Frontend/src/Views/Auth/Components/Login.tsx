@@ -12,12 +12,9 @@ import validationSchema from '../Schema/LoginSchema';
 import { ThemeProvider } from '@emotion/react';
 import {
   Container,
-  LoginFormContainer,
-  ErrorMessage,
-  InputWrapper,
-  StyledForm,
   RouterText,
 } from '../Styled-Components/StyledAuth';
+import { FormContainer, StyledForm, InputWrapper, ErrorMessage } from '../../Styled-Components/StyledForms';
 import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
@@ -80,7 +77,7 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         toggleTheme={toggleTheme}
       />
       <Container>
-        <LoginFormContainer isDarkMode={isDarkMode}>
+        <FormContainer isDarkMode={isDarkMode}>
           <h1>Task Dashboard Login</h1>
           <Formik
             initialValues={formData}
@@ -145,7 +142,7 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
               );
             }}
           </Formik>
-        </LoginFormContainer>
+        </FormContainer>
       </Container>
     </>
   );
