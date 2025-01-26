@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Form } from 'formik';
 import { NavLink } from 'react-router-dom';
-import isDarkMode from '../../../Interface/isDarkMode';
+import isDarkMode from '../../../Interface/General/isDarkMode';
 
 const Container = styled.section`
   label: ContainerWrapper;

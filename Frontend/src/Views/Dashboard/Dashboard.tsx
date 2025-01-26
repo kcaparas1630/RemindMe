@@ -4,7 +4,7 @@ import TaskInterface from '../../Interface/TaskInterface';
 import { Table, TableHeader, TableCell } from './Styled-Components/StyledTable';
 import Button from '../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
-import GeneralProps from '../../Interface/GeneralProps';
+import GeneralProps from '../../Interface/General/GeneralProps';
 
 /**
  * this is going to change still.

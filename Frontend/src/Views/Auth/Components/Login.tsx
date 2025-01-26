@@ -21,8 +21,8 @@ import {
 import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
-import LoginFormProps from '../../../Interface/LoginFormProps';
-import GeneralProps from '../../../Interface/GeneralProps';
+import LoginFormProps from '../../../Interface/Login/LoginFormProps';
+import GeneralProps from '../../../Interface/General/GeneralProps';
 
 const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const [formData] = useState<LoginFormProps>({ userName: '', userPassword: '' });

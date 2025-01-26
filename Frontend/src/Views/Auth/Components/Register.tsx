@@ -25,7 +25,7 @@ import Header from '../../../Commons/Headers';
 import RegisterFormProps from '../../../Interface/RegisterFormProps';
 import Modal from '../../../Commons/Modal';
 import { useNavigate } from 'react-router-dom';
-import GeneralProps from '../../../Interface/GeneralProps';
+import GeneralProps from '../../../Interface/General/GeneralProps';
 
 const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const navigate = useNavigate();

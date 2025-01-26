@@ -7,7 +7,7 @@
 import { FC } from 'react';
 import { HeaderContainer, ThemeToggle } from './StyledCommons/StyledHeader';
 import { Sun, Moon } from 'lucide-react';
-import GeneralProps from '../Interface/GeneralProps';
+import GeneralProps from '../Interface/General/GeneralProps';
 
 const Header: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   return (
