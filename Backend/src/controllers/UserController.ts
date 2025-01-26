@@ -80,7 +80,6 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
     const lowerCaseEmail = userEmail.toLowerCase();
     console.log(lowerCaseEmail);
     const userExists = await checkUserExists(userName, userEmail);
-
     // if user exists send status 403 (Forbidden)
     if (userExists) {
       res.status(403).json({
@@ -142,7 +141,6 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     // verify password
     const isPasswordCorrect = await verifyHashPassword(userPassword, user.userPassword);
-    console.log(isPasswordCorrect);
 
     if (!isPasswordCorrect) {
       res.status(401).send({
