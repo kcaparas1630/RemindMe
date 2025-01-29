@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import isDarkMode from '../../Interface/isDarkMode';
+import isDarkMode from '../../Interface/General/isDarkMode';
 
 const StyledButton = styled.button<isDarkMode>`
   width: 100%;

@@ -27,7 +27,7 @@ const verifyUser = async (payload: JwtPayload, done: DoneFunction) => {
     }
 
     const userResult = await query(
-      'SELECT id, username, first_name, last_name FROM taskuser WHERE username = $1',
+      'SELECT id, "userName", "firstName", "lastName" FROM taskuser WHERE "userName" = $1',
       [payload.sub]
     );
 
@@ -48,7 +48,7 @@ passport.use(new JwtStrategy(jwtOptions, verifyUser));
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate('jwt', { session: false }, (err: Error | null, user: User | false) => {
     if (err) {
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: err.message });
     }
     if (!user) {
       return res.status(401).json({ message: 'Unauthorized' });

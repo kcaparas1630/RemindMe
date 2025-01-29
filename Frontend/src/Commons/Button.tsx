@@ -5,7 +5,7 @@
  */
 import { FC } from 'react';
 import StyledButton from './StyledCommons/StyledButton';
-import ButtonProps from '../Interface/ButtonProps';
+import ButtonProps from '../Interface/General/ButtonProps';
 
 const Button: FC<ButtonProps> = (props) => {
   // only called what's important.

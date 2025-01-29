@@ -6,7 +6,7 @@
 
 import { FC } from 'react';
 import Spinner from './StyledCommons/StyledSpinner';
-import isDarkMode from '../Interface/isDarkMode';
+import isDarkMode from '../Interface/General/isDarkMode';
 
 const LoadingSpinner: FC<isDarkMode> = ({ isDarkMode }) => {
   return <Spinner isDarkMode={isDarkMode} />;

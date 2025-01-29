@@ -12,17 +12,14 @@ import validationSchema from '../Schema/LoginSchema';
 import { ThemeProvider } from '@emotion/react';
 import {
   Container,
-  LoginFormContainer,
-  ErrorMessage,
-  InputWrapper,
-  StyledForm,
   RouterText,
 } from '../Styled-Components/StyledAuth';
+import { FormContainer, StyledForm, InputWrapper, ErrorMessage } from '../../Styled-Components/StyledForms';
 import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
 import Header from '../../../Commons/Headers';
-import LoginFormProps from '../../../Interface/LoginFormProps';
-import GeneralProps from '../../../Interface/GeneralProps';
+import LoginFormProps from '../../../Interface/Login/LoginFormProps';
+import GeneralProps from '../../../Interface/General/GeneralProps';
 
 const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const [formData] = useState<LoginFormProps>({ userName: '', userPassword: '' });
@@ -53,7 +50,7 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         userPassword: values.userPassword,
       });
 
-      localStorage.setItem('loginToken', result.data);
+      localStorage.setItem('loginToken', result.data.token);
       // force a page reload to update authentication state
       window.location.href = '/dashboard';
     } catch (error) {
@@ -80,7 +77,7 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         toggleTheme={toggleTheme}
       />
       <Container>
-        <LoginFormContainer isDarkMode={isDarkMode}>
+        <FormContainer isDarkMode={isDarkMode}>
           <h1>Task Dashboard Login</h1>
           <Formik
             initialValues={formData}
@@ -145,7 +142,7 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
               );
             }}
           </Formik>
-        </LoginFormContainer>
+        </FormContainer>
       </Container>
     </>
   );

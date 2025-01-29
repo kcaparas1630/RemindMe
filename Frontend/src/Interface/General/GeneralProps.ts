@@ -1,7 +1,7 @@
 import isDarkMode from "./isDarkMode";
 
 interface GeneralProps extends isDarkMode {
-  toggleTheme: () => void;
+  toggleTheme?: () => void;
 };
 
 export default GeneralProps;
