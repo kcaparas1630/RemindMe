@@ -2,7 +2,7 @@ interface TaskFormProps {
     taskName: string;
     taskDescription: string;
     taskProgress: string;
-    taskDueDate: Date;
+    taskDueDate: string;
 }
 
 

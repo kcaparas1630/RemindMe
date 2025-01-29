@@ -48,4 +48,6 @@ const InputWrapper = styled.div`
   width: 100%;
 `;
 
-export { InputWrapper, ErrorMessage, StyledForm, FormContainer}
+
+
+export { InputWrapper, ErrorMessage, StyledForm, FormContainer }

@@ -50,7 +50,7 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         userPassword: values.userPassword,
       });
 
-      localStorage.setItem('loginToken', result.data);
+      localStorage.setItem('loginToken', result.data.token);
       // force a page reload to update authentication state
       window.location.href = '/dashboard';
     } catch (error) {

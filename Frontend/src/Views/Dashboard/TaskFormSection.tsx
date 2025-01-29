@@ -15,13 +15,18 @@ import {
 import TextArea from '../../Commons/TextArea';
 import SelectField from '../../Commons/SelectField';
 import TaskOptions from '../../Constants/TaskOptions';
+import DatePickerField from '../../Commons/DatePicker';
+
+
 const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
   const [formData] = useState<TaskFormProps>({
     taskName: '',
     taskDescription: '',
     taskProgress: '',
-    taskDueDate: new Date(Date.now()),
+    taskDueDate: '',
   });
+
+  
 
   const handleTaskSubmit = async (
     values: TaskFormProps,
@@ -41,12 +46,22 @@ const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
       setErrors({});
       setSubmitting(true);
 
+      // Get token from localStorage
+      const token = localStorage.getItem('loginToken');
+      
+      // Add token to request headers
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      };
+
       await axios.post('http://localhost:3000/api/task', {
         taskName: values.taskName,
         taskDescription: values.taskDescription,
         taskProgress: values.taskProgress,
         taskDueDate: values.taskDueDate,
-      });
+      }, config);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data?.message;
@@ -118,6 +133,14 @@ const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
                 {errors.taskProgress && touched.taskProgress && (
                   <ErrorMessage>{errors.taskProgress}</ErrorMessage>
                 )}
+              </InputWrapper>
+              <InputWrapper>
+                <DatePickerField 
+                  inputName='taskDueDate'
+                  labelName='Task Due Date'
+                  value={values.taskDueDate}
+                  error={errors.taskDueDate && touched.taskDueDate}
+                />
               </InputWrapper>
               <Button
                 type="submit"

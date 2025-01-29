@@ -152,11 +152,11 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
 
     const token = jwt.sign(
       {
-        sub: user._id,
+        sub: user.userName,
         email: user.userEmail,
       },
       // eslint-disable-next-line no-undef
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET as string,
       { expiresIn: '20m' }
     );
 
