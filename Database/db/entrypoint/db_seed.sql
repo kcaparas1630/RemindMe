@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS task (
   "taskName" VARCHAR(30) NOT NULL,
   "taskDescription" VARCHAR(30) NOT NULL,
   "taskProgress" VARCHAR(30) NOT NULL,
-  "taskDueDate" DATE NOT NULL,
-  "taskCompleted" DATE
+  "taskTodayDate" DATE NOT NULL,
+  "taskDueDate" DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS taskuser (
@@ -14,4 +14,12 @@ CREATE TABLE IF NOT EXISTS taskuser (
   "userName" VARCHAR(30) NOT NULL,
   "userPassword" VARCHAR(128) NOT NULL,
   "userEmail" VARCHAR(100) NOT NULL 
+);
+
+CREATE TABLE IF NOT EXISTS taskAndUser (
+    ID SERIAL PRIMARY KEY,
+    "taskId" INTEGER REFERENCES task(ID),
+    "userId" INTEGER REFERENCES taskuser(ID),
+    "taskCompleted" DATE,
+    UNIQUE("taskId", "userId")
 );
