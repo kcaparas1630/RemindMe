@@ -4,6 +4,7 @@ import TaskProgressContants from '../Constants/TaskProgress';
 
 // get method by task
 const getAllTask = async (req: Request, res: Response): Promise<void> => {
+  // ORM connector
   const task = await query('Select * from task');
   const body = task.rows.map((row: object) => {
     return row;

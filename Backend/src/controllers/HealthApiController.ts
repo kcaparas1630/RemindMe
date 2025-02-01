@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 
+// Component B
 const checkHealth = (req: Request, res: Response): void => {
     try {
         res.status(200).send('Task API is healthy');
