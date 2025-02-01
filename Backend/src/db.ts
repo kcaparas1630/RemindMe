@@ -46,19 +46,20 @@ const addTaskData = async (
   taskDescription: string,
   taskProgress: string,
   taskDueDate: Date,
-  taskCompleted: Date | null
+  taskTodayDate: Date,
+
 ): Promise<QueryResult> => {
   const queryText: string = `
-        INSERT INTO task ("taskName", "taskDescription", "taskProgress", "taskDueDate", "taskCompleted")
+        INSERT INTO task ("taskName", "taskDescription", "taskProgress", "taskTodayDate", "taskDueDate")
         VALUES ($1, $2, $3, $4, $5)
-        RETURNING id, "taskName", "taskDescription", "taskProgress", "taskDueDate", "taskCompleted"
+        RETURNING id, "taskName", "taskDescription", "taskProgress", "taskTodayDate", "taskDueDate"
         `;
   const values: (string | Date | null)[] = [
     taskName,
     taskDescription,
     taskProgress,
+    taskTodayDate,
     taskDueDate,
-    taskCompleted,
   ];
   return query(queryText, values);
 };

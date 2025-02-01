@@ -41,22 +41,59 @@ const taskProgressCompleteChecker = (taskProgress: string): boolean => {
   return taskProgress.toUpperCase() === TaskProgressContants.COMPLETED;
 };
 
+const updateTaskCompletionHandler = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const queryTask = `
+      SELECT t."taskProgress"
+      FROM task t
+      JOIN taskAndUser tau ON t.id = tau."taskId"
+      WHERE t.id = $1 AND tau."userId" = $2
+    `;
+    const { taskId } = req.params;
+    const { userId } = req.body; 
+    const taskResult = await query(queryTask, [taskId, userId]);
+    const taskProgress = taskResult.rows[0].taskProgress;
+
+    if (taskProgressCompleteChecker(taskProgress)) {
+      const updateQuery = `
+        UPDATE taskAndUser
+        SET "taskCompleted" = CURRENT_DATE
+        WHERE "taskId" = $1 AND "userId" = $2
+        RETURNING *
+      `;
+      
+      await query(updateQuery, [taskId, userId]);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Task Completed status updated sucessfully',
+    });
+  } catch (error) {
+    console.error('Error updating task completion:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update task completion status'
+    });
+  }
+}
+
 // post method for task 
-const postTask = async (req: Request, res: Response): Promise<void> => {
+const postTask = async (req: Request, res: Response) => {
   try {
     /**
      * Check for jwt token. return if none, else continue
      */
     const { taskName, taskDescription, taskProgress, taskDueDate } = req.body;
     console.log('Received data:', { taskName, taskDescription, taskProgress, taskDueDate });
-    const isTaskComplete = taskProgressCompleteChecker(taskProgress);
-    let taskCompleted: Date | null = null;
+    // const isTaskComplete = taskProgressCompleteChecker(taskProgress);
+    // let taskCompleted: Date | null = null;
+    // // if task complete, assign the date today.
+    // if (isTaskComplete) {
+    //   taskCompleted = new Date();
+    // }
+    const taskTodayDate: Date = new Date(Date.now());
 
-    // if task complete, assign the date today.
-    if (isTaskComplete) {
-      taskCompleted = new Date();
-    }
-  
     /**
      * Can also pass req.body, but for clarity, I've passed in the destructured elements.
      * For example,
@@ -71,8 +108,8 @@ const postTask = async (req: Request, res: Response): Promise<void> => {
       taskName,
       taskDescription,
       taskProgress,
+      taskTodayDate,
       taskDueDate,
-      taskCompleted
     );
 
     // Send success response
@@ -92,4 +129,4 @@ const postTask = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { getAllTask, getTaskByName, postTask };
+export { getAllTask, getTaskByName, postTask, updateTaskCompletionHandler };
