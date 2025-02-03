@@ -158,7 +158,7 @@ export class DatabaseService {
 
   // Get Task by taskName
   static async getTaskByTaskName(taskName: string) {
-    return prisma.task.findUnique({
+    return prisma.task.findFirst({
       where: {
         taskName,
       },
@@ -169,10 +169,10 @@ export class DatabaseService {
   }
 
   // Get User by UserName
-  static async getUserByUserId(userId: number) {
+  static async getUserByUserId(id: number) {
     return prisma.user.findUnique({
       where: {
-        userId,
+        id,
       },
       include: {
         tasks: true // Include user's tasks if needed 
