@@ -22,7 +22,6 @@ const createTask = async (req: Request, res: Response): Promise<void> => {
             taskDescription,
             taskProgress,
             new Date(taskDueDate),
-            new Date(Date.now())
         );
 
         res.status(201).json({
