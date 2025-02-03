@@ -11,6 +11,7 @@ services:
       POSTGRES_HOST: task-db
       POSTGRES_PASSWORD: default
       POSTGRES_USER: postgres
+      DATABASE_URL: "postgresql://postgres:default@task-db:5432/postgres"
     ports:
       - "5432:5432"
     volumes:
