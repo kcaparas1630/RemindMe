@@ -12,6 +12,33 @@ const getAllTask = async (req: Request, res: Response): Promise<void> => {
   res.status(200).send(body);
 };
 
+// Create a task
+
+const createTask = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { taskName, taskDescription, taskProgress, taskDueDate} = req.body;
+        const requestBody = DatabaseService.addTask(
+            taskName,
+            taskDescription,
+            taskProgress,
+            new Date(taskDueDate),
+            new Date(Date.now())
+        );
+
+        res.status(201).json({
+            success: true,
+            message: 'Task has successfully been added',
+            data: requestBody,
+        })
+        // Will edit this in next pull request for error handling
+    } catch (error) {
+        res.status(500).json({
+            error: 'Failed to fetch user',
+            message: 'Internal Server Error'
+        })
+    }
+}
+
 // // get method but with params
 // const getTaskByName = async (req: Request, res: Response): Promise<void> => {
 //   try {
@@ -131,4 +158,4 @@ const getAllTask = async (req: Request, res: Response): Promise<void> => {
 // };
 
 // export { getAllTask, getTaskByName, postTask, updateTaskCompletionHandler };
-export default getAllTask;
+export { getAllTask, createTask };
