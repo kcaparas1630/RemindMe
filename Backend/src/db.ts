@@ -158,7 +158,7 @@ export class DatabaseService {
   static async getTaskByTaskName(taskName: string) {
     return prisma.task.findUnique({
       where: {
-        taskName: taskName,
+        taskName,
       },
       include: {
         user: true // include user data if needed
