@@ -9,11 +9,10 @@ datasource db {
 
 model Task {
     id Int @id @default(autoincrement())
-    taskName String
+    taskName String @unique
     taskDescription String
     taskProgress String
     taskDueDate DateTime
-    taskTodayDate DateTime
     createdAt DateTime @default(now())
     user User? @relation(fields: [userId], references: [id])
     userId Int?

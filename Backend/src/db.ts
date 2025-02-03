@@ -115,16 +115,14 @@ export class DatabaseService {
     taskName: string,
     taskDescription: string,
     taskProgress: 'NOTSTARTED' | 'STARTED' | 'COMPLETED',
-    taskDueDate: Date,
-    taskTodayDate: Date
+    taskDueDate: Date
   ) {
     return prisma.task.create({
       data: {
         taskName,
         taskDescription,
         taskProgress,
-        taskDueDate,
-        taskTodayDate
+        taskDueDate
       }
     })
   }
@@ -158,9 +156,9 @@ export class DatabaseService {
 
   // Get Task by taskName
   static async getTaskByTaskName(taskName: string) {
-    return prisma.task.findFirst({
+    return prisma.task.findUnique({
       where: {
-        taskName,
+        taskName: taskName,
       },
       include: {
         user: true // include user data if needed
