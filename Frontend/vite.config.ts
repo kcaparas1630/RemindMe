@@ -10,7 +10,8 @@ export default defineConfig({
     strictPort: true,
     watch: {
       usePolling: true,
-    }
+    },
+    allowedHosts: ['aeec-2001-569-be87-2900-5c95-7cb1-eb90-7790.ngrok-free.app'],
   },
   preview: {
     host: true, // Listen on all addresses
