@@ -153,6 +153,14 @@ export class DatabaseService {
       }
     })
   }
+  // Get all Users
+  static async getUsers() {
+    return prisma.user.findMany({
+      include: {
+        tasks: true // Include related task data if needed
+      }
+    })
+  }
 
   // Get Task by taskName
   static async getTaskByTaskName(taskName: string) {
@@ -166,7 +174,7 @@ export class DatabaseService {
     })
   }
 
-  // Get User by UserName
+  // Get User by UserId
   static async getUserByUserId(id: number) {
     return prisma.user.findUnique({
       where: {
@@ -174,6 +182,34 @@ export class DatabaseService {
       },
       include: {
         tasks: true // Include user's tasks if needed 
+      }
+    })
+  }
+
+  // Get User by UserName (For Login and JWT Auth)
+  static async getUserByUserName(userName: string) {
+    return prisma.user.findFirst({
+      where: {
+        userName
+      }
+    })
+  }
+
+  // Check if User Exists
+  static async checkUserExists(userName: string, userEmail: string) {
+    return prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            userName: userName
+          },
+          {
+            userEmail: userEmail
+          }
+        ],
+      },
+      include: {
+        tasks: true // include user's tasks if needed
       }
     })
   }
