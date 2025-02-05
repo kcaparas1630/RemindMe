@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getAllUser, getUserById, loginUser, registerUser } from '../controllers/UserController';
+import { getAllUser, getUserById, loginUser } from '../controllers/UserController';
 import validate from '../middleware/validation-schema';
 import { userRegisterValidationSchema, userLoginValidationSchema } from '../dto/createUser-schema';
 import rateLimit from 'express-rate-limit';
@@ -14,7 +14,7 @@ const router = Router();
 
 router.route('/user').get(getAllUser);
 
-router.route('/user/register').post(validate(userRegisterValidationSchema), registerUser);
+// router.route('/user/register').post(validate(userRegisterValidationSchema), registerUser);
 router.route('/user/login').post(loginLimiter, validate(userLoginValidationSchema), loginUser);
 
 // protected route with jwt tokens
