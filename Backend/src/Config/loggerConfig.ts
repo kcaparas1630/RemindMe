@@ -1,4 +1,5 @@
 import { createLogger, format, transports } from "winston";
+import path from 'path';
 const { combine, timestamp, json, colorize } = format;
 
 // Custom format for console logging with colors
@@ -17,7 +18,8 @@ const logger = createLogger({
     new transports.Console({
       format: consoleLogFormat,
     }),
-    new transports.File({ filename: "app.log" }),
+    //eslint-disable-next-line no-undef
+    new transports.File({ filename: path.join(process.cwd(), 'app.log') }),
   ],
 });
 
