@@ -1,8 +1,8 @@
 import BaseError from "./BaseError";
 
 class DatabaseError extends BaseError {
-    constructor(message: string) {
-        super(message || 'Database Operation Failed', '400');
+    constructor(message: string, details?: string) {
+        super(message, 500, 'DATABASE_ERROR', details);
     }
 }
 
