@@ -15,11 +15,3 @@ CREATE TABLE IF NOT EXISTS taskuser (
   "userPassword" VARCHAR(128) NOT NULL,
   "userEmail" VARCHAR(100) NOT NULL 
 );
-
-CREATE TABLE IF NOT EXISTS taskAndUser (
-    ID SERIAL PRIMARY KEY,
-    "taskId" INTEGER REFERENCES task(ID),
-    "userId" INTEGER REFERENCES taskuser(ID),
-    "taskCompleted" DATE,
-    UNIQUE("taskId", "userId")
-);

@@ -1,16 +1,13 @@
-import { query } from '../db';
+import { DatabaseService } from "../db";
 
 const checkUserExists = async (username: string, userEmail: string): Promise<boolean> => {
   console.log('Received username:', username);
 
   // Query the database
-  const userResult = await query(
-    'SELECT "userName", "userEmail" FROM taskuser WHERE "userName" = $1 OR "userEmail" = $2',
-    [username, userEmail]
-  );
-
+  const userCountResponse = await DatabaseService.checkUserExists(username, userEmail);
+  console.log('Response Result', userCountResponse);
   // Return true if a user is found, false otherwise
-  return userResult.rows.length > 0;
+  return userCountResponse;
 };
 
 export default checkUserExists;
