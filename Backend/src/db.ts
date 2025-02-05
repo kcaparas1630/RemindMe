@@ -197,7 +197,7 @@ export class DatabaseService {
 
   // Check if User Exists
   static async checkUserExists(userName: string, userEmail: string) {
-    return prisma.user.findFirst({
+    return prisma.user.count({
       where: {
         OR: [
           {
