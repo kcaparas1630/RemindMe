@@ -59,51 +59,58 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
  * @param {Response} res
  * @return {*}  {Promise<void>}
  */
-// const registerUser = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const {
-//       firstName,
-//       lastName,
-//       userName,
-//       userPassword,
-//       userEmail,
-//     }: {
-//       // Made it as User['firstName'] so that when we change anything in the interface, it will not cause any error, or not be a hassle to change everything.
-//       firstName: User['firstName'];
-//       lastName: User['lastName'];
-//       userName: User['userName'];
-//       userPassword: User['userPassword'];
-//       userEmail: User['userEmail'];
-//     } = req.body;
-//     console.log('Received data:', { firstName, lastName, userName, userPassword, userEmail });
-//     const hashedPasssword = await hashPassword(userPassword);
-//     const lowerCaseEmail = userEmail.toLowerCase();
-//     console.log(lowerCaseEmail);
-//     const userExists = await checkUserExists(userName, userEmail);
-//     // if user exists send status 403 (Forbidden)
-//     if (userExists) {
-//       res.status(403).json({
-//         success: false,
-//         message: 'User already exists',
-//       });
-//       return;
-//     }
+const registerUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {
+      firstName,
+      lastName,
+      userName,
+      userPassword,
+      userEmail,
+    }: {
+      // Made it as User['firstName'] so that when we change anything in the interface, it will not cause any error, or not be a hassle to change everything.
+      firstName: User['firstName'];
+      lastName: User['lastName'];
+      userName: User['userName'];
+      userPassword: User['userPassword'];
+      userEmail: User['userEmail'];
+    } = req.body;
+    console.log('Received data:', { firstName, lastName, userName, userPassword, userEmail });
+    const hashedPasssword = await hashPassword(userPassword);
+    const lowerCaseEmail = userEmail.toLowerCase();
+    console.log(lowerCaseEmail);
+    const userExists = await checkUserExists(userName, userEmail);
+    // if user exists send status 403 (Forbidden)
+    if (userExists) {
+      res.status(403).json({
+        success: false,
+        message: 'User already exists',
+      });
+      return;
+    }
 
-//     const result = await addUserData(firstName, lastName, userName, hashedPasssword, userEmail);
+    const result = await DatabaseService.addUser(
+      firstName,
+      lastName,
+      userName,
+      hashedPasssword,
+      lowerCaseEmail
+    );
 
-//     // Send success response
-//     res.status(201).json({
-//       success: true,
-//       message: 'User has succesfully been added',
-//       data: result.rows[0],
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       error: 'Failed to register user',
-//       message: error instanceof Error ? error.message : 'Unknown Error',
-//     });
-//   }
-// };
+    console.log(result);
+    // Send success response
+    res.status(201).json({
+      success: true,
+      message: 'User has succesfully been added',
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to register user',
+      message: error instanceof Error ? error.message : 'Unknown Error',
+    });
+  }
+};
 /**
  *
  *  ALSO A POST METHOD FOR USER BUT FOR LOGIN PURPOSES
@@ -166,4 +173,4 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { getAllUser, getUserById, loginUser };
+export { getAllUser, getUserById, loginUser, registerUser };
