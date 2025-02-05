@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import BaseError from "./BaseError";
 import logger from "../Config/loggerConfig";
 
-const errorHandler = (error: Error, req: Request, res: Response): void => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const errorHandler = (error: Error, req: Request, res: Response, next: NextFunction): void => {
     logger.error('Error details:', {
         error: {
             name: error.name,
