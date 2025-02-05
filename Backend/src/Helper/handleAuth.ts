@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import User from '../Interface/userInteface';
 import DoneFunction from '../Interface/doneFuncType';
-import { query } from '../db';
+import { DatabaseService } from '../db';
 
 // Check for JWT_SECRET early
 // eslint-disable-next-line no-undef
@@ -26,16 +26,13 @@ const verifyUser = async (payload: JwtPayload, done: DoneFunction) => {
       return done(null, false, { message: 'Invalid token payload' });
     }
 
-    const userResult = await query(
-      'SELECT id, "userName", "firstName", "lastName" FROM taskuser WHERE "userName" = $1',
-      [payload.sub]
-    );
+    const userResult = await DatabaseService.getUserByUserName(payload.sub);
 
-    if (userResult.rows.length === 0) {
+    if (!userResult) {
       return done(null, false, { message: 'User not found' });
     }
 
-    return done(null, userResult.rows[0]);
+    return done(null, userResult);
   } catch (error) {
     return done(error instanceof Error ? error : new Error('Unknown error occurred'));
   }
