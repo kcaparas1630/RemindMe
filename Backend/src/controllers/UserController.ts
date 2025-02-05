@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { addUserData, query } from '../db';
+import { DatabaseService } from '../db';
 import dotenv from 'dotenv';
 import { hashPassword, verifyHashPassword } from '../Helper/hash';
 import checkUserExists from '../Helper/UserExists';
@@ -15,8 +15,8 @@ dotenv.config();
  * @return {*}  {Promise<void>}
  */
 const getAllUser = async (req: Request, res: Response): Promise<void> => {
-  const userQuery = await query('Select * from taskuser');
-  const body = userQuery.rows.map((row: object) => {
+  const userQuery = await DatabaseService.getUsers();
+  const body = userQuery.map((row: object) => {
     return row;
   });
   res.status(200).send(body);
@@ -37,14 +37,14 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const result = await query('SELECT * FROM taskuser WHERE id = $1', [userId]);
+    const result = await DatabaseService.getUserByUserId(userId);
 
-    if (result.rowCount === 0) {
+    if (!result) {
       res.status(404).json({ error: 'User not found' });
       return;
     }
 
-    res.status(200).json(result.rows[0]);
+    res.status(200).json(result);
   } catch (error: unknown | null) {
     res.status(500).json({
       error: 'Failed to fetch user',
@@ -59,51 +59,51 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
  * @param {Response} res
  * @return {*}  {Promise<void>}
  */
-const registerUser = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const {
-      firstName,
-      lastName,
-      userName,
-      userPassword,
-      userEmail,
-    }: {
-      // Made it as User['firstName'] so that when we change anything in the interface, it will not cause any error, or not be a hassle to change everything.
-      firstName: User['firstName'];
-      lastName: User['lastName'];
-      userName: User['userName'];
-      userPassword: User['userPassword'];
-      userEmail: User['userEmail'];
-    } = req.body;
-    console.log('Received data:', { firstName, lastName, userName, userPassword, userEmail });
-    const hashedPasssword = await hashPassword(userPassword);
-    const lowerCaseEmail = userEmail.toLowerCase();
-    console.log(lowerCaseEmail);
-    const userExists = await checkUserExists(userName, userEmail);
-    // if user exists send status 403 (Forbidden)
-    if (userExists) {
-      res.status(403).json({
-        success: false,
-        message: 'User already exists',
-      });
-      return;
-    }
+// const registerUser = async (req: Request, res: Response): Promise<void> => {
+//   try {
+//     const {
+//       firstName,
+//       lastName,
+//       userName,
+//       userPassword,
+//       userEmail,
+//     }: {
+//       // Made it as User['firstName'] so that when we change anything in the interface, it will not cause any error, or not be a hassle to change everything.
+//       firstName: User['firstName'];
+//       lastName: User['lastName'];
+//       userName: User['userName'];
+//       userPassword: User['userPassword'];
+//       userEmail: User['userEmail'];
+//     } = req.body;
+//     console.log('Received data:', { firstName, lastName, userName, userPassword, userEmail });
+//     const hashedPasssword = await hashPassword(userPassword);
+//     const lowerCaseEmail = userEmail.toLowerCase();
+//     console.log(lowerCaseEmail);
+//     const userExists = await checkUserExists(userName, userEmail);
+//     // if user exists send status 403 (Forbidden)
+//     if (userExists) {
+//       res.status(403).json({
+//         success: false,
+//         message: 'User already exists',
+//       });
+//       return;
+//     }
 
-    const result = await addUserData(firstName, lastName, userName, hashedPasssword, userEmail);
+//     const result = await addUserData(firstName, lastName, userName, hashedPasssword, userEmail);
 
-    // Send success response
-    res.status(201).json({
-      success: true,
-      message: 'User has succesfully been added',
-      data: result.rows[0],
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: 'Failed to register user',
-      message: error instanceof Error ? error.message : 'Unknown Error',
-    });
-  }
-};
+//     // Send success response
+//     res.status(201).json({
+//       success: true,
+//       message: 'User has succesfully been added',
+//       data: result.rows[0],
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       error: 'Failed to register user',
+//       message: error instanceof Error ? error.message : 'Unknown Error',
+//     });
+//   }
+// };
 /**
  *
  *  ALSO A POST METHOD FOR USER BUT FOR LOGIN PURPOSES
@@ -124,12 +124,9 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     }: { userName: User['userName']; userPassword: User['userPassword'] } = req.body;
     console.log('Received Data: ', userName, userPassword);
     // Checks if user exists in the postgresql database using the userName params
-    const userResult = await query(
-      'SELECT "userName", "userPassword" FROM taskuser WHERE "userName" = $1',
-      [userName]
-    );
+    const userResult = await DatabaseService.getUserByUserName(userName);
     // check the result if not null or empty string
-    if (userResult.rows.length === 0) {
+    if (!userResult) {
       res.status(401).json({
         success: false,
         message: 'Invalid credentials',
@@ -137,7 +134,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     // assigns the userResult into a user variable.
-    const user: User = userResult.rows[0];
+    const user: User = userResult;
 
     // verify password
     const isPasswordCorrect = await verifyHashPassword(userPassword, user.userPassword);
@@ -169,4 +166,4 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { getAllUser, getUserById, registerUser, loginUser };
+export { getAllUser, getUserById, loginUser };
