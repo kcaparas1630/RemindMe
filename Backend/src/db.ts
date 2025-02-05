@@ -208,9 +208,8 @@ export class DatabaseService {
           }
         ],
       },
-      include: {
-        tasks: true // include user's tasks if needed
-      }
+    }).then((count: number) => {
+     return count > 0
     })
   }
 }
