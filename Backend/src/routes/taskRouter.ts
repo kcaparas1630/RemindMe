@@ -11,9 +11,4 @@ router.route('/task').get(handleAuth, getAllTask).post(handleAuth, validate(task
 // special getter for task name
 router.get('/task/:name', handleAuth, getTaskByTaskName);
 
-// router.patch('/task/:taskId/complete', 
-//     handleAuth,
-//     updateTaskCompletionHandler
-//   );
-
 export default router;

@@ -109,6 +109,8 @@ paths:
           description: Task has been added
         "401":
           description: Unauthorized
+        "403":
+          description: Task name already exists. Forbidden
         "500":
           description: Internal server error
   /task/:name:
