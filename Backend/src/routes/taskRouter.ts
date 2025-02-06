@@ -6,10 +6,10 @@ import handleAuth from '../Helper/handleAuth';
 
 const router = Router();
 
-router.route('/task').get(getAllTask).post(handleAuth, validate(taskValidationSchema), createTask);
+router.route('/task').get(handleAuth, getAllTask).post(handleAuth, validate(taskValidationSchema), createTask);
 
 // special getter for task name
-router.get('/task/:name', getTaskByTaskName);
+router.get('/task/:name', handleAuth, getTaskByTaskName);
 
 // router.patch('/task/:taskId/complete', 
 //     handleAuth,

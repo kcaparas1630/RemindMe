@@ -1,8 +1,8 @@
-interface TaskInterface {
-  task_name: string;
-  task_description: string;
-  task_progress: string;
-  task_completion_date?: Date;
+interface Task {
+  taskName: string;
+  taskDescription: string;
+  taskProgress: 'NOTSTARTED' | 'STARTED' | 'COMPLETED';
+  taskDueDate: Date;
 }
 
-export default TaskInterface;
+export default Task;

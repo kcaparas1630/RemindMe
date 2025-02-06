@@ -1,10 +1,14 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { DatabaseService } from '../db';
 import dotenv from 'dotenv';
 import { hashPassword, verifyHashPassword } from '../Helper/hash';
 import checkUserExists from '../Helper/UserExists';
 import jwt from 'jsonwebtoken';
 import User from '../Interface/userInteface';
+import ErrorLogger from '../Helper/LoggerFunc';
+import DatabaseError from '../ErrorHandlers/DatabaseError';
+import ValidationError from '../ErrorHandlers/ValidationError';
+import logger from '../Config/loggerConfig';
 
 dotenv.config();
 /**
@@ -14,12 +18,20 @@ dotenv.config();
  * @param {Response} res
  * @return {*}  {Promise<void>}
  */
-const getAllUser = async (req: Request, res: Response): Promise<void> => {
-  const userQuery = await DatabaseService.getUsers();
-  const body = userQuery.map((row: object) => {
-    return row;
-  });
-  res.status(200).send(body);
+const getAllUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const userQuery = await DatabaseService.getUsers();
+    const body = userQuery.map((row: object) => {
+      return row;
+    });
+    res.status(200).send(body);
+  } catch (error: unknown) {
+    // DRY ERROR LOGGER
+    ErrorLogger(error, 'getAllUser');
+    // Pass error to error handler middleware
+    next(new DatabaseError('Unable to fetch Users', error));
+  }
+  
 };
 /**
  *
@@ -28,28 +40,26 @@ const getAllUser = async (req: Request, res: Response): Promise<void> => {
  * @param {Response} res
  * @return {*}  {Promise<void>}
  */
-const getUserById = async (req: Request, res: Response): Promise<void> => {
+const getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const userId = req.body.id;
 
     if (!userId) {
-      res.status(400).json({ error: 'User Id is required' });
-      return;
+      throw new ValidationError('User Id is required');
     }
 
     const result = await DatabaseService.getUserByUserId(userId);
 
     if (!result) {
-      res.status(404).json({ error: 'User not found' });
-      return;
+      throw new DatabaseError('User not found')
     }
 
     res.status(200).json(result);
-  } catch (error: unknown | null) {
-    res.status(500).json({
-      error: 'Failed to fetch user',
-      message: error instanceof Error ? error.message : 'Unknown error',
-    });
+  } catch (error: unknown) {
+    // DRY ERROR LOGGER
+    ErrorLogger(error, 'getUserById');
+    // Pass error to error handler middleware
+    next(new DatabaseError('Unable to fetch the user', error));
   }
 };
 /**
@@ -59,7 +69,7 @@ const getUserById = async (req: Request, res: Response): Promise<void> => {
  * @param {Response} res
  * @return {*}  {Promise<void>}
  */
-const registerUser = async (req: Request, res: Response): Promise<void> => {
+const registerUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const {
       firstName,
@@ -80,13 +90,10 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
     const lowerCaseEmail = userEmail.toLowerCase();
     console.log(lowerCaseEmail);
     const userExists = await checkUserExists(userName, userEmail);
+
     // if user exists send status 403 (Forbidden)
     if (userExists) {
-      res.status(403).json({
-        success: false,
-        message: 'User already exists',
-      });
-      return;
+      throw new ValidationError('User Already Exists')
     }
 
     const result = await DatabaseService.addUser(
@@ -97,18 +104,18 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
       lowerCaseEmail
     );
 
-    console.log(result);
+    logger.info('User has been successfully been added');
     // Send success response
     res.status(201).json({
       success: true,
       message: 'User has succesfully been added',
       data: result,
     });
-  } catch (error) {
-    res.status(500).json({
-      error: 'Failed to register user',
-      message: error instanceof Error ? error.message : 'Unknown Error',
-    });
+  } catch (error: unknown) {
+    // DRY ERROR LOGGER
+    ErrorLogger(error, 'registerUser');
+    // Pass error to error handler middleware
+    next(new DatabaseError('Unable to add user', error));
   }
 };
 /**
@@ -118,7 +125,7 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
  * @param {Response} res
  * @return {*}  {Promise<void>}
  */
-const loginUser = async (req: Request, res: Response): Promise<void> => {
+const loginUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     // eslint-disable-next-line no-undef
     if (!process.env.JWT_SECRET) {
@@ -134,11 +141,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     const userResult = await DatabaseService.getUserByUserName(userName);
     // check the result if not null or empty string
     if (!userResult) {
-      res.status(401).json({
-        success: false,
-        message: 'Invalid credentials',
-      });
-      return;
+      throw new ValidationError('Invalid Credentials')
     }
     // assigns the userResult into a user variable.
     const user: User = userResult;
@@ -147,11 +150,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     const isPasswordCorrect = await verifyHashPassword(userPassword, user.userPassword);
 
     if (!isPasswordCorrect) {
-      res.status(401).send({
-        success: false,
-        message: 'Invalid Credentials',
-      });
-      return;
+      throw new ValidationError('Invalid Credentials');
     }
 
     const token = jwt.sign(
@@ -165,11 +164,11 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     );
 
     res.status(200).json({ token });
-  } catch (error) {
-    res.status(500).json({
-      error: 'Failed to login user',
-      message: error instanceof Error ? error.message : 'Unknown Error',
-    });
+  } catch (error: unknown) {
+    // DRY ERROR LOGGER
+    ErrorLogger(error, 'loginUser');
+    // Pass error to error handler middleware
+    next(new DatabaseError('Unable to login user', error));
   }
 };
 
