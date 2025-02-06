@@ -212,4 +212,15 @@ export class DatabaseService {
      return count > 0
     })
   }
+
+  // Check if task name already exists
+  static checkTaskNameExists(taskName: string) {
+    return prisma.task.count({
+      where: {
+        taskName: taskName
+      }
+    }).then((count: number) => {
+      return count > 0;
+    })
+  }
 }
