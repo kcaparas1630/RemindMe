@@ -4,6 +4,7 @@ import logger from '../Config/loggerConfig';
 import DatabaseError from '../ErrorHandlers/DatabaseError';
 import ErrorLogger from '../Helper/LoggerFunc';
 import ValidationError from '../ErrorHandlers/ValidationError';
+import Task from '../Interface/taskInterface';
 
 // get method by task
 const getAllTask = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -24,13 +25,18 @@ const getAllTask = async (req: Request, res: Response, next: NextFunction): Prom
 // Create a task
 const createTask = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { taskName, taskDescription, taskProgress, taskDueDate } = req.body;
+    const { taskName, taskDescription, taskProgress, taskDueDate }: {
+        taskName: Task['taskName'],
+        taskDescription: Task['taskDescription'],
+        taskProgress: Task['taskProgress'],
+        taskDueDate: Task['taskDueDate']
+    } = req.body;
     const requestBody = await DatabaseService.addTask(
       taskName,
       taskDescription,
       taskProgress,
       new Date(taskDueDate)
-    ); // TODO: CREATE AN INTERFACE FOR THE REQUEST BODY
+    ); 
     // TODO: CREATE A FORBIDDEN ROUTE FOR MULTIPLE TASKNAME
     logger.info('Task has been successfully been added');
     res.status(201).json({
