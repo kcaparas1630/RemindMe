@@ -11,6 +11,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerConfig from './Config/SwaggerConfig';
 import * as routers from './routes/index';
 import logger from './Config/loggerConfig';
+import errorHandler from './ErrorHandlers/ErrorHandler';
 
 const morganFormat = ":method :url :status :response-time ms";
 
@@ -42,8 +43,8 @@ app.use(morgan(morganFormat, {
       logger.info(JSON.stringify(logObject));
     }
   }
-}))
-
+}));
 //Routes
 app.use('/api', [routers.taskRouter, routers.userRouter, routers.healthRouter]);
+app.use(errorHandler);
 export default app;
