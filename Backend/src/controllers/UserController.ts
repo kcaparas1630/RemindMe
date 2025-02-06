@@ -90,7 +90,7 @@ const registerUser = async (req: Request, res: Response, next: NextFunction): Pr
     const lowerCaseEmail = userEmail.toLowerCase();
     console.log(lowerCaseEmail);
     const userExists = await checkUserExists(userName, userEmail);
-    
+
     // if user exists send status 403 (Forbidden)
     if (userExists) {
       throw new ValidationError('User Already Exists')
@@ -125,7 +125,7 @@ const registerUser = async (req: Request, res: Response, next: NextFunction): Pr
  * @param {Response} res
  * @return {*}  {Promise<void>}
  */
-const loginUser = async (req: Request, res: Response): Promise<void> => {
+const loginUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     // eslint-disable-next-line no-undef
     if (!process.env.JWT_SECRET) {
@@ -141,11 +141,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     const userResult = await DatabaseService.getUserByUserName(userName);
     // check the result if not null or empty string
     if (!userResult) {
-      res.status(401).json({
-        success: false,
-        message: 'Invalid credentials',
-      });
-      return;
+      throw new ValidationError('Invalid Credentials')
     }
     // assigns the userResult into a user variable.
     const user: User = userResult;
@@ -154,11 +150,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     const isPasswordCorrect = await verifyHashPassword(userPassword, user.userPassword);
 
     if (!isPasswordCorrect) {
-      res.status(401).send({
-        success: false,
-        message: 'Invalid Credentials',
-      });
-      return;
+      throw new ValidationError('Invalid Credentials');
     }
 
     const token = jwt.sign(
@@ -172,11 +164,11 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
     );
 
     res.status(200).json({ token });
-  } catch (error) {
-    res.status(500).json({
-      error: 'Failed to login user',
-      message: error instanceof Error ? error.message : 'Unknown Error',
-    });
+  } catch (error: unknown) {
+    // DRY ERROR LOGGER
+    ErrorLogger(error, 'loginUser');
+    // Pass error to error handler middleware
+    next(new DatabaseError('Unable to login user', error));
   }
 };
 
