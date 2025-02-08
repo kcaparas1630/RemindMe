@@ -1,31 +1,35 @@
 FROM node:20.16.0
 
-# Set working directory
 WORKDIR /app/
 
-# Create logs directory
+# Install dependencies first (better layer caching)
+COPY package*.json ./
+RUN npm install
+
+# Create logs directory with correct permissions
 RUN mkdir -p /app/logs
 
-# Copy files and install dependencies
-COPY . ./
-RUN npm i && \
-    npm run build
+# Copy the rest of the application
+COPY . .
 
-# Set User and permissions
+# Generate prisma schema
+RUN npx prisma generate 
+
+# Build the application
+RUN npm run build
+
+
+# Set up user and permissions
 RUN groupadd -r backendgroup && \
     useradd -r -g backendgroup -m backenduser && \
     chown -R backenduser:backendgroup /app && \
     chmod 755 /app && \
-    # Explicitly set permissions for logs directory
     chmod 755 /app/logs
 
-# Set maintainer labels
 LABEL maintainer="Kent Caparas<kentcaparas12@gmail.com>"
 LABEL description="Docker image to run Task command line backend"
 LABEL version="1.0"
 
-# Switch to non-root user
 USER backenduser
 
-# RUN BACKEND
 CMD ["npm", "run", "serve", "--no-update-notifier", "--max-old-space-size=50"]

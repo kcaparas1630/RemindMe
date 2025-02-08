@@ -45,12 +45,17 @@ services:
       watch:
         - action: sync
           path: ./Backend/
-          target: app
+          target: /app/src
           ignore: [node_modules]
+        - action: sync
+          path: ./Backend/package*.json
+          target: /app/
+        - action: sync
+          path: ./Backend/tsconfig.json
+          target: /app/
     env_file:
       - ./Backend/.env
     volumes:
-      - ./Backend:/app
       - ./Backend/logs:/app/logs
 
     healthcheck:
