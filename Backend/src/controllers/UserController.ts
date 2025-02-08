@@ -171,5 +171,4 @@ const loginUser = async (req: Request, res: Response, next: NextFunction): Promi
     next(new DatabaseError('Unable to login user', error));
   }
 };
-
 export { getAllUser, getUserById, loginUser, registerUser };

@@ -18,7 +18,6 @@ const userRegisterValidationSchema = object({
       userEmail: string().email('Email must be a valid email').required('Email is required'),
   }),
 });
-
 const userLoginValidationSchema = object({
   body: object({
     userName: string().required('Username is required'),
