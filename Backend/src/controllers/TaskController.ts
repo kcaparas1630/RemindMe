@@ -22,7 +22,6 @@ const getAllTask = async (req: Request, res: Response, next: NextFunction): Prom
     next(new DatabaseError('Unable to fetch tasks', error));
   }
 };
-
 // Create a task
 const createTask = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

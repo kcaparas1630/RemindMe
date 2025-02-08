@@ -47,4 +47,5 @@ app.use(morgan(morganFormat, {
 //Routes
 app.use('/api', [routers.taskRouter, routers.userRouter, routers.healthRouter]);
 app.use(errorHandler);
+
 export default app;
