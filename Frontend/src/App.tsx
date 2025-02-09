@@ -11,11 +11,15 @@ import Login from './Views/Auth/Components/Login';
 import Register from './Views/Auth/Components/Register';
 import Dashboard from './Views/Dashboard/Dashboard';
 import ProtectedRoute from './ProtectedRoute';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const App = () => {
   // Will create a localStorage custom hook.
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     const savedDarkMode = localStorage.getItem('isDarkMode');
+
     return savedDarkMode !== null && savedDarkMode !== '';
   });
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
@@ -36,9 +40,10 @@ const App = () => {
   }, []);
   
   return (
-    <StyledApp isDarkMode={isDarkMode}>
-      <BrowserRouter>
-        <Routes>
+    <QueryClientProvider client={queryClient}>
+      <StyledApp isDarkMode={isDarkMode}>
+        <BrowserRouter>
+          <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path='/login' element={<Login isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
           <Route path='/register' element={<Register isDarkMode={isDarkMode} toggleTheme={toggleTheme} />} />
@@ -47,8 +52,10 @@ const App = () => {
           </Route>
         </Routes>
       </BrowserRouter>
-    </StyledApp>
+      </StyledApp>
+    </QueryClientProvider>
   );
 };
+
 
 export default App;
