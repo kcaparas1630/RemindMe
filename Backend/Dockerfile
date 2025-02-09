@@ -10,7 +10,7 @@ RUN npm install
 RUN mkdir -p /app/logs
 
 # Copy the rest of the application
-COPY . .
+COPY . ./
 
 # Generate prisma schema
 RUN npx prisma generate 
