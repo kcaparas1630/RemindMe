@@ -24,23 +24,22 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const logoutHandler = () => {
     setIsLogoutClicked(true);
     localStorage.removeItem('loginToken');
-    navigate('/login');  
+    navigate('/login');
   };
   const getTasks = async (): Promise<TaskInterface[]> => {
     const token = localStorage.getItem('loginToken');
     const response = await axios.get('http://localhost:3000/api/task', {
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   };
 
-
   const { data: tasks }: UseQueryResult<TaskInterface[], Error> = useQuery({
     queryKey: ['tasks'],
     queryFn: getTasks,
-    staleTime: 1000 * 60 * 1 // 1 minute
+    staleTime: 1000 * 60 * 1, // 1 minute
   });
 
   return (
@@ -50,35 +49,40 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         toggleTheme={toggleTheme}
       />
       <TaskFormSection isDarkMode={isDarkMode} />
-      { tasks && (
+      {tasks && (
         <Table>
-        <thead>
-          <tr>
-            <TableHeader>Task Name</TableHeader>
-            <TableHeader>Description</TableHeader>
-            <TableHeader>Progress</TableHeader>
-            <TableHeader>Due Date</TableHeader>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks?.map((taskItem, index) => {
-            return (
-              <tr key={index}>
-                <TableCell>{taskItem.taskName}</TableCell>
-                <TableCell>{taskItem.taskDescription}</TableCell>
-                <TableCell>{taskItem.taskProgress}</TableCell>
-                <TableCell>{taskItem.taskDueDate}</TableCell>
-              </tr>
-
-            );
-          })}
-        </tbody>
-      </Table>
+          <thead>
+            <tr>
+              <TableHeader>Task Name</TableHeader>
+              <TableHeader>Description</TableHeader>
+              <TableHeader>Progress</TableHeader>
+              <TableHeader>Due Date</TableHeader>
+            </tr>
+          </thead>
+          <tbody>
+            {tasks?.map((taskItem, index) => {
+              return (
+                <tr key={index}>
+                  <TableCell>{taskItem.taskName}</TableCell>
+                  <TableCell>{taskItem.taskDescription}</TableCell>
+                  <TableCell>{taskItem.taskProgress}</TableCell>
+                  <TableCell>
+                    {new Date(taskItem.taskDueDate).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </TableCell>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
       )}
-      
+
       <Button
-        type='button'
-        name='Logout'
+        type="button"
+        name="Logout"
         disabled={isLogOutClicked}
         isDarkMode={isDarkMode}
         handleClick={logoutHandler}
