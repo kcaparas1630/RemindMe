@@ -6,6 +6,11 @@ import ErrorLogger from '../Helper/LoggerFunc';
 import ValidationError from '../ErrorHandlers/ValidationError';
 import Task from '../Interface/taskInterface';
 import checkTaskNameExists from '../Helper/TaskNameExists';
+import { JwtPayload } from 'jsonwebtoken';
+
+interface CustomJwtPayload extends JwtPayload {
+  id: number
+};
 
 // get method by task
 const getAllTask = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -37,19 +42,20 @@ const createTask = async (req: Request, res: Response, next: NextFunction): Prom
       taskDueDate: Task['taskDueDate'];
     } = req.body;
 
+    const userId = (req.user as CustomJwtPayload).id;
     const taskNameExists = await checkTaskNameExists(taskName);
 
-    
-    if(taskNameExists) {
-        throw new ValidationError('Task Name Already Exists.');
+    if (taskNameExists) {
+      throw new ValidationError('Task Name Already Exists.');
     }
     const requestBody = await DatabaseService.addTask(
       taskName,
       taskDescription,
       taskProgress,
-      new Date(taskDueDate)
+      new Date(taskDueDate),
+      userId
     );
-   
+
     logger.info('Task has been successfully been added');
     res.status(201).json({
       success: true,
