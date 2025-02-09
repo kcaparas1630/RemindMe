@@ -6,10 +6,12 @@ import Button from '../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
 import GeneralProps from '../../Interface/General/GeneralProps';
 import TaskFormSection from './TaskFormSection';
-
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import axios from 'axios';
 /**
  * this is going to change still.
  * 
+
  * @param isDarkMode - a state that refers to the dark mode or light mode theme.
  * @param toggleTheme - a function that handles the changing of isDarkMode
  * @returns a ReactNode, renders an html element
@@ -24,27 +26,17 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
     localStorage.removeItem('loginToken');
     navigate('/login');  
   };
+  const getTasks = async (): Promise<TaskInterface[]> => {
+    const response = await axios.get('http://localhost:3000/api/tasks');
+    return response.data;
+  };
 
-  const tasks: TaskInterface[] = [
-    {
-      taskName: 'task1',
-      taskDescription: 'task1desc',
-      taskProgress: 'Not Started',
-      taskDueDate: 'Tomorrow',
-    },
-    {
-      taskName: 'task2',
-      taskDescription: 'task2desc',
-      taskProgress: 'Not Started',
-      taskDueDate: 'Tomorrow',
-    },
-    {
-      taskName: 'task3',
-      taskDescription: 'task3desc',
-      taskProgress: 'Not Started',
-      taskDueDate: 'Tomorrow',
-    },
-  ];
+
+  const { data: tasks }: UseQueryResult<TaskInterface[], Error> = useQuery({
+    queryKey: ['tasks'],
+    queryFn: getTasks,
+  });
+  console.log(tasks);
 
   return (
     <>
@@ -63,14 +55,15 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
           </tr>
         </thead>
         <tbody>
-          {tasks.map((task, index) => {
+          {tasks?.map((taskItem, index) => {
             return (
               <tr key={index}>
-                <TableCell>{task.taskName}</TableCell>
-                <TableCell>{task.taskDescription}</TableCell>
-                <TableCell>{task.taskProgress}</TableCell>
-                <TableCell>{task.taskDueDate}</TableCell>
+                <TableCell>{taskItem.taskName}</TableCell>
+                <TableCell>{taskItem.taskDescription}</TableCell>
+                <TableCell>{taskItem.taskProgress}</TableCell>
+                <TableCell>{taskItem.taskDueDate}</TableCell>
               </tr>
+
             );
           })}
         </tbody>
