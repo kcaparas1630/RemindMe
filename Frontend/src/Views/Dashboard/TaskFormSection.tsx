@@ -35,10 +35,13 @@ const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
       setErrors,
       resetForm
     }: {
+      // eslint-disable-next-line no-unused-vars
       setSubmitting: (isSubmitting: boolean) => void;
+      // eslint-disable-next-line no-unused-vars
       setErrors: (errors: FormikErrors<TaskFormProps>) => void;
       resetForm: () => void;
     }
+
   ): Promise<void> => {
     try {
       setErrors({});
