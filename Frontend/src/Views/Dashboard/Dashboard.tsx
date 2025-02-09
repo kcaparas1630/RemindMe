@@ -27,7 +27,12 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
     navigate('/login');  
   };
   const getTasks = async (): Promise<TaskInterface[]> => {
-    const response = await axios.get('http://localhost:3000/api/tasks');
+    const token = localStorage.getItem('loginToken');
+    const response = await axios.get('http://localhost:3000/api/task', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     return response.data;
   };
 
@@ -35,8 +40,8 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const { data: tasks }: UseQueryResult<TaskInterface[], Error> = useQuery({
     queryKey: ['tasks'],
     queryFn: getTasks,
+    staleTime: 1000 * 60 * 1 // 1 minute
   });
-  console.log(tasks);
 
   return (
     <>
@@ -45,7 +50,8 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         toggleTheme={toggleTheme}
       />
       <TaskFormSection isDarkMode={isDarkMode} />
-      <Table>
+      { tasks && (
+        <Table>
         <thead>
           <tr>
             <TableHeader>Task Name</TableHeader>
@@ -68,6 +74,8 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
           })}
         </tbody>
       </Table>
+      )}
+      
       <Button
         type='button'
         name='Logout'
