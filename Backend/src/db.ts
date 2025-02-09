@@ -20,14 +20,20 @@ export class DatabaseService {
     taskName: string,
     taskDescription: string,
     taskProgress: 'NOTSTARTED' | 'STARTED' | 'COMPLETED',
-    taskDueDate: Date
+    taskDueDate: Date,
+    userId: number
   ) {
     return prisma.task.create({
       data: {
         taskName,
         taskDescription,
         taskProgress,
-        taskDueDate
+        taskDueDate,
+        user: {
+          connect: {
+            id: userId
+          }
+        }
       }
     })
   }
