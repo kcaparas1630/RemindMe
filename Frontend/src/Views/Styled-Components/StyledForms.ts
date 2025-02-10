@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { Form } from 'formik';
 import isDarkMode from '../../Interface/General/isDarkMode';
 
 const FormContainer = styled.div<isDarkMode>`
@@ -28,7 +27,7 @@ const FormContainer = styled.div<isDarkMode>`
   }
 `;
 
-const StyledForm = styled(Form)`
+const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 24px;

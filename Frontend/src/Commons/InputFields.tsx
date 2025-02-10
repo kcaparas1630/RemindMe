@@ -4,17 +4,24 @@
  * @author @Kcaparas
  */
 import { FC } from "react";
+import { useFormContext } from "react-hook-form";
 import { InputContainer, StyledInput, StyledLabel } from "./StyledCommons/StyledInput";
 import InputFieldProps from "../Interface/InputFieldsProps";
 
-const InputField: FC<InputFieldProps> = (props) => {
-  const { inputName, labelName } = props;
+const InputField: FC<InputFieldProps> = ({ inputName, labelName, registerName, ...props }) => {
+  const { register } = useFormContext();
+
   return (
     <InputContainer>
       <StyledLabel htmlFor={inputName}>{labelName}:</StyledLabel>
-      <StyledInput id={inputName} name={inputName} {...props} />
+      <StyledInput 
+        id={inputName}  
+        {...register(registerName)}
+        {...props} 
+      />
     </InputContainer>
   );
 };
+
 
 export default InputField;
