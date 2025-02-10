@@ -30,12 +30,12 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const token = localStorage.getItem('loginToken');
   const userName: string = token ? JSON.parse(atob(token.split('.')[1])).sub : null;
   const getTasks = async (userName: string): Promise<UserInterface> => {
-      const response = await axios.get(`http://localhost:3000/api/user/${userName}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data; 
+    const response = await axios.get(`http://localhost:3000/api/user/${userName}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
   };
 
   const { data: users }: UseQueryResult<UserInterface, Error> = useQuery({
@@ -63,23 +63,26 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
             </tr>
           </thead>
           <tbody>
-            {users && users.tasks && users?.tasks.map((taskItem, index) => {
-              return (
-                <tr key={`${users.id}-${index}`}>
-                  <TableCell>{taskItem.taskName}</TableCell>
+            {/** Null Check users and users.tasks. Because it will throw a users is undefined  */}
+            {users &&
+              users.tasks &&
+              users?.tasks.map((taskItem, index) => {
+                return (
+                  <tr key={`${users.id}-${index}`}>
+                    <TableCell>{taskItem.taskName}</TableCell>
 
-                  <TableCell>{taskItem.taskDescription}</TableCell>
-                  <TableCell>{taskItem.taskProgress}</TableCell>
-                  <TableCell>
-                    {new Date(taskItem.taskDueDate).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </TableCell>
-                </tr>
-              );
-            })}
+                    <TableCell>{taskItem.taskDescription}</TableCell>
+                    <TableCell>{taskItem.taskProgress}</TableCell>
+                    <TableCell>
+                      {new Date(taskItem.taskDueDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </TableCell>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
       )}
