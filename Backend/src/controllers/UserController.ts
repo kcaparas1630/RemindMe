@@ -40,15 +40,15 @@ const getAllUser = async (req: Request, res: Response, next: NextFunction): Prom
  * @param {Response} res
  * @return {*}  {Promise<void>}
  */
-const getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getUserByUserName = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const userId = req.body.id;
+    const userName = req.params.userName;
 
-    if (!userId) {
+    if (!userName) {
       throw new ValidationError('User Id is required');
     }
 
-    const result = await DatabaseService.getUserByUserId(userId);
+    const result = await DatabaseService.getUserByUserName(userName);
 
     if (!result) {
       throw new DatabaseError('User not found')
@@ -57,7 +57,7 @@ const getUserById = async (req: Request, res: Response, next: NextFunction): Pro
     res.status(200).json(result);
   } catch (error: unknown) {
     // DRY ERROR LOGGER
-    ErrorLogger(error, 'getUserById');
+    ErrorLogger(error, 'getUserByUserName');
     // Pass error to error handler middleware
     next(new DatabaseError('Unable to fetch the user', error));
   }
@@ -171,4 +171,4 @@ const loginUser = async (req: Request, res: Response, next: NextFunction): Promi
     next(new DatabaseError('Unable to login user', error));
   }
 };
-export { getAllUser, getUserById, loginUser, registerUser };
+export { getAllUser, getUserByUserName, loginUser, registerUser };
