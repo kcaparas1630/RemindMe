@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getAllUser, getUserById, loginUser, registerUser } from '../controllers/UserController';
+import { getAllUser, getUserByUserName, loginUser, registerUser } from '../controllers/UserController';
 import validate from '../middleware/validation-schema';
 import { userRegisterValidationSchema, userLoginValidationSchema } from '../dto/createUser-schema';
 import rateLimit from 'express-rate-limit';
@@ -21,7 +21,7 @@ router.route('/user/login').post(loginLimiter, validate(userLoginValidationSchem
 router.get('/dashboard', authenticateJWT, (req: Request, res: Response) => {
     res.json({ message: 'Access granted to protected route' });
   });
-// special getter for getting user id
-router.get('/user/:id', getUserById);
+// special getter for getting username
+router.get('/user/:userName', getUserByUserName);
 
 export default router;
