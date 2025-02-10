@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import Header from '../../Commons/Headers';
-import TaskInterface from '../../Interface/TaskInterface';
+import UserInterface from '../../Interface/UserInterface';
 import { Table, TableHeader, TableCell } from './Styled-Components/StyledTable';
 import Button from '../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
@@ -26,22 +26,25 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
     localStorage.removeItem('loginToken');
     navigate('/login');
   };
-  const getTasks = async (): Promise<TaskInterface[]> => {
-    const token = localStorage.getItem('loginToken');
-    const response = await axios.get('http://localhost:3000/api/task', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
+  // get token from local storage
+  const token = localStorage.getItem('loginToken');
+  const userName: string = token ? JSON.parse(atob(token.split('.')[1])).sub : null;
+  const getTasks = async (userName: string): Promise<UserInterface> => {
+      const response = await axios.get(`http://localhost:3000/api/user/${userName}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data; 
   };
 
-  const { data: tasks }: UseQueryResult<TaskInterface[], Error> = useQuery({
-    queryKey: ['tasks'],
-    queryFn: getTasks,
+  const { data: users }: UseQueryResult<UserInterface, Error> = useQuery({
+    queryKey: ['users', userName],
+    queryFn: () => {
+      return getTasks(userName);
+    },
     staleTime: 1000 * 60 * 1, // 1 minute
   });
-
   return (
     <>
       <Header
@@ -49,7 +52,7 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         toggleTheme={toggleTheme}
       />
       <TaskFormSection isDarkMode={isDarkMode} />
-      {tasks && (
+      {users && (
         <Table>
           <thead>
             <tr>
@@ -60,10 +63,11 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
             </tr>
           </thead>
           <tbody>
-            {tasks?.map((taskItem, index) => {
+            {users && users.tasks && users?.tasks.map((taskItem, index) => {
               return (
-                <tr key={index}>
+                <tr key={`${users.id}-${index}`}>
                   <TableCell>{taskItem.taskName}</TableCell>
+
                   <TableCell>{taskItem.taskDescription}</TableCell>
                   <TableCell>{taskItem.taskProgress}</TableCell>
                   <TableCell>
