@@ -8,6 +8,7 @@ import GeneralProps from '../../Interface/General/GeneralProps';
 import TaskFormSection from './TaskFormSection';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import axios from 'axios';
+import LoadingSpinner from '../../Commons/LoadingSpinner';
 /**
  * this is going to change still.
  * 
@@ -38,13 +39,21 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
     return response.data;
   };
 
-  const { data: users }: UseQueryResult<UserInterface, Error> = useQuery({
+  const { data: users, isPending, isError, error }: UseQueryResult<UserInterface, Error> = useQuery({
     queryKey: ['users', userName],
     queryFn: () => {
       return getTasks(userName);
     },
-    staleTime: 1000 * 60 * 1, // 1 minute
+    enabled: !!userName,
   });
+
+  if (isPending) {
+    return <LoadingSpinner isDarkMode={isDarkMode} />
+  }
+
+  if (isError) {
+    return <span>{error.message}</span>
+  }
   return (
     <>
       <Header
