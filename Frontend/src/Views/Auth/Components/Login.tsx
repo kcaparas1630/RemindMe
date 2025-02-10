@@ -7,9 +7,9 @@
 
 import { FC, useState } from 'react';
 import axios from 'axios';
-import { Formik, FormikErrors } from 'formik';
 import validationSchema from '../Schema/LoginSchema';
 import { ThemeProvider } from '@emotion/react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Container, RouterText } from '../Styled-Components/StyledAuth';
 import {
   FormContainer,
@@ -25,7 +25,9 @@ import GeneralProps from '../../../Interface/General/GeneralProps';
 import { SubmitHandler, useForm, FormProvider } from 'react-hook-form';
 
 const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
-  const methods = useForm<LoginFormProps>();
+  const methods = useForm<LoginFormProps>({
+    resolver: yupResolver(validationSchema),
+  });
 
   const onSubmit: SubmitHandler<LoginFormProps> = (data) => {
     // eslint-disable-next-line no-console
@@ -97,16 +99,31 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
                   placeholder="Enter your Username"
                   error={methods.formState.errors.userName}
                 />
-                {methods.formState.errors.userName && <ErrorMessage>Show something</ErrorMessage>}
+                {methods.formState.errors.userName && (
+                  <ErrorMessage>{methods.formState.errors.userName?.message}</ErrorMessage>
+                )}
+              </InputWrapper>
+              <InputWrapper>
+                <InputField
+                  registerName="userPassword"
+                  type="password"
+                  inputName="userPassword"
+                  labelName="Password"
+                  placeholder="Enter your Password"
+                  error={methods.formState.errors.userPassword}
+                />
+                {methods.formState.errors.userPassword && (
+                  <ErrorMessage>{methods.formState.errors.userPassword?.message}</ErrorMessage>
+                )}
               </InputWrapper>
               <Button
-                    type="submit"
-                    name="Submit"
-                    disabled={false}
-                    isDarkMode={isDarkMode}
-                  >
-                    Submit
-                  </Button>
+                type="submit"
+                name="Submit"
+                disabled={false}
+                isDarkMode={isDarkMode}
+              >
+                Submit
+              </Button>
             </StyledForm>
           </FormProvider>
 
