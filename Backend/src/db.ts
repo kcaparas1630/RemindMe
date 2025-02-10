@@ -89,7 +89,7 @@ export class DatabaseService {
   static async getUserByUserId(id: number) {
     return prisma.user.findUnique({
       where: {
-        id,
+        id: id,
       },
       include: {
         tasks: true // Include user's tasks if needed 
@@ -99,9 +99,12 @@ export class DatabaseService {
 
   // Get User by UserName (For Login and JWT Auth)
   static async getUserByUserName(userName: string) {
-    return prisma.user.findFirst({
+    return prisma.user.findUnique({
       where: {
         userName
+      },
+      include: {
+        tasks: true
       }
     })
   }
