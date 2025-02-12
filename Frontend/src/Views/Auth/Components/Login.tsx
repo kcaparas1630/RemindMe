@@ -6,7 +6,7 @@
  */
 
 import { FC } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import validationSchema from '../Schema/LoginSchema';
 import { ThemeProvider } from '@emotion/react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -23,20 +23,41 @@ import Header from '../../../Commons/Headers';
 import LoginFormProps from '../../../Interface/Login/LoginFormProps';
 import GeneralProps from '../../../Interface/General/GeneralProps';
 import { SubmitHandler, useForm, FormProvider } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+
+const loginUser = async (credentials: LoginFormProps) => {
+  const result = await axios.post('http://localhost:3000/api/user/login', {
+    userName: credentials.userName,
+    userPassword: credentials.userPassword,
+  });
+  return result.data;
+};
 
 const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
-  const formData: LoginFormProps = ({ userName: '', userPassword: '' });
+  const formData: LoginFormProps = { userName: '', userPassword: '' };
   const methods = useForm<LoginFormProps>({
     resolver: yupResolver(validationSchema),
     defaultValues: formData,
   });
+  const mutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      localStorage.setItem('loginToken', JSON.stringify(data));
+      // force a page reload to update authentication state
+      window.location.href = '/dashboard';
+    },
+    onError: (error) => {
+      methods.setError('root', {
+        message: error.message,
+      });
+    },
+  });
   // Will update in the next PR
   const onSubmit: SubmitHandler<LoginFormProps> = async (data) => {
-    await new Promise(resolve => {
-      setTimeout(resolve, 3000) 
+    await new Promise((resolve) => {
+      setTimeout(resolve, 3000);
     });
-    // eslint-disable-next-line no-console
-    console.log(data);
+    mutation.mutate(data);
   };
 
   return (
@@ -77,8 +98,8 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
                 )}
               </InputWrapper>
               <ThemeProvider theme={{ isDarkMode: isDarkMode }}>
-                    <RouterText to="/register">No Account yet?</RouterText>
-                  </ThemeProvider>
+                <RouterText to="/register">No Account yet?</RouterText>
+              </ThemeProvider>
               <Button
                 type="submit"
                 name="Submit"
@@ -87,9 +108,11 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
               >
                 {methods.formState.isSubmitting ? 'Loading...' : 'Submit'}
               </Button>
+              {methods.formState.errors.root && (
+                  <ErrorMessage>{methods.formState.errors.root?.message}</ErrorMessage>
+                )}
             </StyledForm>
           </FormProvider>
-
         </FormContainer>
       </Container>
     </>
