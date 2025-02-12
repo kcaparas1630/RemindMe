@@ -28,11 +28,20 @@ import { SubmitHandler, useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
+
+  const formData: RegisterFormProps = ({
+    firstName: '',
+    lastName: '',
+    userName: '',
+    userPassword: '',
+    userEmail: '',
+  });
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const methods = useForm<RegisterFormProps>({
     resolver: yupResolver(validationSchema),
+    defaultValues: formData,
   });
 
   const onSubmit: SubmitHandler<RegisterFormProps> = async (data) => {

@@ -5,7 +5,7 @@
  * @author @Kcaparas
  */
 
-import { FC, } from 'react';
+import { FC } from 'react';
 // import axios from 'axios';
 import validationSchema from '../Schema/LoginSchema';
 import { ThemeProvider } from '@emotion/react';
@@ -25,8 +25,10 @@ import GeneralProps from '../../../Interface/General/GeneralProps';
 import { SubmitHandler, useForm, FormProvider } from 'react-hook-form';
 
 const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
+  const formData: LoginFormProps = ({ userName: '', userPassword: '' });
   const methods = useForm<LoginFormProps>({
     resolver: yupResolver(validationSchema),
+    defaultValues: formData,
   });
   // Will update in the next PR
   const onSubmit: SubmitHandler<LoginFormProps> = async (data) => {
