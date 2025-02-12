@@ -5,17 +5,18 @@
  */
 
 import { FC } from 'react';
+import { useFormContext } from 'react-hook-form';
 import SelectFieldProps from '../Interface/SelectFieldProps';
 import { StyledSelect, InputContainer, StyledLabel } from './StyledCommons/StyledSelectField';
 
-const SelectField: FC<SelectFieldProps> = (props) => {
-  const { inputName, labelName, options } = props;
+const SelectField: FC<SelectFieldProps> = ({inputName, labelName, registerName, options, ...props}) => {
+  const { register } = useFormContext();
   return (
     <InputContainer>
       <StyledLabel htmlFor={inputName}>{labelName}:</StyledLabel>
       <StyledSelect
         id={inputName}
-        name={inputName}
+        {...register(registerName)}
         {...props}
       >
         <option
