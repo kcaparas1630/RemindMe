@@ -1,4 +1,4 @@
-import React from 'react';
+import { FieldError } from 'react-hook-form';
 
 export interface OptionProps {
   value: string;
@@ -9,12 +9,8 @@ interface SelectFieldProps {
   options: OptionProps[];
   inputName: string;
   labelName: string;
-  value: string;
-  // eslint-disable-next-line no-unused-vars
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  // eslint-disable-next-line no-unused-vars
-  onBlur: (e: React.FocusEvent<HTMLSelectElement>) => void;
-  error?: boolean | undefined | string;
+  registerName: string;
+  error?: FieldError | undefined;
 }
 
 export default SelectFieldProps;

@@ -7,13 +7,20 @@ import { FC } from 'react';
 import { InputContainer, StyledLabel } from './StyledCommons/StyledInput';
 import DatePickerWrapper from './StyledCommons/StyledDatePicker';
 import DatePickerProps from '../Interface/DatePickerProps';
+import { useFormContext, useController } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { useField, useFormikContext } from 'formik';
+
 
 const DatePickerField: FC<DatePickerProps> = ({ inputName, labelName }) => {
-  const { setFieldValue } = useFormikContext();
-  const [field] = useField(inputName);
+  const { control } = useFormContext();
+  const {
+    field: { value, onChange }
+  } = useController({
+    name: inputName,
+    control,
+    defaultValue: new Date()
+  });
 
   return (
     <InputContainer>
@@ -21,9 +28,9 @@ const DatePickerField: FC<DatePickerProps> = ({ inputName, labelName }) => {
       <DatePickerWrapper>
         <DatePicker
           id={inputName}
-          selected={field.value ? new Date(field.value) : new Date()}
+          selected={value ? new Date(value) : new Date()}
           onChange={(date: Date | null) => {
-            setFieldValue(inputName, date?.toISOString());
+            onChange(date?.toISOString());
           }}
           portalId="root"
           popperPlacement="bottom-start"
