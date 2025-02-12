@@ -1,7 +1,7 @@
 interface TaskFormProps {
     taskName: string;
     taskDescription: string;
-    taskProgress: string;
+    taskProgress: 'NOTSTARTED' | 'STARTED' | 'COMPLETED';
     taskDueDate: string;
 }
 

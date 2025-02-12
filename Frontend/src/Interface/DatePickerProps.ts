@@ -1,8 +1,8 @@
+import { FieldError } from "react-hook-form";
 interface DatePickerProps {
     inputName: string;
     labelName: string;
-    value: string;
-    error?: boolean | undefined | string;
+    error?: FieldError | undefined;
 }
 
 export default DatePickerProps;
