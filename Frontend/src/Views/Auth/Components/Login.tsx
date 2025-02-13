@@ -24,6 +24,7 @@ import LoginFormProps from '../../../Interface/Login/LoginFormProps';
 import GeneralProps from '../../../Interface/General/GeneralProps';
 import { SubmitHandler, useForm, FormProvider } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
+import ApiErrorResponse from '../../../Interface/ErrorResponse';
 
 const loginUser = async (credentials: LoginFormProps) => {
   const result = await axios.post('http://localhost:3000/api/user/login', {
@@ -46,10 +47,17 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
       // force a page reload to update authentication state
       window.location.href = '/dashboard';
     },
-    onError: (error) => {
-      methods.setError('root', {
-        message: error.message,
-      });
+    onError: (error: Error & {response?: { data: ApiErrorResponse}}) => {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        methods.setError('root', {
+          message: error.response.data.message,
+        });
+      } else {
+        // Fallback for other types of errors
+        methods.setError('root', {
+          message: 'An unexpected error occurred',
+        });
+      }
     },
   });
   // Will update in the next PR
