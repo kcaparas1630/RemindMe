@@ -20,7 +20,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import ApiErrorResponse from '../../Interface/ErrorResponse';
 import DashboardProps from '../../Interface/DashboardProps';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const addTasks = async (credentials: TaskFormProps) => {
   const token = localStorage.getItem('loginToken');
@@ -41,6 +41,10 @@ const addTasks = async (credentials: TaskFormProps) => {
 
   return response.data;
 }
+
+const notify = (message: string) => {
+  return toast(message);
+}
 const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient }) => {
   const formData: TaskFormProps = {
     taskName: '',
@@ -58,6 +62,7 @@ const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient
   const mutation = useMutation({
     mutationFn: addTasks,
     onSuccess: async () => {
+      notify('Task Added!')
       // reset the form
       methods.reset();
       // refers to Dashboard getUsers queryKey
@@ -65,11 +70,14 @@ const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient
     },
     onError: (error: Error & {response?: { data: ApiErrorResponse}}) => {
       if (axios.isAxiosError(error) && error.response?.data) {
+        notify(error.response.data.message);
         methods.setError('root', {
           message: error.response.data.message,
         });
       } else {
         // Fallback for other types of errors
+        // toast nothing special lol.
+        notify('An unexpected error occured');
         methods.setError('root', {
           message: 'An unexpected error occurred',
         });

@@ -9,6 +9,7 @@ import TaskFormSection from './TaskFormSection';
 import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import axios from 'axios';
 import LoadingSpinner from '../../Commons/LoadingSpinner';
+import { ToastContainer } from 'react-toastify';
 /**
  * this is going to change still.
  * 
@@ -61,6 +62,7 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   }
   return (
     <>
+      <ToastContainer />
       <Header
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
