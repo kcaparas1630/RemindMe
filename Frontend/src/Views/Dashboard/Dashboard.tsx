@@ -6,7 +6,7 @@ import Button from '../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
 import GeneralProps from '../../Interface/General/GeneralProps';
 import TaskFormSection from './TaskFormSection';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import axios from 'axios';
 import LoadingSpinner from '../../Commons/LoadingSpinner';
 /**
@@ -21,7 +21,7 @@ import LoadingSpinner from '../../Commons/LoadingSpinner';
 const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const [isLogOutClicked, setIsLogoutClicked] = useState<boolean>(false);
   const navigate = useNavigate();
-
+  const queryClient = useQueryClient();
   const logoutHandler = () => {
     setIsLogoutClicked(true);
     localStorage.removeItem('loginToken');
@@ -39,7 +39,12 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
     return response.data;
   };
 
-  const { data: users, isPending, isError, error }: UseQueryResult<UserInterface, Error> = useQuery({
+  const {
+    data: users,
+    isPending,
+    isError,
+    error,
+  }: UseQueryResult<UserInterface, Error> = useQuery({
     queryKey: ['users', userName],
     queryFn: () => {
       return getTasks(userName);
@@ -48,11 +53,11 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   });
 
   if (isPending) {
-    return <LoadingSpinner isDarkMode={isDarkMode} />
+    return <LoadingSpinner isDarkMode={isDarkMode} />;
   }
 
   if (isError) {
-    return <span>{error.message}</span>
+    return <span>{error.message}</span>;
   }
   return (
     <>
@@ -60,7 +65,11 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
       />
-      <TaskFormSection isDarkMode={isDarkMode} />
+      <TaskFormSection
+        isDarkMode={isDarkMode}
+        userName={userName}
+        queryClient={queryClient}
+      />
       {users && (
         <Table>
           <thead>

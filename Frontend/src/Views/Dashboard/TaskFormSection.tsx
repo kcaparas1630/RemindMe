@@ -17,8 +17,10 @@ import TaskOptions from '../../Constants/TaskOptions';
 import DatePickerField from '../../Commons/DatePicker';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import ApiErrorResponse from '../../Interface/ErrorResponse';
+import DashboardProps from '../../Interface/DashboardProps';
+import { ToastContainer, toast } from 'react-toastify';
 
 const addTasks = async (credentials: TaskFormProps) => {
   const token = localStorage.getItem('loginToken');
@@ -39,7 +41,7 @@ const addTasks = async (credentials: TaskFormProps) => {
 
   return response.data;
 }
-const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
+const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient }) => {
   const formData: TaskFormProps = {
     taskName: '',
     taskDescription: '',
@@ -47,7 +49,6 @@ const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
     taskDueDate: '',
   };
 
-  const queryClient = useQueryClient();
 
   const methods = useForm<TaskFormProps>({
     resolver: yupResolver(taskValidationSchema),
@@ -59,7 +60,7 @@ const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
     onSuccess: async () => {
       // reset the form
       methods.reset();
-      await queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      await queryClient.invalidateQueries({ queryKey: ['users', userName] });
     },
     onError: (error: Error & {response?: { data: ApiErrorResponse}}) => {
       if (axios.isAxiosError(error) && error.response?.data) {
