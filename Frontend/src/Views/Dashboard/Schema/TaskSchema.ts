@@ -8,7 +8,7 @@ const taskValidationSchema = Yup.object().shape({
     taskProgress: Yup.string().oneOf(['NOTSTARTED', 'STARTED', 'COMPLETED']).required('Task Progress is required'),
     taskDueDate: Yup.date()
     // eslint-disable-next-line
-    .transform((value, originalValue) => new Date(originalValue))
+    .transform((originalValue) => new Date(originalValue))
     .min(todayDate, 'Date must be today or later.')
     .max(maxDate, 'Date must be no more than December 31, 2050')
     .required('Due date is required'),
