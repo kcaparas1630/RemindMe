@@ -60,6 +60,7 @@ const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient
     onSuccess: async () => {
       // reset the form
       methods.reset();
+      // refers to Dashboard getUsers queryKey
       await queryClient.invalidateQueries({ queryKey: ['users', userName] });
     },
     onError: (error: Error & {response?: { data: ApiErrorResponse}}) => {
