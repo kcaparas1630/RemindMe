@@ -45,13 +45,13 @@ const getUserByUserName = async (req: Request, res: Response, next: NextFunction
     const userName = req.params.userName;
 
     if (!userName) {
-      throw new ValidationError('User Id is required');
+      return next(new ValidationError('User Id is required'));
     }
 
     const result = await DatabaseService.getUserByUserName(userName);
 
     if (!result) {
-      throw new DatabaseError('User not found')
+      return next(new DatabaseError('User not found'));
     }
 
     res.status(200).json(result);
@@ -93,7 +93,7 @@ const registerUser = async (req: Request, res: Response, next: NextFunction): Pr
 
     // if user exists send status 403 (Forbidden)
     if (userExists) {
-      throw new ValidationError('User Already Exists')
+      return next(new ValidationError('User Already Exists'));
     }
 
     const result = await DatabaseService.addUser(
@@ -141,7 +141,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction): Promi
     const userResult = await DatabaseService.getUserByUserName(userName);
     // check the result if not null or empty string
     if (!userResult) {
-      throw new ValidationError('Invalid Credentials')
+      return next(new ValidationError('Invalid Credentials'));
     }
     // assigns the userResult into a user variable.
     const user: User = userResult;
@@ -150,7 +150,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction): Promi
     const isPasswordCorrect = await verifyHashPassword(userPassword, user.userPassword);
 
     if (!isPasswordCorrect) {
-      throw new ValidationError('Invalid Credentials');
+      return next(new ValidationError('Invalid Credentials'));
     }
 
     const token = jwt.sign(

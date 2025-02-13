@@ -46,7 +46,7 @@ const createTask = async (req: Request, res: Response, next: NextFunction): Prom
     const taskNameExists = await checkTaskNameExists(taskName);
 
     if (taskNameExists) {
-      throw new ValidationError('Task Name Already Exists.');
+      return next(new ValidationError('Task Name Already Exists.'));
     }
     const requestBody = await DatabaseService.addTask(
       taskName,
@@ -80,12 +80,12 @@ const getTaskByTaskName = async (
 
     // throw error if missing task name
     if (!taskName) {
-      throw new ValidationError('Task Name is required');
+      return next(new ValidationError('Task Name is required'));
     }
     const requestBody = await DatabaseService.getTaskByTaskName(taskName);
 
     if (!requestBody) {
-      throw new DatabaseError('Task not found');
+      return next(new DatabaseError('Task not found'));
     }
     res.status(200).send(requestBody);
   } catch (error) {

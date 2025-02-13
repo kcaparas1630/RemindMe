@@ -7,7 +7,6 @@
  * @author @Kcaparas
  */
 import { FC, useState } from 'react';
-// import axios from 'axios';
 import validationSchema from '../Schema/RegisterSchema';
 import { ThemeProvider } from '@emotion/react';
 import { Container, RouterText } from '../Styled-Components/StyledAuth';
@@ -26,16 +25,29 @@ import { useNavigate } from 'react-router-dom';
 import GeneralProps from '../../../Interface/General/GeneralProps';
 import { SubmitHandler, useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import ApiErrorResponse from '../../../Interface/ErrorResponse';
 
+const registerUser = async (credentials: RegisterFormProps) => {
+  const response = await axios.post('http://localhost:3000/api/user/register', {
+    firstName: credentials.firstName,
+    lastName: credentials.lastName,
+    userName: credentials.userName,
+    userPassword: credentials.userPassword,
+    userEmail: credentials.userEmail,
+  });
+
+  return response.data;
+};
 const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
-
-  const formData: RegisterFormProps = ({
+  const formData: RegisterFormProps = {
     firstName: '',
     lastName: '',
     userName: '',
     userPassword: '',
     userEmail: '',
-  });
+  };
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,17 +56,34 @@ const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
     defaultValues: formData,
   });
 
-  const onSubmit: SubmitHandler<RegisterFormProps> = async (data) => {
-    setIsModalOpen(true);
-    setIsLoading(true);
-    await new Promise((resolve) => {
-      setTimeout(resolve, 3000);
-    });
-    // eslint-disable-next-line no-console
-    console.log(data);
-    setIsModalOpen(false);
-    setIsLoading(false);
-    navigate('/login');
+  const mutation = useMutation({
+    mutationFn: registerUser,
+    onSuccess: async () => {
+      setIsModalOpen(true);
+      setIsLoading(true);
+      await new Promise((resolve) => {
+        setTimeout(resolve, 3000);
+      });
+      setIsModalOpen(false);
+      setIsLoading(false);
+      navigate('/login');
+    },
+    onError: (error: Error & {response?: { data: ApiErrorResponse}}) => {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        methods.setError('root', {
+          message: error.response.data.message,
+        });
+      } else {
+        // Fallback for other types of errors
+        methods.setError('root', {
+          message: 'An unexpected error occurred',
+        });
+      }
+    },
+  });
+
+  const onSubmit: SubmitHandler<RegisterFormProps> =  (data) => {
+    mutation.mutate(data);
   };
 
   return (
@@ -144,6 +173,9 @@ const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
               >
                 {methods.formState.isSubmitting ? 'Loading...' : 'Register'}
               </Button>
+              {methods.formState.errors.root && (
+                <ErrorMessage>{methods.formState.errors.root?.message}</ErrorMessage>
+              )}
             </StyledForm>
           </FormProvider>
         </FormContainer>

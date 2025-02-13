@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import InputField from '../../Commons/InputFields';
 import Button from '../../Commons/Button';
-// import axios from 'axios';
+import axios from 'axios';
 import GeneralProps from '../../Interface/General/GeneralProps';
 import TaskFormProps from '../../Interface/TaskFormProps';
 import taskValidationSchema from './Schema/TaskSchema';
@@ -15,11 +15,37 @@ import TextArea from '../../Commons/TextArea';
 import SelectField from '../../Commons/SelectField';
 import TaskOptions from '../../Constants/TaskOptions';
 import DatePickerField from '../../Commons/DatePicker';
-import LoadingSpinner from '../../Commons/LoadingSpinner';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-// import { useQueryClient } from '@tanstack/react-query';
-const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
+import { useMutation } from '@tanstack/react-query';
+import ApiErrorResponse from '../../Interface/ErrorResponse';
+import DashboardProps from '../../Interface/DashboardProps';
+import { toast } from 'react-toastify';
+
+const addTasks = async (credentials: TaskFormProps) => {
+  const token = localStorage.getItem('loginToken');
+
+  // Add token to request headers
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  };
+
+  const response = await axios.post('http://localhost:3000/api/task', {
+    taskName: credentials.taskName,
+    taskDescription: credentials.taskDescription,
+    taskProgress: credentials.taskProgress,
+    taskDueDate: credentials.taskDueDate,
+  }, config);
+
+  return response.data;
+}
+
+const notify = (message: string) => {
+  return toast(message);
+}
+const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient }) => {
   const formData: TaskFormProps = {
     taskName: '',
     taskDescription: '',
@@ -27,80 +53,44 @@ const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
     taskDueDate: '',
   };
 
+
   const methods = useForm<TaskFormProps>({
     resolver: yupResolver(taskValidationSchema),
     defaultValues: formData,
   });
 
+  const mutation = useMutation({
+    mutationFn: addTasks,
+    onSuccess: async () => {
+      notify('Task Added!')
+      // reset the form
+      methods.reset();
+      // refers to Dashboard getUsers queryKey
+      await queryClient.invalidateQueries({ queryKey: ['users', userName] });
+    },
+    onError: (error: Error & {response?: { data: ApiErrorResponse}}) => {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        notify(error.response.data.message);
+        methods.setError('root', {
+          message: error.response.data.message,
+        });
+      } else {
+        // Fallback for other types of errors
+        // toast nothing special lol.
+        notify('An unexpected error occured');
+        methods.setError('root', {
+          message: 'An unexpected error occurred',
+        });
+      }
+    },
+  })
+
   const onSubmit: SubmitHandler<TaskFormProps> = async (data) => {
     await new Promise((resolve) => {
       setTimeout(resolve, 3000);
     });
-    // eslint-disable-next-line no-console
-    console.log(data);
+    mutation.mutate(data);
   };
-
-  // const queryClient = useQueryClient();
-
-  // const handleTaskSubmit = async (
-  //   values: TaskFormProps,
-  //   {
-  //     setSubmitting,
-  //     setErrors,
-  //     resetForm
-  //   }: {
-  //     // eslint-disable-next-line no-unused-vars
-  //     setSubmitting: (isSubmitting: boolean) => void;
-  //     // eslint-disable-next-line no-unused-vars
-  //     setErrors: (errors: FormikErrors<TaskFormProps>) => void;
-  //     resetForm: () => void;
-  //   }
-
-  // ): Promise<void> => {
-  //   try {
-  //     setErrors({});
-  //     setSubmitting(true);
-
-  //     const token = localStorage.getItem('loginToken');
-
-  //     // Add token to request headers
-  //     const config = {
-  //       headers: {
-  //         'Authorization': `Bearer ${token}`
-  //       }
-  //     };
-
-  //     await axios.post('http://localhost:3000/api/task', {
-  //       taskName: values.taskName,
-  //       taskDescription: values.taskDescription,
-  //       taskProgress: values.taskProgress,
-  //       taskDueDate: values.taskDueDate,
-  //     }, config);
-
-  //     // Reset form after successful submission
-  //     resetForm();
-
-  //     // Invalidate and refetch tasks
-  //     await queryClient.invalidateQueries({ queryKey: ['tasks'] });
-
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       // Handle validation errors
-  //       if (error.response?.data?.details?.message) {
-  //         setErrors({ taskName: error.response.data.details.message });
-  //       } else if (error.response?.data?.errors) {
-  //         setErrors(error.response.data.errors);
-  //       } else {
-  //         setErrors({ taskName: error.response?.data?.message || 'Failed to add task' });
-  //       }
-  //     } else {
-  //       // requires an object from TaskFormProps to work. Either field will work.
-  //       setErrors({ taskName: 'An unexpected error occurred' });
-  //     }
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
 
   return (
     <FormContainer isDarkMode={isDarkMode}>
@@ -159,14 +149,11 @@ const TaskFormSection: FC<GeneralProps> = ({ isDarkMode }) => {
             disabled={methods.formState.isSubmitting}
             isDarkMode={isDarkMode}
           >
-            {methods.formState.isSubmitting ? (
-              <>
-                <LoadingSpinner isDarkMode={isDarkMode} /> Adding...
-              </>
-            ) : (
-              'Add Task'
-            )}
+            {methods.formState.isSubmitting ? 'Adding...' : 'Submit'}
           </Button>
+          {methods.formState.errors.root && (
+              <ErrorMessage>{methods.formState.errors.root?.message}</ErrorMessage>
+            )}
         </StyledForm>
       </FormProvider>
     </FormContainer>
