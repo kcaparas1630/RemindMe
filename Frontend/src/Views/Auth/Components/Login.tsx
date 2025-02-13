@@ -43,7 +43,7 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const mutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
-      localStorage.setItem('loginToken', JSON.stringify(data));
+      localStorage.setItem('loginToken', data.token);
       // force a page reload to update authentication state
       window.location.href = '/dashboard';
     },
