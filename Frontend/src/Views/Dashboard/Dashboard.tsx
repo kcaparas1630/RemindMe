@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from '../../Commons/LoadingSpinner';
 import { ToastContainer } from 'react-toastify';
 import GetUser from '../../Hooks/GetUser';
+import WelcomeUser from './WelcomeUser';
 /**
  * this is going to change still.
  * 
@@ -23,9 +24,10 @@ import GetUser from '../../Hooks/GetUser';
 const token = localStorage.getItem('loginToken');
 const userName: string = token ? JSON.parse(atob(token.split('.')[1])).sub : null;
 
-
 const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
-  const {users, isPending, isError, error} = GetUser(userName, token);
+  const { users, isPending, isError, error } = GetUser(userName, token);
+  // IDK HOW TO NAME IT HAHAHA. When login, Greets the user
+  const [isWelcomeDone, setWelcomeDone] = useState<boolean>(false);
   const [isLogOutClicked, setIsLogoutClicked] = useState<boolean>(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -35,14 +37,19 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
     navigate('/login');
   };
 
-
-
   if (isPending) {
     return <LoadingSpinner isDarkMode={isDarkMode} />;
   }
 
   if (isError && !!error) {
     return <span>{error.message}</span>;
+  }
+
+  if (!isWelcomeDone) {
+    return <WelcomeUser 
+      isDarkMode={isDarkMode}
+      user={users}
+    />
   }
   return (
     <>
@@ -51,55 +58,59 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
       />
-      <TaskFormSection
-        isDarkMode={isDarkMode}
-        userName={userName}
-        queryClient={queryClient}
-      />
-      {users && (
-        <Table>
-          <thead>
-            <tr>
-              <TableHeader>Task Name</TableHeader>
-              <TableHeader>Description</TableHeader>
-              <TableHeader>Progress</TableHeader>
-              <TableHeader>Due Date</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {/** Null Check users and users.tasks. Because it will throw a users is undefined  */}
-            {users &&
-              users.tasks &&
-              users?.tasks.map((taskItem, index) => {
-                return (
-                  <tr key={`${users.id}-${index}`}>
-                    <TableCell>{taskItem.taskName}</TableCell>
+      {isWelcomeDone && (
+        <>
+          <TaskFormSection
+            isDarkMode={isDarkMode}
+            userName={userName}
+            queryClient={queryClient}
+          />
+          {users && (
+            <Table>
+              <thead>
+                <tr>
+                  <TableHeader>Task Name</TableHeader>
+                  <TableHeader>Description</TableHeader>
+                  <TableHeader>Progress</TableHeader>
+                  <TableHeader>Due Date</TableHeader>
+                </tr>
+              </thead>
+              <tbody>
+                {/** Null Check users and users.tasks. Because it will throw a users is undefined  */}
+                {users &&
+                  users.tasks &&
+                  users?.tasks.map((taskItem, index) => {
+                    return (
+                      <tr key={`${users.id}-${index}`}>
+                        <TableCell>{taskItem.taskName}</TableCell>
 
-                    <TableCell>{taskItem.taskDescription}</TableCell>
-                    <TableCell>{taskItem.taskProgress}</TableCell>
-                    <TableCell>
-                      {new Date(taskItem.taskDueDate).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
-                    </TableCell>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </Table>
+                        <TableCell>{taskItem.taskDescription}</TableCell>
+                        <TableCell>{taskItem.taskProgress}</TableCell>
+                        <TableCell>
+                          {new Date(taskItem.taskDueDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
+                        </TableCell>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </Table>
+          )}
+
+          <Button
+            type="button"
+            name="Logout"
+            disabled={isLogOutClicked}
+            isDarkMode={isDarkMode}
+            handleClick={logoutHandler}
+          >
+            Logout
+          </Button>
+        </>
       )}
-
-      <Button
-        type="button"
-        name="Logout"
-        disabled={isLogOutClicked}
-        isDarkMode={isDarkMode}
-        handleClick={logoutHandler}
-      >
-        Logout
-      </Button>
     </>
   );
 };
