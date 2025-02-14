@@ -19,7 +19,7 @@ export class DatabaseService {
   static async addTask(
     taskName: string,
     taskDescription: string,
-    taskProgress: 'NOTSTARTED' | 'STARTED' | 'COMPLETED',
+    taskProgress: string,
     taskDueDate: Date,
     userId: number
   ) {

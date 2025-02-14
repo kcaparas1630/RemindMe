@@ -96,4 +96,47 @@ const getTaskByTaskName = async (
   }
 };
 
-export { getAllTask, createTask, getTaskByTaskName };
+const isSameDay = (date1: Date, date2: Date) => {
+  return date1.getFullYear() === date2.getFullYear() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getDate() === date2.getDate();
+}
+
+const highlightTasksDueToday = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const userName = req.params.userName;
+    const tasksDueToday: Task[] = [{
+      taskName: '',
+      taskDescription: '',
+      taskProgress: '',
+      taskDueDate: new Date(Date.now()),
+    }];
+    if (!userName) {
+      return next(new ValidationError('User Id is required'));
+    }
+
+    const result = await DatabaseService.getUserByUserName(userName);
+
+    if (!result) {
+      return next(new DatabaseError('User not found'));
+    }
+
+    result.tasks.map((taskItem) => {
+      if (isSameDay(taskItem.taskDueDate, new Date(Date.now()))) {
+        tasksDueToday.push({
+          taskName: taskItem.taskName,
+          taskDescription: taskItem.taskDescription,
+          taskProgress: taskItem.taskProgress,
+          taskDueDate: taskItem.taskDueDate,
+        });
+      }
+    });
+    
+    res.status(200).send(tasksDueToday);
+  } catch (error) {
+    ErrorLogger(error, 'highlightTasksDueToday');
+    next(new DatabaseError('Unable to fetch tasks due today', error))
+  }
+}
+
+export { getAllTask, createTask, getTaskByTaskName, highlightTasksDueToday };

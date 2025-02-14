@@ -1,7 +1,7 @@
 interface Task {
   taskName: string;
   taskDescription: string;
-  taskProgress: 'NOTSTARTED' | 'STARTED' | 'COMPLETED';
+  taskProgress: string;
   taskDueDate: Date;
 }
 
