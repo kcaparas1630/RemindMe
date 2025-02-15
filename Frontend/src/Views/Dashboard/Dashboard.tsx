@@ -27,7 +27,7 @@ const userName: string = token ? JSON.parse(atob(token.split('.')[1])).sub : nul
 const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const { users, isPending, isError, error } = GetUser(userName, token);
   // IDK HOW TO NAME IT HAHAHA. When login, Greets the user
-  const [isWelcomeDone, setWelcomeDone] = useState<boolean>(false);
+  const [isWelcomeDone] = useState<boolean>(false);
   const [isLogOutClicked, setIsLogoutClicked] = useState<boolean>(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -44,13 +44,6 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   if (isError && !!error) {
     return <span>{error.message}</span>;
   }
-
-  if (!isWelcomeDone) {
-    return <WelcomeUser 
-      isDarkMode={isDarkMode}
-      user={users}
-    />
-  }
   return (
     <>
       <ToastContainer />
@@ -58,6 +51,14 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
       />
+      {!isWelcomeDone && (
+        <WelcomeUser
+          isDarkMode={isDarkMode}
+          userName={userName}
+          token={token}
+          firstName={users?.firstName}
+        />
+      )}
       {isWelcomeDone && (
         <>
           <TaskFormSection
