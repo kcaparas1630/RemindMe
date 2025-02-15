@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import isDarkMode from '../../../Interface/General/isDarkMode';
+import { motion } from "motion/react"
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -62,7 +63,6 @@ const TasksContainer = styled.div`
 const TasksTitle = styled.h2`
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
   margin: 0;
 `;
 
@@ -93,7 +93,6 @@ const TaskBullet = styled.div`
 `;
 
 const TaskText = styled.p`
-  color: #374151;
   margin: 0;
 `;
 
@@ -106,7 +105,6 @@ const QuickActionsSection = styled.div`
 const ActionsTitle = styled.h2`
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
   margin: 0;
 `;
 
@@ -118,6 +116,9 @@ const ActionsGrid = styled.div`
   @media (min-width: 768px) {
     grid-template-columns: 1fr 1fr;
   }
+`;
+const MotionWrapper = styled.div`
+  width: 100%;
 `;
 
 const ActionButton = styled.button<isDarkMode>`
@@ -137,6 +138,7 @@ const ActionButton = styled.button<isDarkMode>`
   cursor: pointer;
   transition: all 0.2s;
   font-size: 1rem;
+  width: 100%;
 
   &:hover {
     background-color: ${(props) => {
@@ -154,6 +156,7 @@ export {
   Container,
   WelcomeSection,
   WelcomeTitle,
+  MotionWrapper,
   EmptyStateContainer,
   Card,
   EmptyStateText,
