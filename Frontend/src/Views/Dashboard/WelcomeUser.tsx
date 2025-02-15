@@ -22,6 +22,7 @@ import {
   ActionsTitle,
   MotionWrapper,
 } from './Styled-Components/StyledWelcome';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const slideUpAnimation = {
   initial: { opacity: 0, y: '100vh' },
@@ -48,11 +49,30 @@ const WelcomeUser: FC<DashboardWelcomeProps> = ({ isDarkMode, firstName, userNam
     return 'evening';
   };
 
+  const welcomeText = `Good ${getTimeOfDay()}, ${firstName}`;
+
   return (
     <Container {...slideUpAnimation}>
       <WelcomeSection>
         <WelcomeTitle>
-          Good {getTimeOfDay()}, {firstName}
+          <AnimatePresence>
+            {welcomeText.split('').map((char, index) => {
+              return (
+                <motion.span
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{
+                  duration: 1,
+                  delay: index * 0.05, // Each character appears with a slight delay
+                  ease: "easeIn"
+                }}
+              >
+                  {char}
+                </motion.span>
+              );
+            })}
+          </AnimatePresence>
         </WelcomeTitle>
 
         <Card isDarkMode={isDarkMode}>
