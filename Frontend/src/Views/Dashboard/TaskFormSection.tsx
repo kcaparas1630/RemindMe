@@ -2,7 +2,6 @@ import { FC } from 'react';
 import InputField from '../../Commons/InputFields';
 import Button from '../../Commons/Button';
 import axios from 'axios';
-import GeneralProps from '../../Interface/General/GeneralProps';
 import TaskFormProps from '../../Interface/TaskFormProps';
 import taskValidationSchema from './Schema/TaskSchema';
 import {
@@ -50,7 +49,7 @@ const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient
     taskName: '',
     taskDescription: '',
     taskProgress: 'NOTSTARTED',
-    taskDueDate: '',
+    taskDueDate: new Date(Date.now()),
   };
 
 
