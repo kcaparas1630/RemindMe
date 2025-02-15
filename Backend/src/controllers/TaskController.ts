@@ -105,12 +105,7 @@ const isSameDay = (date1: Date, date2: Date) => {
 const highlightTasksDueToday = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const userName = req.params.userName;
-    const tasksDueToday: Task[] = [{
-      taskName: '',
-      taskDescription: '',
-      taskProgress: '',
-      taskDueDate: new Date(Date.now()),
-    }];
+    const tasksDueToday: Task[] = [];
     if (!userName) {
       return next(new ValidationError('User Id is required'));
     }
@@ -120,6 +115,7 @@ const highlightTasksDueToday = async (req: Request, res: Response, next: NextFun
     if (!result) {
       return next(new DatabaseError('User not found'));
     }
+
 
     result.tasks.map((taskItem) => {
       if (isSameDay(taskItem.taskDueDate, new Date(Date.now()))) {
@@ -131,6 +127,7 @@ const highlightTasksDueToday = async (req: Request, res: Response, next: NextFun
         });
       }
     });
+
     
     res.status(200).send(tasksDueToday);
   } catch (error) {
