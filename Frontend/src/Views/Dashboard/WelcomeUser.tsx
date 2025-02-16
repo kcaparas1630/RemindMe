@@ -31,9 +31,9 @@ const slideUpAnimation = {
     type: 'spring',
     duration: 0.5,
     bounce: 0.5,
-    damping: 10,
+    damping: 15,
     stiffness: 80,
-    delay: 0.5,
+    delay: 1,
   },
 };
 
@@ -52,7 +52,7 @@ const WelcomeUser: FC<DashboardWelcomeProps> = ({ isDarkMode, firstName, userNam
   const welcomeText = `Good ${getTimeOfDay()}, ${firstName}`;
 
   return (
-    <Container {...slideUpAnimation}>
+    <Container>
       <WelcomeSection>
         <WelcomeTitle>
           <AnimatePresence>
@@ -63,8 +63,8 @@ const WelcomeUser: FC<DashboardWelcomeProps> = ({ isDarkMode, firstName, userNam
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{
-                  duration: 1,
-                  delay: index * 0.05, // Each character appears with a slight delay
+                  duration: 0.5,
+                  delay: index * 0.05, 
                   ease: "easeIn"
                 }}
               >
@@ -75,7 +75,7 @@ const WelcomeUser: FC<DashboardWelcomeProps> = ({ isDarkMode, firstName, userNam
           </AnimatePresence>
         </WelcomeTitle>
 
-        <Card isDarkMode={isDarkMode}>
+        <Card isDarkMode={isDarkMode} {...slideUpAnimation}>
           {tasks?.length === 0 ? (
             <EmptyStateContainer>
               <CheckCircle2
@@ -106,7 +106,7 @@ const WelcomeUser: FC<DashboardWelcomeProps> = ({ isDarkMode, firstName, userNam
         </Card>
       </WelcomeSection>
 
-      <QuickActionsSection>
+      <QuickActionsSection {...slideUpAnimation}>
         <ActionsTitle>What would you like to do?</ActionsTitle>
         <ActionsGrid>
           <MotionWrapper>
