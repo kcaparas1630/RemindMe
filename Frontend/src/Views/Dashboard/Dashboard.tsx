@@ -1,72 +1,30 @@
-import { FC, useState } from 'react';
 import Header from '../../Commons/Headers';
 import { Table, TableHeader, TableCell } from './Styled-Components/StyledTable';
-import Button from '../../Commons/Button';
-import { useNavigate } from 'react-router-dom';
 import GeneralProps from '../../Interface/General/GeneralProps';
-import TaskFormSection from './TaskFormSection';
-import { useQueryClient } from '@tanstack/react-query';
-import LoadingSpinner from '../../Commons/LoadingSpinner';
-import { ToastContainer } from 'react-toastify';
+import { FC, ReactNode } from 'react';
+import getUserFromToken from '../../Hooks/GetUserNameFromToken';
 import GetUser from '../../Hooks/GetUser';
-import WelcomeUser from './WelcomeUser';
-/**
- * this is going to change still.
- * 
+import LoadingSpinner from '../../Commons/LoadingSpinner';
 
- * @param isDarkMode - a state that refers to the dark mode or light mode theme.
- * @param toggleTheme - a function that handles the changing of isDarkMode
- * @returns a ReactNode, renders an html element
- * @author @Kcaparas
- */
+const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }): ReactNode => {
+    const {userName, token } = getUserFromToken(); 
+    const { users, isPending, isError, error } = GetUser(userName, token);
 
-// get token from local storage
-const token = localStorage.getItem('loginToken');
-const userName: string = token ? JSON.parse(atob(token.split('.')[1])).sub : null;
+    if (isPending) {
+        return <LoadingSpinner isDarkMode={isDarkMode} />;
+      }
+    
+      if (isError && !!error) {
+        return <span>{error.message}</span>;
+      }
 
-const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
-  const { users, isPending, isError, error } = GetUser(userName, token);
-  // IDK HOW TO NAME IT HAHAHA. When login, Greets the user
-  const [isWelcomeDone] = useState<boolean>(false);
-  const [isLogOutClicked, setIsLogoutClicked] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const logoutHandler = () => {
-    setIsLogoutClicked(true);
-    localStorage.removeItem('loginToken');
-    navigate('/login');
-  };
-
-  if (isPending) {
-    return <LoadingSpinner isDarkMode={isDarkMode} />;
-  }
-
-  if (isError && !!error) {
-    return <span>{error.message}</span>;
-  }
-  return (
-    <>
-      <ToastContainer />
-      <Header
-        isDarkMode={isDarkMode}
-        toggleTheme={toggleTheme}
-      />
-      {!isWelcomeDone && (
-        <WelcomeUser
-          isDarkMode={isDarkMode}
-          userName={userName}
-          token={token}
-          firstName={users?.firstName}
-        />
-      )}
-      {isWelcomeDone && (
+    return (
         <>
-          <TaskFormSection
-            isDarkMode={isDarkMode}
-            userName={userName}
-            queryClient={queryClient}
-          />
-          {users && (
+            <Header 
+                isDarkMode={isDarkMode}
+                toggleTheme={toggleTheme}
+            />
+            {users && (
             <Table>
               <thead>
                 <tr>
@@ -101,19 +59,8 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
             </Table>
           )}
 
-          <Button
-            type="button"
-            name="Logout"
-            disabled={isLogOutClicked}
-            isDarkMode={isDarkMode}
-            handleClick={logoutHandler}
-          >
-            Logout
-          </Button>
         </>
-      )}
-    </>
-  );
-};
+    )
+}
 
 export default Dashboard;
