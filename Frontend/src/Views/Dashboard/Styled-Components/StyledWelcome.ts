@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import isDarkMode from '../../../Interface/General/isDarkMode';
 import { motion } from "motion/react"
 
-const Container = styled(motion.div)`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -14,17 +14,20 @@ const Container = styled(motion.div)`
 const WelcomeSection = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 2rem;
+  padding: 0 24px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const WelcomeTitle = styled.h1`
-  font-size: 1.875rem;
+  font-size: 3rem;
   font-weight: 700;
   line-height: 2.25rem;
   margin: 0;
 `;
 
-const Card = styled.div<isDarkMode>`
+const Card = styled(motion.div)<isDarkMode>`
    background-color: ${(props) => {
     return props.isDarkMode ? '#2C2F33' : '#E9ECEF';
   }};
@@ -34,6 +37,7 @@ const Card = styled.div<isDarkMode>`
   border-radius: 0.5rem;
   border: 1px solid #e5e7eb;
   padding: 1.5rem;
+  width: 100%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
@@ -96,14 +100,14 @@ const TaskText = styled.p`
   margin: 0;
 `;
 
-const QuickActionsSection = styled.div`
+const QuickActionsSection = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 `;
 
 const ActionsTitle = styled.h2`
-  font-size: 1.25rem;
+  font-size: 2rem;
   font-weight: 600;
   margin: 0;
 `;
