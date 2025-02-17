@@ -23,6 +23,7 @@ import {
   MotionWrapper,
 } from './Styled-Components/StyledWelcome';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const slideUpAnimation = {
   initial: { opacity: 0, y: '100vh' },
@@ -39,7 +40,7 @@ const slideUpAnimation = {
 
 const WelcomeUser: FC<DashboardWelcomeProps> = ({ isDarkMode, firstName, userName, token }) => {
   const { users } = GetTasksDueToday(userName, token);
-
+  const navigate = useNavigate();
   const tasks: TaskInterface[] | undefined = users;
 
   const getTimeOfDay = () => {
@@ -63,11 +64,11 @@ const WelcomeUser: FC<DashboardWelcomeProps> = ({ isDarkMode, firstName, userNam
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{
-                  duration: 0.5,
-                  delay: index * 0.05, 
-                  ease: "easeIn"
-                }}
-              >
+                    duration: 0.5,
+                    delay: index * 0.05,
+                    ease: 'easeIn',
+                  }}
+                >
                   {char}
                 </motion.span>
               );
@@ -75,7 +76,10 @@ const WelcomeUser: FC<DashboardWelcomeProps> = ({ isDarkMode, firstName, userNam
           </AnimatePresence>
         </WelcomeTitle>
 
-        <Card isDarkMode={isDarkMode} {...slideUpAnimation}>
+        <Card
+          isDarkMode={isDarkMode}
+          {...slideUpAnimation}
+        >
           {tasks?.length === 0 ? (
             <EmptyStateContainer>
               <CheckCircle2
@@ -110,13 +114,17 @@ const WelcomeUser: FC<DashboardWelcomeProps> = ({ isDarkMode, firstName, userNam
         <ActionsTitle>What would you like to do?</ActionsTitle>
         <ActionsGrid>
           <MotionWrapper>
-            <ActionButton isDarkMode={isDarkMode}>
+            <ActionButton isDarkMode={isDarkMode} onClick={() => {
+                navigate('/addTasks')
+            }}>
               <PlusCircle size={20} />
               <span>Add New Task</span>
             </ActionButton>
           </MotionWrapper>
           <MotionWrapper>
-            <ActionButton isDarkMode={isDarkMode}>
+            <ActionButton isDarkMode={isDarkMode} onClick={() => {
+                navigate('/dashboard')
+            }}>
               <LayoutDashboard size={20} />
               <span>View Dashboard</span>
             </ActionButton>
