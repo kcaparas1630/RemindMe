@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, JSX } from 'react';
 import Header from '../../Commons/Headers';
 import Button from '../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,8 @@ import GeneralProps from '../../Interface/General/GeneralProps';
 import GetUser from '../../Hooks/GetUser';
 import WelcomeUser from './WelcomeUser';
 import getUserFromToken from '../../Hooks/GetUserNameFromToken';
+import { LayoutDashboard, PlusCircle } from 'lucide-react';
+import Sidebar from '../../Commons/Sidebar';
 /**
  * this is going to change still.
  * 
@@ -16,7 +18,11 @@ import getUserFromToken from '../../Hooks/GetUserNameFromToken';
  * @author @Kcaparas
  */
 
-
+interface SidebarItem {
+  icon: JSX.Element;
+  label: string;
+  onClick: () => void;
+}
 
 const MainPage: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const { userName, token } = getUserFromToken(); 
@@ -25,7 +31,24 @@ const MainPage: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const [isWelcomeDone] = useState<boolean>(false);
   const [isLogOutClicked, setIsLogoutClicked] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [, setView] = useState('dashboard'); 
 
+  const sidebarItems: SidebarItem[] = [
+    {
+      icon: <LayoutDashboard size={20} />,
+      label: 'Dashboard',
+      onClick: () => {
+        setView('dashboard')
+      }
+    },
+    {
+      icon: <PlusCircle size={20} />,
+      label: 'Add Task',
+      onClick: () => {
+        setView('addTask')
+      }
+    }
+  ];
   const logoutHandler = () => {
     setIsLogoutClicked(true);
     localStorage.removeItem('loginToken');
@@ -38,6 +61,10 @@ const MainPage: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
       <Header
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
+      />
+      <Sidebar 
+        items={sidebarItems}
+        isDarkMode={isDarkMode}
       />
       {!isWelcomeDone && (
         <WelcomeUser
