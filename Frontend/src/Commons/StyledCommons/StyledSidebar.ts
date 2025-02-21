@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
  // need to fix still
 const SidebarContainer = styled.div<{ isOpen: boolean; isDarkMode: boolean }>`
-  width: 250px;
+  width: 100%;
   height: 100vh;
   background-color: ${props => {
     if (props.isDarkMode) {
@@ -15,13 +15,13 @@ const SidebarContainer = styled.div<{ isOpen: boolean; isDarkMode: boolean }>`
     if (props.isOpen) {
       return '0';
     } else {
-      return '-350px';
+      return '-150%';
     }
   }};
   top: 0;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
   z-index: 1000;
 
   @media (min-width: 768px) {
