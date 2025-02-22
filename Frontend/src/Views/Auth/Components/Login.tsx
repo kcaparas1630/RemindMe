@@ -19,6 +19,7 @@ import {
   BannerTitle,
   BannerText,
   BannerTextContainer,
+  ButtonContainer,
 } from '../Styled-Components/StyledAuth';
 import {
   FormContainer,
@@ -28,7 +29,6 @@ import {
 } from '../../Styled-Components/StyledForms';
 import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
-import Header from '../../../Commons/Headers';
 import LoginFormProps from '../../../Interface/Login/LoginFormProps';
 import GeneralProps from '../../../Interface/General/GeneralProps';
 import { SubmitHandler, useForm, FormProvider } from 'react-hook-form';
@@ -36,8 +36,10 @@ import { useMutation } from '@tanstack/react-query';
 import ApiErrorResponse from '../../../Interface/ErrorResponse';
 import ManSittingDown from '../../../../assets/Man Sitting Down.svg';
 import { useNavigate } from 'react-router-dom';
+import { useMediaQuery } from '@react-hook/media-query';
 
-const loginUser = async (credentials: LoginFormProps) => { 
+
+const loginUser = async (credentials: LoginFormProps) => {
   const result = await axios.post('http://localhost:3000/api/user/login', {
     userName: credentials.userName,
     userPassword: credentials.userPassword,
@@ -45,8 +47,9 @@ const loginUser = async (credentials: LoginFormProps) => {
   return result.data;
 };
 
-const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
+const Login: FC<GeneralProps> = ({ isDarkMode }) => {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width: 1024px)');
   const formData: LoginFormProps = { userName: '', userPassword: '' };
   const methods = useForm<LoginFormProps>({
     resolver: yupResolver(validationSchema),
@@ -84,52 +87,79 @@ const Login: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const handleSignUpClick = async () => {
     setIsExiting(true);
     // Wait for animation to complete before navigating
-    await new Promise(resolve => {
-      setTimeout(resolve, 2500);
+    await new Promise((resolve) => {
+      setTimeout(resolve, 1800);
     });
     navigate('/register');
   };
 
   return (
     <>
-      <Header
-        isDarkMode={isDarkMode}
-        toggleTheme={toggleTheme}
-      />
-        <Container>
-          <ThemeProvider theme={{ isDarkMode: isDarkMode }}>
-            <BannerContainer
-              initial={{ scale: 1, opacity: 1 }}
-              animate={isExiting && {
-                width: '100vw',
-                height: '100vh',
-                zIndex: 100,
+      <Container>
+        <ThemeProvider theme={{ isDarkMode: isDarkMode }}>
+          <BannerContainer
+            initial={{ scale: 1, opacity: 1 }}
+            animate={
+              (isExiting && !isMobile) ? {
+                width: '100%',
                 borderRadius: 0,
-                position: 'fixed',
-                top: 0,
-                left: 0,
-              }}
+                scale: 5,
+              }: (isExiting && isMobile) && {
+                height: '100%',
+                borderRadius: 0,
+                scale: 5,
+              }
+            }
+            transition={{
+              duration: 2.5,
+              ease: 'easeInOut',
+            }}
+          >
+            <BannerTextContainer
+              initial={{ scale: 1, opacity: 1 }}
+              animate={
+                isExiting && {
+                  opacity: 0,
+                }
+              }
               transition={{
-                duration: 2.5,
-                ease: [0.4, 0, 0.2, 1],
+                duration: 0.5,
+                ease: "easeOut",
               }}
             >
-            <BannerTextContainer>
               <BannerTitle>Welcome Back!</BannerTitle>
-              <BannerImage src={ManSittingDown}  alt='Man Holding a Coffee'/>
+              <BannerImage
+                src={ManSittingDown}
+                alt="Man Holding a Coffee"
+              />
               <BannerText>Catch up on your tasks!</BannerText>
               <BannerText>No Account yet?</BannerText>
-              <Button
+              <ButtonContainer>
+                <Button
                   type="button"
                   name="Sign Up"
-                  disabled={false}
-                  isDarkMode={isDarkMode}
-                  handleClick={handleSignUpClick}
-                >Sign Up</Button>
+                disabled={false}
+                isDarkMode={isDarkMode}
+                handleClick={handleSignUpClick}
+              >
+                  Sign Up
+                </Button>
+              </ButtonContainer>
             </BannerTextContainer>
           </BannerContainer>
         </ThemeProvider>
-        <FormHolderContainer>
+        <FormHolderContainer
+          initial={{ scale: 1, opacity: 1 }}
+          animate={
+            isExiting && {
+              display: 'none',
+              opacity: 0,
+            }
+          }
+          transition={{
+            duration: 0.5,
+          }}
+        >
           <FormContainer isDarkMode={isDarkMode}>
             <h1>Task Dashboard Login</h1>
             <FormProvider {...methods}>

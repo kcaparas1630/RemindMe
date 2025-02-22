@@ -23,8 +23,8 @@ const Container = styled.section`
 const BannerContainer = styled(motion.div)`
   display: flex;
   width: 100%;
-  height: 20%;
-  border-radius: 50px;
+  height: 10%;
+  border-radius: 20px;
   position: relative;
   background-color: ${({ theme }) => {
     return theme.isDarkMode ? '#22333b' : '#E9ECEF';
@@ -48,18 +48,25 @@ const BannerImage = styled.img`
     object-fit: cover;
     position: absolute;
     top: 75%;
-    left: 55%;
+    left: 65%;
     transform: translate(-50%, -50%);
     filter: drop-shadow(0 20px 10px rgba(0, 0, 0, 0.2));
   }
 `;
 
-const BannerTextContainer = styled.div`
+const BannerTextContainer = styled(motion.div)`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 25% 0 0 30%;
-  gap: 24px;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  padding: 5% 0;
+
+  @media (min-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+    margin: 25% 0 0 30%;
+    gap: 24px;
+  }
 `;
 
 const BannerTitle = styled.h2`
@@ -71,7 +78,7 @@ const BannerTitle = styled.h2`
     font-weight: 600;
     margin: 0;
     color: ${({ theme }) => {
-      return theme.isDarkMode ? '#DEE2E6' : '#212529'
+      return theme.isDarkMode ? '#DEE2E6' : '#212529';
     }};
   }
 `;
@@ -90,7 +97,16 @@ const BannerText = styled.p`
   }
 `;
 
-const FormHolderContainer = styled.div`
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  height: 30%;
+`;
+
+const FormHolderContainer = styled(motion.div)`
   display: flex;
   width: 70%;
   height: 100%;
@@ -116,4 +132,14 @@ const RouterText = styled(NavLink)`
   }
 `;
 
-export { Container, RouterText, BannerContainer, FormHolderContainer, BannerImage, BannerTitle, BannerText, BannerTextContainer };
+export {
+  Container,
+  RouterText,
+  BannerContainer,
+  FormHolderContainer,
+  BannerImage,
+  BannerTitle,
+  BannerText,
+  BannerTextContainer,
+  ButtonContainer,
+};
