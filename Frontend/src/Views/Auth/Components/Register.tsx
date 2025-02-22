@@ -18,7 +18,6 @@ import {
 } from '../../Styled-Components/StyledForms';
 import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
-import Header from '../../../Commons/Headers';
 import RegisterFormProps from '../../../Interface/RegisterFormProps';
 import Modal from '../../../Commons/Modal';
 import { useNavigate } from 'react-router-dom';
@@ -40,7 +39,7 @@ const registerUser = async (credentials: RegisterFormProps) => {
 
   return response.data;
 };
-const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
+const Register: FC<GeneralProps> = ({ isDarkMode }) => {
   const formData: RegisterFormProps = {
     firstName: '',
     lastName: '',
@@ -68,7 +67,7 @@ const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
       setIsLoading(false);
       navigate('/login');
     },
-    onError: (error: Error & {response?: { data: ApiErrorResponse}}) => {
+    onError: (error: Error & { response?: { data: ApiErrorResponse } }) => {
       if (axios.isAxiosError(error) && error.response?.data) {
         methods.setError('root', {
           message: error.response.data.message,
@@ -82,16 +81,12 @@ const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
     },
   });
 
-  const onSubmit: SubmitHandler<RegisterFormProps> =  (data) => {
+  const onSubmit: SubmitHandler<RegisterFormProps> = (data) => {
     mutation.mutate(data);
   };
 
   return (
     <>
-      <Header
-        isDarkMode={isDarkMode}
-        toggleTheme={toggleTheme}
-      />
       <Container>
         <FormContainer isDarkMode={isDarkMode}>
           <h1>Task Dashboard Register</h1>
