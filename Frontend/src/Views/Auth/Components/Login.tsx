@@ -5,7 +5,7 @@
  * @author @Kcaparas
  */
 
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import axios from 'axios';
 import validationSchema from '../Schema/LoginSchema';
 import { ThemeProvider } from '@emotion/react';
@@ -36,8 +36,6 @@ import { useMutation } from '@tanstack/react-query';
 import ApiErrorResponse from '../../../Interface/ErrorResponse';
 import ManSittingDown from '../../../../assets/Man Sitting Down.svg';
 import { useNavigate } from 'react-router-dom';
-import { useMediaQuery } from '@react-hook/media-query';
-
 
 const loginUser = async (credentials: LoginFormProps) => {
   const result = await axios.post('http://localhost:3000/api/user/login', {
@@ -49,7 +47,7 @@ const loginUser = async (credentials: LoginFormProps) => {
 
 const Login: FC<GeneralProps> = ({ isDarkMode }) => {
   const navigate = useNavigate();
-  const isMobile = useMediaQuery('(max-width: 1024px)');
+
   const formData: LoginFormProps = { userName: '', userPassword: '' };
   const methods = useForm<LoginFormProps>({
     resolver: yupResolver(validationSchema),
@@ -75,7 +73,6 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
       }
     },
   });
-  const [isExiting, setIsExiting] = useState(false);
 
   const onSubmit: SubmitHandler<LoginFormProps> = async (data) => {
     await new Promise((resolve) => {
@@ -85,7 +82,6 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
   };
 
   const handleSignUpClick = async () => {
-    setIsExiting(true);
     // Wait for animation to complete before navigating
     await new Promise((resolve) => {
       setTimeout(resolve, 1800);
@@ -97,38 +93,11 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
     <>
       <Container>
         <ThemeProvider theme={{ isDarkMode: isDarkMode }}>
-          <BannerContainer
-            initial={{ scale: 1, opacity: 1 }}
-            animate={
-              (isExiting && !isMobile) ? {
-                width: '100%',
-                borderRadius: 0,
-                scale: 5,
-              }: (isExiting && isMobile) && {
-                height: '100%',
-                borderRadius: 0,
-                scale: 5,
-              }
-            }
-            transition={{
-              duration: 2.5,
-              ease: 'easeInOut',
-            }}
-          >
-            <BannerTextContainer
-              initial={{ scale: 1, opacity: 1 }}
-              animate={
-                isExiting && {
-                  opacity: 0,
-                }
-              }
-              transition={{
-                duration: 0.5,
-                ease: "easeOut",
-              }}
-            >
+          <BannerContainer view="login">
+            <BannerTextContainer>
               <BannerTitle>Welcome Back!</BannerTitle>
               <BannerImage
+                view="login"
                 src={ManSittingDown}
                 alt="Man Holding a Coffee"
               />
@@ -138,28 +107,17 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
                 <Button
                   type="button"
                   name="Sign Up"
-                disabled={false}
-                isDarkMode={isDarkMode}
-                handleClick={handleSignUpClick}
-              >
+                  disabled={false}
+                  isDarkMode={isDarkMode}
+                  handleClick={handleSignUpClick}
+                >
                   Sign Up
                 </Button>
               </ButtonContainer>
             </BannerTextContainer>
           </BannerContainer>
         </ThemeProvider>
-        <FormHolderContainer
-          initial={{ scale: 1, opacity: 1 }}
-          animate={
-            isExiting && {
-              display: 'none',
-              opacity: 0,
-            }
-          }
-          transition={{
-            duration: 0.5,
-          }}
-        >
+        <FormHolderContainer>
           <FormContainer isDarkMode={isDarkMode}>
             <h1>Task Dashboard Login</h1>
             <FormProvider {...methods}>
