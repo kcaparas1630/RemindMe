@@ -62,7 +62,6 @@ const AnimatedRoutes = ({
           element={
             <Login
               isDarkMode={isDarkMode}
-              toggleTheme={toggleTheme}
             />
           }
         />
@@ -71,7 +70,6 @@ const AnimatedRoutes = ({
           element={
             <Register
               isDarkMode={isDarkMode}
-              toggleTheme={toggleTheme}
             />
           }
         />
