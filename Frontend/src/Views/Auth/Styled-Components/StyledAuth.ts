@@ -25,12 +25,19 @@ const BannerContainer = styled(motion.div)`
   width: 100%;
   height: 10%;
   border-radius: 20px;
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  transform-origin: bottom;
   background-color: ${({ theme }) => {
     return theme.isDarkMode ? '#22333b' : '#E9ECEF';
   }};
   order: 1;
   @media (min-width: 1024px) {
+    position: relative;
+    transform-origin: center;
+    bottom: unset;
+    left: unset;
     order: 0;
     width: 30%;
     height: 100%;
@@ -64,8 +71,12 @@ const BannerTextContainer = styled(motion.div)`
   @media (min-width: 1024px) {
     flex-direction: column;
     align-items: center;
+    width: auto;
+    height: auto;
     margin: 25% 0 0 30%;
     gap: 24px;
+    padding: 0;
+    justify-content: start;
   }
 `;
 
@@ -104,6 +115,11 @@ const ButtonContainer = styled.div`
   justify-content: center;
   width: 30%;
   height: 30%;
+
+  @media (min-width: 1024px) {
+    width: 100%;
+    height: auto;
+  }
 `;
 
 const FormHolderContainer = styled(motion.div)`
@@ -114,6 +130,11 @@ const FormHolderContainer = styled(motion.div)`
   justify-content: center;
   align-items: center;
   order: 0;
+  margin-top: -30%;
+
+  @media (min-width: 1024px) {
+    margin: 0;
+  }
 `;
 
 // it's under ThemeProvider so theme props works. It's also defined in @emotion.d.ts
