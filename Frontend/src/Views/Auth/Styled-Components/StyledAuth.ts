@@ -20,7 +20,7 @@ const Container = styled.section`
   }
 `;
 
-const BannerContainer = styled(motion.div)`
+const BannerContainer = styled(motion.div)<{ view: string }>`
   display: flex;
   width: 100%;
   height: 10%;
@@ -41,11 +41,13 @@ const BannerContainer = styled(motion.div)`
     order: 0;
     width: 30%;
     height: 100%;
-    border-radius: 0 0 80% 0;
+    border-radius: ${({ view }) => {
+      return view === 'register' ? '0 0 0 80%' : '0 0 80% 0';
+    }};
   }
 `;
 
-const BannerImage = styled.img`
+const BannerImage = styled.img<{ view: string }>`
   display: none;
 
   @media (min-width: 1024px) {
@@ -54,8 +56,12 @@ const BannerImage = styled.img`
     height: 70%;
     object-fit: cover;
     position: absolute;
-    top: 75%;
-    left: 65%;
+    top: ${({ view }) => {
+      return view === 'register' ? '70%' : '75%';
+    }};
+    left: ${({ view }) => {
+      return view === 'register' ? '25%' : '65%';
+    }};
     transform: translate(-50%, -50%);
     filter: drop-shadow(0 20px 10px rgba(0, 0, 0, 0.2));
   }
@@ -73,9 +79,9 @@ const BannerTextContainer = styled(motion.div)`
     align-items: center;
     width: auto;
     height: auto;
-    margin: 25% 0 0 30%;
+    margin: 25% 0 0 20%;
     gap: 24px;
-    padding: 0;
+    padding-right: 10%;
     justify-content: start;
   }
 `;
