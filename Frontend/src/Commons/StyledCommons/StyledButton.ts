@@ -12,7 +12,7 @@ const StyledButton = styled.button<isDarkMode>`
     return props.isDarkMode ? '#f8f9fa' : '#212529';
   }};
   border: 1px solid #ced4da;
-  border-radius: 50px;
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 
