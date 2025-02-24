@@ -99,6 +99,7 @@ const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient
             <InputField
               registerName="taskName"
               type="text"
+              isDarkMode={isDarkMode}
               inputName="taskName"
               labelName="Task Name"
               placeholder="Enter the task name"

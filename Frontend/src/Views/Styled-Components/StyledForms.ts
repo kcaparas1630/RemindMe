@@ -9,7 +9,7 @@ const FormContainer = styled.div<isDarkMode>`
   gap: 16px;
   padding: 16px;
   width: 90%;
-  max-width: 400px;
+  max-width: 300px;
   color: ${(props) => {
     return props.isDarkMode ? '#DEE2E6' : '#212529';
   }};
@@ -17,6 +17,7 @@ const FormContainer = styled.div<isDarkMode>`
   @media (min-width: 768px) {
     padding: 24px 30px;
     gap: 24px;
+    max-width: 400px;
   }
 `;
 

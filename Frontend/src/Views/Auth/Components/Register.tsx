@@ -113,6 +113,7 @@ const Register: FC<GeneralProps> = ({ isDarkMode }) => {
               <StyledForm onSubmit={methods.handleSubmit(onSubmit)}>
                 <InputWrapper>
                   <InputField
+                    isDarkMode={isDarkMode}
                     registerName="firstName"
                     type="text"
                     inputName="firstName"
@@ -126,6 +127,7 @@ const Register: FC<GeneralProps> = ({ isDarkMode }) => {
                 </InputWrapper>
                 <InputWrapper>
                   <InputField
+                    isDarkMode={isDarkMode}
                     registerName="lastName"
                     type="text"
                     inputName="lastName"
@@ -137,8 +139,9 @@ const Register: FC<GeneralProps> = ({ isDarkMode }) => {
                     <ErrorMessage>{methods.formState.errors.lastName?.message}</ErrorMessage>
                   )}
                 </InputWrapper>
-                <InputWrapper>
+                <InputWrapper> 
                   <InputField
+                    isDarkMode={isDarkMode}
                     registerName="userName"
                     type="text"
                     inputName="userName"
@@ -152,6 +155,7 @@ const Register: FC<GeneralProps> = ({ isDarkMode }) => {
                 </InputWrapper>
                 <InputWrapper>
                   <InputField
+                    isDarkMode={isDarkMode}
                     registerName="userPassword"
                     type="password"
                     inputName="userPassword"
@@ -165,6 +169,7 @@ const Register: FC<GeneralProps> = ({ isDarkMode }) => {
                 </InputWrapper>
                 <InputWrapper>
                   <InputField
+                    isDarkMode={isDarkMode}
                     registerName="userEmail"
                     type="email"
                     inputName="userEmail"

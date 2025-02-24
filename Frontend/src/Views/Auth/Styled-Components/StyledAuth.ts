@@ -6,7 +6,7 @@ const Container = styled.section`
   label: ContainerWrapper;
   display: flex;
   width: 100%;
-  height: 95vh;
+  height: calc(100vh - 52px);
   position: relative;
   flex-direction: column;
   justify-content: center;
@@ -21,29 +21,16 @@ const Container = styled.section`
 `;
 
 const BannerContainer = styled(motion.div)<{ view: string }>`
-  display: flex;
-  width: 100%;
-  height: 10%;
-  border-radius: 20px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  transform-origin: bottom;
-  background-color: ${({ theme }) => {
-    return theme.isDarkMode ? '#22333b' : '#E9ECEF';
-  }};
-  order: 1;
+  display: none;
   @media (min-width: 1024px) {
-    position: relative;
-    transform-origin: center;
-    bottom: unset;
-    left: unset;
-    order: 0;
-    width: 30%;
-    height: 100%;
-    border-radius: ${({ view }) => {
-      return view === 'register' ? '0 0 0 80%' : '0 0 80% 0';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: ${({ theme }) => {
+      return theme.isDarkMode ? '#22333b' : '#E9ECEF';
     }};
+    width: 50%;
+    height: 100%;
   }
 `;
 
@@ -55,14 +42,6 @@ const BannerImage = styled.img<{ view: string }>`
     width: 70%;
     height: 70%;
     object-fit: cover;
-    position: absolute;
-    top: ${({ view }) => {
-      return view === 'register' ? '70%' : '75%';
-    }};
-    left: ${({ view }) => {
-      return view === 'register' ? '25%' : '65%';
-    }};
-    transform: translate(-50%, -50%);
     filter: drop-shadow(0 20px 10px rgba(0, 0, 0, 0.2));
   }
 `;
@@ -130,16 +109,16 @@ const ButtonContainer = styled.div`
 
 const FormHolderContainer = styled(motion.div)`
   display: flex;
-  width: 70%;
+  width: 100%;
   height: 100%;
-  position: relative;
-  justify-content: center;
   align-items: center;
-  order: 0;
-  margin-top: -30%;
+  justify-content: center;
 
   @media (min-width: 1024px) {
     margin: 0;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
   }
 `;
 

@@ -15,11 +15,6 @@ import {
   RouterText,
   BannerContainer,
   FormHolderContainer,
-  BannerImage,
-  BannerTitle,
-  BannerText,
-  BannerTextContainer,
-  ButtonContainer,
 } from '../Styled-Components/StyledAuth';
 import {
   FormContainer,
@@ -34,8 +29,8 @@ import GeneralProps from '../../../Interface/General/GeneralProps';
 import { SubmitHandler, useForm, FormProvider } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import ApiErrorResponse from '../../../Interface/ErrorResponse';
-import ManSittingDown from '../../../../assets/Man Sitting Down.svg';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+import Carousel from './Carousel';
 
 const loginUser = async (credentials: LoginFormProps) => {
   const result = await axios.post('http://localhost:3000/api/user/login', {
@@ -46,7 +41,7 @@ const loginUser = async (credentials: LoginFormProps) => {
 };
 
 const Login: FC<GeneralProps> = ({ isDarkMode }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const formData: LoginFormProps = { userName: '', userPassword: '' };
   const methods = useForm<LoginFormProps>({
@@ -81,40 +76,20 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
     mutation.mutate(data);
   };
 
-  const handleSignUpClick = async () => {
-    // Wait for animation to complete before navigating
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1800);
-    });
-    navigate('/register');
-  };
+  // const handleSignUpClick = async () => {
+  //   // Wait for animation to complete before navigating
+  //   await new Promise((resolve) => {
+  //     setTimeout(resolve, 1800);
+  //   });
+  //   navigate('/register');
+  // };
 
   return (
     <>
       <Container>
         <ThemeProvider theme={{ isDarkMode: isDarkMode }}>
           <BannerContainer view="login">
-            <BannerTextContainer>
-              <BannerTitle>Welcome Back!</BannerTitle>
-              <BannerImage
-                view="login"
-                src={ManSittingDown}
-                alt="Man Holding a Coffee"
-              />
-              <BannerText>Catch up on your tasks!</BannerText>
-              <BannerText>No Account yet?</BannerText>
-              <ButtonContainer>
-                <Button
-                  type="button"
-                  name="Sign Up"
-                  disabled={false}
-                  isDarkMode={isDarkMode}
-                  handleClick={handleSignUpClick}
-                >
-                  Sign Up
-                </Button>
-              </ButtonContainer>
-            </BannerTextContainer>
+            <Carousel />
           </BannerContainer>
         </ThemeProvider>
         <FormHolderContainer>
@@ -124,11 +99,12 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
               <StyledForm onSubmit={methods.handleSubmit(onSubmit)}>
                 <InputWrapper>
                   <InputField
+                    isDarkMode={isDarkMode}
                     registerName="userName"
                     type="text"
                     inputName="userName"
                     labelName="Username"
-                    placeholder="Enter your Username"
+                    placeholder="Username"
                     error={methods.formState.errors.userName}
                   />
                   {methods.formState.errors.userName && (
@@ -137,11 +113,12 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
                 </InputWrapper>
                 <InputWrapper>
                   <InputField
+                    isDarkMode={isDarkMode}
                     registerName="userPassword"
                     type="password"
                     inputName="userPassword"
                     labelName="Password"
-                    placeholder="Enter your Password"
+                    placeholder="Password"
                     error={methods.formState.errors.userPassword}
                   />
                   {methods.formState.errors.userPassword && (
