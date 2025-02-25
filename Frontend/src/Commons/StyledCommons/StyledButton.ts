@@ -6,11 +6,12 @@ const StyledButton = styled.button<isDarkMode>`
   padding: 5px;
   height: 35px;
   background-color: ${(props) => {
-    return props.isDarkMode ? '#264653' : '#E9ECEF';
+    return props.isDarkMode ? '#264653' : '#e76f51';
   }};
   color: ${(props) => {
-    return props.isDarkMode ? '#f8f9fa' : '#212529';
+    return props.isDarkMode ? '#f8f9fa' : '#fdf0d5';
   }};
+  font-weight: 600;
   border: 1px solid #ced4da;
   border-radius: 5px;
   cursor: pointer;

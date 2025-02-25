@@ -15,6 +15,8 @@ import {
   RouterText,
   BannerContainer,
   FormHolderContainer,
+  NavigationText,
+  FormHeader1,
 } from '../Styled-Components/StyledAuth';
 import {
   FormContainer,
@@ -91,58 +93,59 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
           <BannerContainer view="login">
             <Carousel />
           </BannerContainer>
-        </ThemeProvider>
-        <FormHolderContainer>
-          <FormContainer isDarkMode={isDarkMode}>
-            <h1>Task Dashboard Login</h1>
-            <FormProvider {...methods}>
-              <StyledForm onSubmit={methods.handleSubmit(onSubmit)}>
-                <InputWrapper>
-                  <InputField
-                    isDarkMode={isDarkMode}
-                    registerName="userName"
-                    type="text"
-                    inputName="userName"
-                    labelName="Username"
-                    placeholder="Username"
-                    error={methods.formState.errors.userName}
-                  />
-                  {methods.formState.errors.userName && (
-                    <ErrorMessage>{methods.formState.errors.userName?.message}</ErrorMessage>
-                  )}
-                </InputWrapper>
-                <InputWrapper>
-                  <InputField
-                    isDarkMode={isDarkMode}
-                    registerName="userPassword"
-                    type="password"
-                    inputName="userPassword"
-                    labelName="Password"
-                    placeholder="Password"
-                    error={methods.formState.errors.userPassword}
-                  />
-                  {methods.formState.errors.userPassword && (
-                    <ErrorMessage>{methods.formState.errors.userPassword?.message}</ErrorMessage>
-                  )}
-                </InputWrapper>
-                <ThemeProvider theme={{ isDarkMode: isDarkMode }}>
+          <FormHolderContainer>
+            <FormContainer isDarkMode={isDarkMode}>
+              <FormHeader1>Task Dashboard Login</FormHeader1>
+              <NavigationText>
+                Don't have an account?&nbsp;<RouterText to="/register">Sign up</RouterText>
+              </NavigationText>
+              <FormProvider {...methods}>
+                <StyledForm onSubmit={methods.handleSubmit(onSubmit)}>
+                  <InputWrapper>
+                    <InputField
+                      isDarkMode={isDarkMode}
+                      registerName="userName"
+                      type="text"
+                      inputName="userName"
+                      labelName="Username"
+                      placeholder="Username"
+                      error={methods.formState.errors.userName}
+                    />
+                    {methods.formState.errors.userName && (
+                      <ErrorMessage>{methods.formState.errors.userName?.message}</ErrorMessage>
+                    )}
+                  </InputWrapper>
+                  <InputWrapper>
+                    <InputField
+                      isDarkMode={isDarkMode}
+                      registerName="userPassword"
+                      type="password"
+                      inputName="userPassword"
+                      labelName="Password"
+                      placeholder="Password"
+                      error={methods.formState.errors.userPassword}
+                    />
+                    {methods.formState.errors.userPassword && (
+                      <ErrorMessage>{methods.formState.errors.userPassword?.message}</ErrorMessage>
+                    )}
+                  </InputWrapper>
                   <RouterText to="/register">Forgot your Password?</RouterText>
-                </ThemeProvider>
-                <Button
-                  type="submit"
-                  name="Submit"
-                  disabled={methods.formState.isSubmitting}
-                  isDarkMode={isDarkMode}
-                >
-                  {methods.formState.isSubmitting ? 'Loading...' : 'Submit'}
-                </Button>
-                {methods.formState.errors.root && (
-                  <ErrorMessage>{methods.formState.errors.root?.message}</ErrorMessage>
-                )}
-              </StyledForm>
-            </FormProvider>
-          </FormContainer>
-        </FormHolderContainer>
+                  <Button
+                    type="submit"
+                    name="Submit"
+                    disabled={methods.formState.isSubmitting}
+                    isDarkMode={isDarkMode}
+                  >
+                    {methods.formState.isSubmitting ? 'Loading...' : 'Submit'}
+                  </Button>
+                  {methods.formState.errors.root && (
+                    <ErrorMessage>{methods.formState.errors.root?.message}</ErrorMessage>
+                  )}
+                </StyledForm>
+              </FormProvider>
+            </FormContainer>
+          </FormHolderContainer>
+        </ThemeProvider>
       </Container>
     </>
   );

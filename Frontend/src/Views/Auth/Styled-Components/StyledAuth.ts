@@ -26,87 +26,24 @@ const BannerContainer = styled(motion.div)<{ view: string }>`
     display: flex;
     align-items: center;
     justify-content: center;
+    // 001524, 000814
     background-color: ${({ theme }) => {
-      return theme.isDarkMode ? '#22333b' : '#E9ECEF';
+      return theme.isDarkMode ? '#0d1b2a' : '#E9ECEF';
     }};
     width: 50%;
     height: 100%;
   }
 `;
 
-const BannerImage = styled.img<{ view: string }>`
-  display: none;
-
-  @media (min-width: 1024px) {
-    display: flex;
-    width: 70%;
-    height: 70%;
-    object-fit: cover;
-    filter: drop-shadow(0 20px 10px rgba(0, 0, 0, 0.2));
-  }
-`;
-
-const BannerTextContainer = styled(motion.div)`
+const NavigationText = styled.p`
   display: flex;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  padding: 5% 0;
-
-  @media (min-width: 1024px) {
-    flex-direction: column;
-    align-items: center;
-    width: auto;
-    height: auto;
-    margin: 25% 0 0 20%;
-    gap: 24px;
-    padding-right: 10%;
-    justify-content: start;
-  }
+  font-size: 1.2rem;
+  margin: 0;
+  font-weight: 400;
+  color: ${({ theme }) => {
+    return theme.isDarkMode ? '#f8f9fa' : '#212529';
+  }};
 `;
-
-const BannerTitle = styled.h2`
-  display: none;
-
-  @media (min-width: 1024px) {
-    display: flex;
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0;
-    color: ${({ theme }) => {
-      return theme.isDarkMode ? '#DEE2E6' : '#212529';
-    }};
-  }
-`;
-
-const BannerText = styled.p`
-  display: none;
-
-  @media (min-width: 1024px) {
-    display: flex;
-    font-size: 1.5rem;
-    margin: 0;
-    font-weight: 400;
-    color: ${({ theme }) => {
-      return theme.isDarkMode ? '#DEE2E6' : '#333333';
-    }};
-  }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 30%;
-  height: 30%;
-
-  @media (min-width: 1024px) {
-    width: 100%;
-    height: auto;
-  }
-`;
-
 const FormHolderContainer = styled(motion.div)`
   display: flex;
   width: 100%;
@@ -122,16 +59,25 @@ const FormHolderContainer = styled(motion.div)`
   }
 `;
 
+const FormHeader1 = styled.h1`
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: ${({ theme }) => {
+    return theme.isDarkMode ? '#f8f9fa' : '#212529';
+  }};
+`;
+
 // it's under ThemeProvider so theme props works. It's also defined in @emotion.d.ts
 const RouterText = styled(NavLink)`
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: ${({ theme }) => {
-    return theme.isDarkMode ? '#DEE2E6' : '#333333';
+    return theme.isDarkMode ? '#264653' : '#e76f51';
   }};
   text-align: right;
   padding: 0;
   margin: 0;
-  text-decoration: none;
+  text-decoration: underline;
 
   &:hover {
     text-decoration: underline;
@@ -143,9 +89,6 @@ export {
   RouterText,
   BannerContainer,
   FormHolderContainer,
-  BannerImage,
-  BannerTitle,
-  BannerText,
-  BannerTextContainer,
-  ButtonContainer,
+  NavigationText,
+  FormHeader1,
 };
