@@ -24,6 +24,8 @@ const BannerContainer = styled(motion.div)<{ view: string }>`
   display: none;
   @media (min-width: 1024px) {
     display: flex;
+    flex-direction: column;
+    gap: 24px;
     align-items: center;
     justify-content: center;
     // 001524, 000814
@@ -35,11 +37,37 @@ const BannerContainer = styled(motion.div)<{ view: string }>`
   }
 `;
 
+const BannerHeader = styled.h2` 
+  font-size: 3rem;
+  font-weight: 600;
+  margin: 0;
+  width: 70%;
+  text-align: center;
+  opacity: ${({ theme }) => {
+    return theme.isDarkMode && '0.85';
+  }};
+  color: ${({ theme }) => {
+    return theme.isDarkMode ? '#f8f9fa' : '#212529';
+  }};
+`;
+
+const BannerText = styled.p`
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 0;
+  width: 50%;
+  opacity: 0.85;
+  text-align: center;
+`;
+
 const NavigationText = styled.p`
   display: flex;
   font-size: 1.2rem;
   margin: 0;
   font-weight: 400;
+  opacity: ${({ theme }) => {
+    return theme.isDarkMode && '0.75';
+  }};
   color: ${({ theme }) => {
     return theme.isDarkMode ? '#f8f9fa' : '#212529';
   }};
@@ -63,6 +91,9 @@ const FormHeader1 = styled.h1`
   font-size: 2.5rem;
   font-weight: 600;
   margin: 0;
+  opacity: ${({ theme }) => {
+    return theme.isDarkMode && '0.85';
+  }};
   color: ${({ theme }) => {
     return theme.isDarkMode ? '#f8f9fa' : '#212529';
   }};
@@ -78,11 +109,14 @@ const RouterText = styled(NavLink)`
   padding: 0;
   margin: 0;
   text-decoration: underline;
+  
 
   &:hover {
     text-decoration: underline;
   }
 `;
+
+
 
 export {
   Container,
@@ -91,4 +125,6 @@ export {
   FormHolderContainer,
   NavigationText,
   FormHeader1,
+  BannerHeader,
+  BannerText,
 };

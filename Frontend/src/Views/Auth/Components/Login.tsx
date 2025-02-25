@@ -31,7 +31,6 @@ import GeneralProps from '../../../Interface/General/GeneralProps';
 import { SubmitHandler, useForm, FormProvider } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import ApiErrorResponse from '../../../Interface/ErrorResponse';
-// import { useNavigate } from 'react-router-dom';
 import Carousel from './Carousel';
 
 const loginUser = async (credentials: LoginFormProps) => {
@@ -43,7 +42,6 @@ const loginUser = async (credentials: LoginFormProps) => {
 };
 
 const Login: FC<GeneralProps> = ({ isDarkMode }) => {
-  // const navigate = useNavigate();
 
   const formData: LoginFormProps = { userName: '', userPassword: '' };
   const methods = useForm<LoginFormProps>({
@@ -78,13 +76,6 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
     mutation.mutate(data);
   };
 
-  // const handleSignUpClick = async () => {
-  //   // Wait for animation to complete before navigating
-  //   await new Promise((resolve) => {
-  //     setTimeout(resolve, 1800);
-  //   });
-  //   navigate('/register');
-  // };
 
   return (
     <>
@@ -95,7 +86,7 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
           </BannerContainer>
           <FormHolderContainer>
             <FormContainer isDarkMode={isDarkMode}>
-              <FormHeader1>Task Dashboard Login</FormHeader1>
+              <FormHeader1>Welcome Back!</FormHeader1>
               <NavigationText>
                 Don't have an account?&nbsp;<RouterText to="/register">Sign up</RouterText>
               </NavigationText>

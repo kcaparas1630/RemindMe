@@ -41,6 +41,13 @@ const InputWrapper = styled.div`
   width: 100%;
 `;
 
+const InputRow = styled.div`  
+  display: flex;
+  gap: 24px;
+  flex-direction: row;
+  width: 100%;
+`;
 
 
-export { InputWrapper, ErrorMessage, StyledForm, FormContainer }
+
+export { InputWrapper, ErrorMessage, StyledForm, FormContainer, InputRow }
