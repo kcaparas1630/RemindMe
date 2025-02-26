@@ -1,6 +1,7 @@
 import { FieldError } from "react-hook-form";
+import isDarkMode from "./General/isDarkMode";
 
-interface InputFieldProps {
+interface InputFieldProps extends isDarkMode {
     type: string;
     inputName: string;
     labelName: string;

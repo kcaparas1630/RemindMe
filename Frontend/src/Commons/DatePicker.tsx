@@ -4,7 +4,7 @@
  * @author @Kcaparas
  */
 import { FC } from 'react';
-import { InputContainer, StyledLabel } from './StyledCommons/StyledInput';
+import { InputWrapper, StyledLabel } from './StyledCommons/StyledInput';
 import DatePickerWrapper from './StyledCommons/StyledDatePicker';
 import DatePickerProps from '../Interface/DatePickerProps';
 import { useFormContext, useController } from 'react-hook-form';
@@ -23,7 +23,7 @@ const DatePickerField: FC<DatePickerProps> = ({ inputName, labelName }) => {
   });
 
   return (
-    <InputContainer>
+    <InputWrapper>
       <StyledLabel htmlFor={inputName}>{labelName}:</StyledLabel>
       <DatePickerWrapper>
         <DatePicker
@@ -37,7 +37,7 @@ const DatePickerField: FC<DatePickerProps> = ({ inputName, labelName }) => {
           showIcon
         />
       </DatePickerWrapper>
-    </InputContainer>
+    </InputWrapper>
   );
 };
 

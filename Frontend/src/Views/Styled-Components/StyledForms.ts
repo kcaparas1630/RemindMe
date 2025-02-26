@@ -9,21 +9,15 @@ const FormContainer = styled.div<isDarkMode>`
   gap: 16px;
   padding: 16px;
   width: 90%;
-  max-width: 400px;
-  background-color: ${(props) => {
-    return props.isDarkMode ? '#2C2F33' : '#E9ECEF';
-  }};
+  max-width: 300px;
   color: ${(props) => {
     return props.isDarkMode ? '#DEE2E6' : '#212529';
   }};
   border-radius: 8px;
-  box-shadow: ${(props) => {
-    return props.isDarkMode ? '0 4px 6px rgba(255, 255, 255, 0.1)' : '0 4px 6px rgba(0, 0, 0, 0.1)';
-  }};
-
   @media (min-width: 768px) {
     padding: 24px 30px;
     gap: 24px;
+    max-width: 400px;
   }
 `;
 
@@ -47,6 +41,13 @@ const InputWrapper = styled.div`
   width: 100%;
 `;
 
+const InputRow = styled.div`  
+  display: flex;
+  gap: 24px;
+  flex-direction: row;
+  width: 100%;
+`;
 
 
-export { InputWrapper, ErrorMessage, StyledForm, FormContainer }
+
+export { InputWrapper, ErrorMessage, StyledForm, FormContainer, InputRow }

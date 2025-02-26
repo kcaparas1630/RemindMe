@@ -9,16 +9,26 @@
 import { FC, useState } from 'react';
 import validationSchema from '../Schema/RegisterSchema';
 import { ThemeProvider } from '@emotion/react';
-import { Container, RouterText } from '../Styled-Components/StyledAuth';
+import {
+  BannerContainer,
+  Container,
+  FormHolderContainer,
+  RouterText,
+  NavigationText,
+  FormHeader1,
+  BannerHeader,
+  BannerText,
+  BannerImage,
+} from '../Styled-Components/StyledAuth';
 import {
   FormContainer,
   ErrorMessage,
   InputWrapper,
   StyledForm,
+  InputRow,
 } from '../../Styled-Components/StyledForms';
 import InputField from '../../../Commons/InputFields';
 import Button from '../../../Commons/Button';
-import Header from '../../../Commons/Headers';
 import RegisterFormProps from '../../../Interface/RegisterFormProps';
 import Modal from '../../../Commons/Modal';
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +38,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import ApiErrorResponse from '../../../Interface/ErrorResponse';
+import RegisterTaskImage from '../../../../assets/register-task.svg';
 
 const registerUser = async (credentials: RegisterFormProps) => {
   const response = await axios.post('http://localhost:3000/api/user/register', {
@@ -40,7 +51,7 @@ const registerUser = async (credentials: RegisterFormProps) => {
 
   return response.data;
 };
-const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
+const Register: FC<GeneralProps> = ({ isDarkMode }) => {
   const formData: RegisterFormProps = {
     firstName: '',
     lastName: '',
@@ -68,7 +79,7 @@ const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
       setIsLoading(false);
       navigate('/login');
     },
-    onError: (error: Error & {response?: { data: ApiErrorResponse}}) => {
+    onError: (error: Error & { response?: { data: ApiErrorResponse } }) => {
       if (axios.isAxiosError(error) && error.response?.data) {
         methods.setError('root', {
           message: error.response.data.message,
@@ -82,103 +93,119 @@ const Register: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
     },
   });
 
-  const onSubmit: SubmitHandler<RegisterFormProps> =  (data) => {
+  const onSubmit: SubmitHandler<RegisterFormProps> = (data) => {
     mutation.mutate(data);
   };
 
+
   return (
     <>
-      <Header
-        isDarkMode={isDarkMode}
-        toggleTheme={toggleTheme}
-      />
       <Container>
-        <FormContainer isDarkMode={isDarkMode}>
-          <h1>Task Dashboard Register</h1>
-          <FormProvider {...methods}>
-            <StyledForm onSubmit={methods.handleSubmit(onSubmit)}>
-              <InputWrapper>
-                <InputField
-                  registerName="firstName"
-                  type="text"
-                  inputName="firstName"
-                  labelName="First Name"
-                  placeholder="Enter your First Name"
-                  error={methods.formState.errors.firstName}
-                />
-                {methods.formState.errors.firstName && (
-                  <ErrorMessage>{methods.formState.errors.firstName?.message}</ErrorMessage>
-                )}
-              </InputWrapper>
-              <InputWrapper>
-                <InputField
-                  registerName="lastName"
-                  type="text"
-                  inputName="lastName"
-                  labelName="Last Name"
-                  placeholder="Enter your Last Name"
-                  error={methods.formState.errors.lastName}
-                />
-                {methods.formState.errors.lastName && (
-                  <ErrorMessage>{methods.formState.errors.lastName?.message}</ErrorMessage>
-                )}
-              </InputWrapper>
-              <InputWrapper>
-                <InputField
-                  registerName="userName"
-                  type="text"
-                  inputName="userName"
-                  labelName="Username"
-                  placeholder="Enter your Username"
-                  error={methods.formState.errors.userName}
-                />
-                {methods.formState.errors.userName && (
-                  <ErrorMessage>{methods.formState.errors.userName?.message}</ErrorMessage>
-                )}
-              </InputWrapper>
-              <InputWrapper>
-                <InputField
-                  registerName="userPassword"
-                  type="password"
-                  inputName="userPassword"
-                  labelName="Password"
-                  placeholder="Enter your Password"
-                  error={methods.formState.errors.userPassword}
-                />
-                {methods.formState.errors.userPassword && (
-                  <ErrorMessage>{methods.formState.errors.userPassword?.message}</ErrorMessage>
-                )}
-              </InputWrapper>
-              <InputWrapper>
-                <InputField
-                  registerName="userEmail"
-                  type="email"
-                  inputName="userEmail"
-                  labelName="Email"
-                  placeholder="Enter your email"
-                  error={methods.formState.errors.userEmail}
-                />
-                {methods.formState.errors.userEmail && (
-                  <ErrorMessage>{methods.formState.errors.userEmail?.message}</ErrorMessage>
-                )}
-              </InputWrapper>
-              <ThemeProvider theme={{ isDarkMode: isDarkMode }}>
-                <RouterText to="/login">Already have an account?</RouterText>
-              </ThemeProvider>
-              <Button
-                type="submit"
-                name="Submit"
-                disabled={methods.formState.isSubmitting}
-                isDarkMode={isDarkMode}
-              >
-                {methods.formState.isSubmitting ? 'Loading...' : 'Register'}
-              </Button>
-              {methods.formState.errors.root && (
-                <ErrorMessage>{methods.formState.errors.root?.message}</ErrorMessage>
-              )}
-            </StyledForm>
-          </FormProvider>
-        </FormContainer>
+        <ThemeProvider theme={{ isDarkMode: isDarkMode }}>
+          <FormHolderContainer>
+            <FormContainer isDarkMode={isDarkMode}>
+              <FormHeader1>Create your Account</FormHeader1>
+              <NavigationText>
+                Already have an account?&nbsp;<RouterText to="/login">Sign in</RouterText>
+              </NavigationText>
+
+              <FormProvider {...methods}>
+                <StyledForm onSubmit={methods.handleSubmit(onSubmit)}>
+                  <InputRow>
+                    <InputWrapper>
+                      <InputField
+                        isDarkMode={isDarkMode}
+                        registerName="firstName"
+                        type="text"
+                        inputName="firstName"
+                        labelName="First Name"
+                        placeholder="First Name"
+                        error={methods.formState.errors.firstName}
+                      />
+                      {methods.formState.errors.firstName && (
+                        <ErrorMessage>{methods.formState.errors.firstName?.message}</ErrorMessage>
+                      )}
+                    </InputWrapper>
+                    <InputWrapper>
+                      <InputField
+                        isDarkMode={isDarkMode}
+                        registerName="lastName"
+                        type="text"
+                        inputName="lastName"
+                        labelName="Last Name"
+                        placeholder="Last Name"
+                        error={methods.formState.errors.lastName}
+                      />
+                      {methods.formState.errors.lastName && (
+                        <ErrorMessage>{methods.formState.errors.lastName?.message}</ErrorMessage>
+                      )}
+                    </InputWrapper>
+                  </InputRow>
+                  <InputWrapper>
+                    <InputField
+                      isDarkMode={isDarkMode}
+                      registerName="userName"
+                      type="text"
+                      inputName="userName"
+                      labelName="Username"
+                      placeholder="Username"
+                      error={methods.formState.errors.userName}
+                    />
+                    {methods.formState.errors.userName && (
+                      <ErrorMessage>{methods.formState.errors.userName?.message}</ErrorMessage>
+                    )}
+                  </InputWrapper>
+                  <InputWrapper>
+                    <InputField
+                      isDarkMode={isDarkMode}
+                      registerName="userPassword"
+                      type="password"
+                      inputName="userPassword"
+                      labelName="Password"
+                      placeholder="Password"
+                      error={methods.formState.errors.userPassword}
+                    />
+                    {methods.formState.errors.userPassword && (
+                      <ErrorMessage>{methods.formState.errors.userPassword?.message}</ErrorMessage>
+                    )}
+                  </InputWrapper>
+                  <InputWrapper>
+                    <InputField
+                      isDarkMode={isDarkMode}
+                      registerName="userEmail"
+                      type="email"
+                      inputName="userEmail"
+                      labelName="Email"
+                      placeholder="Email"
+                      error={methods.formState.errors.userEmail}
+                    />
+                    {methods.formState.errors.userEmail && (
+                      <ErrorMessage>{methods.formState.errors.userEmail?.message}</ErrorMessage>
+                    )}
+                  </InputWrapper>
+
+                  <RouterText to="/login">Already have an account?</RouterText>
+                  <Button
+                    type="submit"
+                    name="Submit"
+                    disabled={methods.formState.isSubmitting}
+                    isDarkMode={isDarkMode}
+                  >
+                    {methods.formState.isSubmitting ? 'Loading...' : 'Register'}
+                  </Button>
+                  {methods.formState.errors.root && (
+                    <ErrorMessage>{methods.formState.errors.root?.message}</ErrorMessage>
+                  )}
+                </StyledForm>
+              </FormProvider>
+            </FormContainer>
+          </FormHolderContainer>
+          <BannerContainer view="register">
+            <BannerHeader>Welcome to RemindMe! Join now and get started!</BannerHeader>
+            <BannerText>We got you covered! No more my dog eat my homework!</BannerText>
+            <BannerImage src={RegisterTaskImage} alt="Register Task" />
+          </BannerContainer>
+        </ThemeProvider>
       </Container>
       <Modal
         isOpen={isModalOpen}

@@ -1,22 +1,71 @@
 import styled from '@emotion/styled';
+import isDarkMode from '../../Interface/General/isDarkMode';
 
-const InputContainer = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+const InputWrapper = styled.div`
+  position: relative;
+  margin-bottom: 20px;
 `;
-const StyledInput = styled.input`
-    width: 97%;
-    height: 100%;
-    min-height: 25px;
-    border-radius: 4px;
-    border: 1px solid #CED4DA;
-    padding: 5px;
+
+const StyledInput = styled.input<isDarkMode>`
+  font-size: 1rem;
+  outline: none;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 1rem 0;
+  color: gray;
+  background-color: ${(props) => {
+    return props.isDarkMode ? '#212529' : '#F8F9FA';
+  }};
+  transition: 0.1s ease-out;
+  width: 100%;
+
+  &:focus {
+    border-color: ${(props) => {
+      return props.isDarkMode ? '#DEE2E6' : '#212529';
+    }};
+  }
+
+  &:focus + label {
+    top: 0;
+    background-color: ${(props) => {
+      return props.isDarkMode ? '#212529' : '#F8F9FA';
+    }};
+    color: ${(props) => {
+      return props.isDarkMode ? '#DEE2E6' : '#212529';
+    }};
+    transform: translateY(-50%) scale(0.9);
+  }
+
+  &:not(:placeholder-shown) + label {
+    top: 0;
+    background-color: ${(props) => {
+      return props.isDarkMode ? '#212529' : '#F8F9FA';
+    }};
+    transform: translateY(-50%) scale(0.9);
+  }
+
+  &:not(:focus)::placeholder {
+    opacity: 0;
+  }
 `;
+
+const FloatingLabel = styled.label`
+  position: absolute;
+  font-size: 1rem;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+  padding: 0 0.3rem;
+  margin: 0 0.5rem;
+  transition: 0.1s ease-out;
+  transform-origin: left top;
+  pointer-events: none;
+`;
+
 const StyledLabel = styled.label`
-    font-size: 1.5rem;
-    font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 700;
 `;
 
-export { InputContainer, StyledInput, StyledLabel };
+export { InputWrapper, StyledInput, FloatingLabel, StyledLabel };
