@@ -60,6 +60,12 @@ const BannerText = styled.p`
   text-align: center;
 `;
 
+const BannerImage = styled.img`
+  width: 50%;
+  height: 30%;
+  object-fit: cover;
+`;
+
 const NavigationText = styled.p`
   display: flex;
   font-size: 1.2rem;
@@ -127,4 +133,5 @@ export {
   FormHeader1,
   BannerHeader,
   BannerText,
+  BannerImage,
 };

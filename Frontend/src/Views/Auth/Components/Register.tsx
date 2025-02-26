@@ -18,6 +18,7 @@ import {
   FormHeader1,
   BannerHeader,
   BannerText,
+  BannerImage,
 } from '../Styled-Components/StyledAuth';
 import {
   FormContainer,
@@ -37,6 +38,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import ApiErrorResponse from '../../../Interface/ErrorResponse';
+import RegisterTaskImage from '../../../../assets/register-task.svg';
 
 const registerUser = async (credentials: RegisterFormProps) => {
   const response = await axios.post('http://localhost:3000/api/user/register', {
@@ -201,6 +203,7 @@ const Register: FC<GeneralProps> = ({ isDarkMode }) => {
           <BannerContainer view="register">
             <BannerHeader>Welcome to RemindMe! Join now and get started!</BannerHeader>
             <BannerText>We got you covered! No more my dog eat my homework!</BannerText>
+            <BannerImage src={RegisterTaskImage} alt="Register Task" />
           </BannerContainer>
         </ThemeProvider>
       </Container>
