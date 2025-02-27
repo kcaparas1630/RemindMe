@@ -1,11 +1,11 @@
 import { FC, useState, JSX } from 'react';
 import Header from '../../Commons/Headers';
-import Button from '../../Commons/Button';
+// import Button from '../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
 import GeneralProps from '../../Interface/General/GeneralProps';
-import GetUser from '../../Hooks/GetUser';
-import WelcomeUser from './WelcomeUser';
-import getUserFromToken from '../../Hooks/GetUserNameFromToken';
+// import GetUser from '../../Hooks/GetUser';
+// import WelcomeUser from './WelcomeUser';
+// import getUserFromToken from '../../Hooks/GetUserNameFromToken';
 import { LayoutDashboard, PlusCircle } from 'lucide-react';
 import Sidebar from '../../Commons/Sidebar';
 /**
@@ -25,11 +25,9 @@ interface SidebarItem {
 }
 
 const MainPage: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
-  const { userName, token } = getUserFromToken(); 
-  const { users } = GetUser(userName, token);
-  // IDK HOW TO NAME IT HAHAHA. When login, Greets the user
-  const [isWelcomeDone] = useState<boolean>(false);
-  const [isLogOutClicked, setIsLogoutClicked] = useState<boolean>(false);
+  // const { userName, token } = getUserFromToken(); 
+  // const { users } = GetUser(userName, token);
+  const [, setIsLogoutClicked] = useState<boolean>(false);
   const navigate = useNavigate();
   const [, setView] = useState('dashboard'); 
 
@@ -66,27 +64,7 @@ const MainPage: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
         items={sidebarItems}
         isDarkMode={isDarkMode}
       />
-      {!isWelcomeDone && (
-        <WelcomeUser
-          isDarkMode={isDarkMode}
-          userName={userName}
-          token={token}
-          firstName={users?.firstName}
-        />
-      )}
-      {isWelcomeDone && (
-        <>
-          <Button
-            type="button"
-            name="Logout"
-            disabled={isLogOutClicked}
-            isDarkMode={isDarkMode}
-            handleClick={logoutHandler}
-          >
-            Logout
-          </Button>
-        </>
-      )}
+      
     </>
   );
 };
