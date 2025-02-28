@@ -53,7 +53,7 @@ const Login: FC<GeneralProps> = ({ isDarkMode }) => {
     onSuccess: (data) => {
       localStorage.setItem('loginToken', data.token);
       // force a page reload to update authentication state
-      window.location.href = '/main';
+      window.location.href = '/main/dashboard';
     },
     onError: (error: Error & { response?: { data: ApiErrorResponse } }) => {
       if (axios.isAxiosError(error) && error.response?.data) {

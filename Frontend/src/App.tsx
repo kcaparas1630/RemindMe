@@ -4,20 +4,27 @@
  *
  * @author @Kcaparas
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import StyledApp from './StyledApp';
 import Login from './Views/Auth/Components/Login';
 import Register from './Views/Auth/Components/Register';
-import MainPage from './Views/Dashboard/MainPage';
-import Dashboard from './Views/Dashboard/Dashboard';
-import AddTasks from './Views/Dashboard/AddTasks';
 import ProtectedRoute from './ProtectedRoute';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'motion/react';
 import Header from './Commons/Headers';
 
 const queryClient = new QueryClient();
+
+const MainPageLayout = lazy(() => {
+  return import('./Views/Dashboard/MainPage');
+});
+const Dashboard = lazy(() => {
+  return import('./Views/Dashboard/Dashboard');
+});
+const AddTasks = lazy(() => {
+  return import('./Views/Dashboard/AddTasks');
+});
 
 const PageWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -34,11 +41,9 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
 
 const AnimatedRoutes = ({
   isDarkMode,
-  toggleTheme,
   isAuthenticated,
 }: {
   isDarkMode: boolean;
-  toggleTheme: () => void;
   isAuthenticated: boolean;
 }) => {
   const location = useLocation();
@@ -59,54 +64,23 @@ const AnimatedRoutes = ({
         />
         <Route
           path="/login"
-          element={
-            <Login
-              isDarkMode={isDarkMode}
-            />
-          }
+          element={<Login isDarkMode={isDarkMode} />}
         />
         <Route
           path="/register"
-          element={
-            <Register
-              isDarkMode={isDarkMode}
-            />
-          }
+          element={<Register isDarkMode={isDarkMode} />}
         />
         <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
-          <Route
-            path="/main"
-            element={
-              <PageWrapper>
-                <MainPage
-                  isDarkMode={isDarkMode}
-                  toggleTheme={toggleTheme}
-                />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <PageWrapper>
-                <Dashboard
-                  isDarkMode={isDarkMode}
-                  toggleTheme={toggleTheme}
-                />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/addTasks"
-            element={
-              <PageWrapper>
-                <AddTasks
-                  isDarkMode={isDarkMode}
-                  toggleTheme={toggleTheme}
-                />
-              </PageWrapper>
-            }
-          />
+          <Route path="/main" element={<MainPageLayout isDarkMode={isDarkMode} />}>
+            <Route
+              path="dashboard"
+              element={<Dashboard isDarkMode={isDarkMode} />}
+            />
+            <Route
+              path="addTasks"
+              element={<AddTasks isDarkMode={isDarkMode} />}
+            />
+          </Route>
         </Route>
       </Routes>
     </AnimatePresence>
@@ -146,7 +120,6 @@ const App = () => {
           />
           <AnimatedRoutes
             isDarkMode={isDarkMode}
-            toggleTheme={toggleTheme}
             isAuthenticated={isAuthenticated}
           />
         </StyledApp>

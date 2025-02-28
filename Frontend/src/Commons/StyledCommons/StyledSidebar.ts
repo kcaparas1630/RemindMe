@@ -26,6 +26,8 @@ const SidebarContainer = styled.div<{ isOpen: boolean; isDarkMode: boolean }>`
 
   @media (min-width: 768px) {
     width: 20vw;
+    position: relative;
+    height: calc(100vh - 50px);
     left: 0;
   }
 `;
@@ -54,13 +56,16 @@ const HamburgerButton = styled.button<{ isDarkMode: boolean }>`
   }
 `;
 
-const SidebarItem = styled.div<{ isDarkMode: boolean }>`
+const SidebarItem = styled.div<{ isDarkMode: boolean, isActive: boolean }>`
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
   margin: 25px 0;
   border-radius: 6px;
+  background-color: ${(props) => {
+    return props.isActive ? '#333333' : 'transparent';
+  }};
   cursor: pointer;
   color: ${props => {
     if (props.isDarkMode) {
