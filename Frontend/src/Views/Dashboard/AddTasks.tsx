@@ -5,7 +5,7 @@ import GeneralProps from '../../Interface/General/GeneralProps';
 import TaskFormSection from './TaskFormSection';
 import getUserFromToken from '../../Hooks/GetUserNameFromToken';
 
-const AddTasks: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
+const AddTasks: FC<GeneralProps> = ({ isDarkMode }) => {
   const queryClient = useQueryClient();
   const { userName } = getUserFromToken(); 
 

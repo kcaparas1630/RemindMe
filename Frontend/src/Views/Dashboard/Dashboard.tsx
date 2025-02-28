@@ -1,4 +1,3 @@
-import Header from '../../Commons/Headers';
 import { Table, TableHeader, TableCell } from './Styled-Components/StyledTable';
 import GeneralProps from '../../Interface/General/GeneralProps';
 import { FC, ReactNode } from 'react';
