@@ -1,13 +1,14 @@
-import { FC, useState, JSX } from 'react';
-import Header from '../../Commons/Headers';
+import { FC, useState, JSX, Suspense } from 'react';
 // import Button from '../../Commons/Button';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import GeneralProps from '../../Interface/General/GeneralProps';
 // import GetUser from '../../Hooks/GetUser';
 // import WelcomeUser from './WelcomeUser';
 // import getUserFromToken from '../../Hooks/GetUserNameFromToken';
 import { LayoutDashboard, PlusCircle } from 'lucide-react';
 import Sidebar from '../../Commons/Sidebar';
+import { MainContainer, MainContent } from './Styled-Components/StyledMain';
+import LoadingSpinner from '../../Commons/LoadingSpinner';
 /**
  * this is going to change still.
  * 
@@ -21,29 +22,33 @@ import Sidebar from '../../Commons/Sidebar';
 interface SidebarItem {
   icon: JSX.Element;
   label: string;
+  activePath: string;
   onClick: () => void;
 }
 
-const MainPage: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
+const MainPageLayout: FC<GeneralProps> = ({ isDarkMode }) => {
   // const { userName, token } = getUserFromToken(); 
   // const { users } = GetUser(userName, token);
   const [, setIsLogoutClicked] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const [, setView] = useState('dashboard'); 
-
+  const navigate = useNavigate(); 
+  const [activePath, setActivePath] = useState<string>('dashboard');
   const sidebarItems: SidebarItem[] = [
     {
       icon: <LayoutDashboard size={20} />,
       label: 'Dashboard',
+      activePath: 'dashboard',
       onClick: () => {
-        setView('dashboard')
+        navigate('dashboard')
+        setActivePath('dashboard')
       }
     },
     {
       icon: <PlusCircle size={20} />,
       label: 'Add Task',
+      activePath: 'addTasks',
       onClick: () => {
-        setView('addTask')
+        navigate('addTasks')
+        setActivePath('addTasks')
       }
     }
   ];
@@ -55,18 +60,24 @@ const MainPage: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
 
   
   return (
-    <>
-      <Header
-        isDarkMode={isDarkMode}
-        toggleTheme={toggleTheme}
-      />
+    <MainContainer>
       <Sidebar 
         items={sidebarItems}
         isDarkMode={isDarkMode}
+        activePath={activePath}
       />
-      
-    </>
+      <MainContent
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -100 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Suspense fallback={<LoadingSpinner isDarkMode={isDarkMode} />}>
+          <Outlet context={{ isDarkMode }} />
+        </Suspense>
+      </MainContent>
+    </MainContainer>
   );
 };
 
-export default MainPage;
+export default MainPageLayout;
