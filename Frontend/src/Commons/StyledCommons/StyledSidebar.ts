@@ -1,47 +1,44 @@
 import styled from '@emotion/styled';
- // need to fix still
-const SidebarContainer = styled.div<{ isOpen: boolean; isDarkMode: boolean }>`
-  width: 100%;
-  height: 100vh;
-  background-color: ${props => {
-    if (props.isDarkMode) {
-      return '#1a1a1a';
-    } else {
-      return '#ffffff';
-    }
-  }};
-  position: fixed;
-  left: ${props => {
-    if (props.isOpen) {
-      return '0';
-    } else {
-      return '-150%';
-    }
-  }};
-  top: 0;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.5s ease;
-  z-index: 1000;
+import isDarkMode from '../../Interface/General/isDarkMode';
+import { motion } from 'framer-motion';
+interface SidebarProps extends isDarkMode {
+  isOpen?: boolean;
+  isActive?: boolean;
+}
 
-  @media (min-width: 768px) {
-    width: 20vw;
+const SidebarContainer = styled(motion.div)<SidebarProps>`
+  width: 70%;
+  height: 100%;
+  background-color: ${(props) => {
+    return props.isDarkMode ? '#1a1a1a' : '#ffffff';
+  }};
+  z-index: 2;
+  position: fixed;
+
+  @media (min-width: 1024px) {
+    width: 20%;
     position: relative;
-    height: calc(100vh - 50px);
-    left: 0;
   }
 `;
 
-const HamburgerButton = styled.button<{ isDarkMode: boolean }>`
+const HamburgerButton = styled.button<isDarkMode>`
   display: none;
   position: fixed;
-  top: 15px;
+  top: 10%;
   left: 15px;
-  z-index: 1001;
+  z-index: 1;
   background: none;
-  border: none;
+  border: 1px solid
+    ${(props) => {
+      if (props.isDarkMode) {
+        return '#ffffff';
+      } else {
+        return '#333333';
+      }
+    }};
+  border-radius: 6px;
   cursor: pointer;
-  color: ${props => {
+  color: ${(props) => {
     if (props.isDarkMode) {
       return '#ffffff';
     } else {
@@ -56,18 +53,53 @@ const HamburgerButton = styled.button<{ isDarkMode: boolean }>`
   }
 `;
 
-const SidebarItem = styled.div<{ isDarkMode: boolean, isActive: boolean }>`
+const ArrowIcon = styled.button<SidebarProps>`
+  display: none;
+  @media (min-width: 1024px) {
+    display: block;
+    background-color: ${(props) => {
+      return props.isDarkMode ? '#1a1a1a' : '#ffffff';
+    }};
+    color: ${(props) => {
+      if (props.isDarkMode) {
+        return '#ffffff';
+      } else {
+        return '#333333';
+      }
+    }};
+    border: 1px solid
+      ${(props) => {
+        if (props.isDarkMode) {
+          return '#ffffff';
+        } else {
+          return '#333333';
+        }
+      }};
+    border-radius: 100%;
+    padding: 0.5rem;
+    position: absolute;
+    top: 6%;
+    left: ${(props) => {
+      return props.isOpen ? '15%' : '1%';
+    }};
+    z-index: 5;
+    transition: left 0.3s ease-in-out;
+  }
+`;
+
+const SidebarItem = styled.div<SidebarProps>`
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
   margin: 25px 0;
   border-radius: 6px;
+
   background-color: ${(props) => {
     return props.isActive ? '#333333' : 'transparent';
   }};
   cursor: pointer;
-  color: ${props => {
+  color: ${(props) => {
     if (props.isDarkMode) {
       return '#ffffff';
     } else {
@@ -77,7 +109,7 @@ const SidebarItem = styled.div<{ isDarkMode: boolean, isActive: boolean }>`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: ${props => {
+    background-color: ${(props) => {
       if (props.isDarkMode) {
         return '#333333';
       } else {
@@ -85,12 +117,15 @@ const SidebarItem = styled.div<{ isDarkMode: boolean, isActive: boolean }>`
       }
     }};
   }
+  &:nth-child(1) {
+    margin-top: 20%;
+  }
 `;
 
 const Overlay = styled.div<{ isOpen: boolean }>`
   display: none;
   @media (max-width: 768px) {
-    display: ${props => {
+    display: ${(props) => {
       if (props.isOpen) {
         return 'block';
       } else {
@@ -103,8 +138,14 @@ const Overlay = styled.div<{ isOpen: boolean }>`
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+    z-index: 1;
   }
 `;
 
-export { SidebarContainer, HamburgerButton, SidebarItem, Overlay };
+const LogoutButtonWrapper = styled.div`
+  position: absolute;
+  bottom: 10%;
+  padding: 0 1rem;
+  width: 90%;
+`;
+export { SidebarContainer, HamburgerButton, SidebarItem, Overlay, LogoutButtonWrapper, ArrowIcon };

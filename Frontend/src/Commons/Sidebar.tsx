@@ -1,32 +1,26 @@
-import { FC, useState, JSX } from 'react';
+import { FC, useState } from 'react';
 import {
   HamburgerButton,
   Overlay,
   SidebarContainer,
   SidebarItem,
+  LogoutButtonWrapper,
+  ArrowIcon,
 } from './StyledCommons/StyledSidebar';
-import { Menu } from 'lucide-react';
-import GeneralProps from '../Interface/General/GeneralProps';
-import { useLocation } from 'react-router-dom';
-
-interface SidebarProps extends GeneralProps {
-  items: {
-    icon: JSX.Element;
-    label: string;
-    onClick: () => void;
-  }[];
-  activePath: string;
-}
+import { Menu, ArrowRight, ArrowLeft } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { SidebarProps } from '../Interface/SidebarProps';
+import Button from './Button';
 
 const Sidebar: FC<SidebarProps> = ({ isDarkMode, items }) => {
   const [isOpen, setIsOpen] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  const activePath = location.pathname.replace('/main/', '');
-  console.log(activePath);
+  const activePathName = location.pathname.replace('/main/', '');
   return (
     <>
       <HamburgerButton
@@ -35,13 +29,22 @@ const Sidebar: FC<SidebarProps> = ({ isDarkMode, items }) => {
       >
         <Menu size={24} />
       </HamburgerButton>
-
+      <ArrowIcon
+        isDarkMode={isDarkMode}
+        isOpen={isOpen}
+        onClick={toggleSidebar}
+      >
+        {isOpen ? <ArrowLeft size={24} /> : <ArrowRight size={24} />}
+      </ArrowIcon>
       <Overlay
         isOpen={isOpen}
         onClick={toggleSidebar}
       />
 
       <SidebarContainer
+        initial={{ x: '-100%' }}
+        animate={{ x: isOpen ? '0' : '-100%' }}
+        transition={{ duration: 0.3 }}
         isOpen={isOpen}
         isDarkMode={isDarkMode}
       >
@@ -51,13 +54,28 @@ const Sidebar: FC<SidebarProps> = ({ isDarkMode, items }) => {
               key={index}
               isDarkMode={isDarkMode}
               onClick={item.onClick}
-              isActive={activePath === item.activePath}
+              isActive={activePathName === item.activePath}
             >
               {item.icon}
               {item.label}
+              {item.activePath === activePathName && <ArrowRight size={20} />}
             </SidebarItem>
           );
         })}
+        <LogoutButtonWrapper>
+          <Button
+            type="button"
+            name="Logout"
+            disabled={false}
+            isDarkMode={isDarkMode}
+            handleClick={() => {
+              localStorage.removeItem('loginToken');
+              navigate('/login');
+            }}
+          >
+            Logout
+          </Button>
+        </LogoutButtonWrapper>
       </SidebarContainer>
     </>
   );
