@@ -1,14 +1,16 @@
-import { Table, TableHeader, TableCell } from './Styled-Components/StyledTable';
 import GeneralProps from '../../Interface/General/GeneralProps';
 import { FC, ReactNode } from 'react';
 import getUserFromToken from '../../Hooks/GetUserNameFromToken';
 import GetUser from '../../Hooks/GetUser';
 import LoadingSpinner from '../../Commons/LoadingSpinner';
-
+import { DashboardHeader1 } from './Styled-Components/StyledMain';
+import { useMediaQuery} from '@react-hook/media-query';
+import MobileTable from './MobileTable';
+import DesktopTable from './DesktopTable';
 const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const { userName, token } = getUserFromToken();
   const { users, isPending, isError, error } = GetUser(userName, token);
-
+  const isMobile = useMediaQuery('(max-width: 768px)');
   if (isPending) {
     return <LoadingSpinner isDarkMode={isDarkMode} />;
   }
@@ -19,39 +21,15 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
 
   return (
     <>
+      <DashboardHeader1>Hello, {users?.firstName}</DashboardHeader1>
       {users && (
-        <Table>
-          <thead>
-            <tr>
-              <TableHeader>Task Name</TableHeader>
-              <TableHeader>Description</TableHeader>
-              <TableHeader>Progress</TableHeader>
-              <TableHeader>Due Date</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {/** Null Check users and users.tasks. Because it will throw a users is undefined  */}
-            {users &&
-              users.tasks &&
-              users?.tasks.map((taskItem, index) => {
-                return (
-                  <tr key={`${users.id}-${index}`}>
-                    <TableCell>{taskItem.taskName}</TableCell>
-
-                    <TableCell>{taskItem.taskDescription}</TableCell>
-                    <TableCell>{taskItem.taskProgress}</TableCell>
-                    <TableCell>
-                      {new Date(taskItem.taskDueDate).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
-                    </TableCell>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </Table>
+        <>  
+          {isMobile ? (
+            <MobileTable userTasks={users?.tasks} />
+          ) : (
+            <DesktopTable userTasks={users?.tasks} />
+          )}
+        </>
       )}
     </>
   );
