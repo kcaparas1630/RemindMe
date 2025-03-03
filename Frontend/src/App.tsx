@@ -4,14 +4,14 @@
  *
  * @author @Kcaparas
  */
-import React, { useEffect, useState, lazy } from 'react';
+import { useEffect, useState, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import StyledApp from './StyledApp';
 import Login from './Views/Auth/Components/Login';
 import Register from './Views/Auth/Components/Register';
 import ProtectedRoute from './ProtectedRoute';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence } from 'motion/react';
 import Header from './Commons/Headers';
 
 const queryClient = new QueryClient();
@@ -26,18 +26,6 @@ const AddTasks = lazy(() => {
   return import('./Views/Dashboard/AddTasks');
 });
 
-const PageWrapper = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.5 }}
-    >
-      {children}
-    </motion.div>
-  );
-};
 
 const AnimatedRoutes = ({
   isDarkMode,
