@@ -1,14 +1,12 @@
-import { FC, useState, JSX, Suspense } from 'react';
+import { FC, Suspense, useState } from 'react';
 // import Button from '../../Commons/Button';
 import { Outlet, useNavigate } from 'react-router-dom';
 import GeneralProps from '../../Interface/General/GeneralProps';
-// import GetUser from '../../Hooks/GetUser';
-// import WelcomeUser from './WelcomeUser';
-// import getUserFromToken from '../../Hooks/GetUserNameFromToken';
 import { LayoutDashboard, PlusCircle } from 'lucide-react';
 import Sidebar from '../../Commons/Sidebar';
 import { MainContainer, MainContent } from './Styled-Components/StyledMain';
 import LoadingSpinner from '../../Commons/LoadingSpinner';
+import { SidebarItemType } from '../../Interface/SidebarProps';
 /**
  * this is going to change still.
  * 
@@ -19,27 +17,17 @@ import LoadingSpinner from '../../Commons/LoadingSpinner';
  * @author @Kcaparas
  */
 
-interface SidebarItem {
-  icon: JSX.Element;
-  label: string;
-  activePath: string;
-  onClick: () => void;
-}
 
 const MainPageLayout: FC<GeneralProps> = ({ isDarkMode }) => {
-  // const { userName, token } = getUserFromToken(); 
-  // const { users } = GetUser(userName, token);
-  const [, setIsLogoutClicked] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
   const navigate = useNavigate(); 
-  const [activePath, setActivePath] = useState<string>('dashboard');
-  const sidebarItems: SidebarItem[] = [
+  const sidebarItems: SidebarItemType[] = [
     {
       icon: <LayoutDashboard size={20} />,
       label: 'Dashboard',
       activePath: 'dashboard',
       onClick: () => {
         navigate('dashboard')
-        setActivePath('dashboard')
       }
     },
     {
@@ -48,15 +36,9 @@ const MainPageLayout: FC<GeneralProps> = ({ isDarkMode }) => {
       activePath: 'addTasks',
       onClick: () => {
         navigate('addTasks')
-        setActivePath('addTasks')
       }
     }
   ];
-  const logoutHandler = () => {
-    setIsLogoutClicked(true);
-    localStorage.removeItem('loginToken');
-    navigate('/login');
-  };
 
   
   return (
@@ -64,13 +46,15 @@ const MainPageLayout: FC<GeneralProps> = ({ isDarkMode }) => {
       <Sidebar 
         items={sidebarItems}
         isDarkMode={isDarkMode}
-        activePath={activePath}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
       />
       <MainContent
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -100 }}
         transition={{ duration: 0.5 }}
+        isOpen={isOpen}
       >
         <Suspense fallback={<LoadingSpinner isDarkMode={isDarkMode} />}>
           <Outlet context={{ isDarkMode }} />

@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import { JSX, Dispatch, SetStateAction } from "react";
 import GeneralProps from "../Interface/General/GeneralProps";
 
 export interface SidebarItemType {
@@ -10,4 +10,6 @@ export interface SidebarItemType {
   
   export interface SidebarProps extends GeneralProps {
     items: SidebarItemType[];
+    isOpen: boolean;
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
   }

@@ -17,7 +17,10 @@ const SidebarContainer = styled(motion.div)<SidebarProps>`
 
   @media (min-width: 1024px) {
     width: 20%;
-    position: relative;
+    position: ${(props) => {
+      return props.isOpen ? 'relative' : 'fixed';
+    }};
+    padding-top: 3%;
   }
 `;
 
@@ -80,10 +83,11 @@ const ArrowIcon = styled.button<SidebarProps>`
     position: absolute;
     top: 6%;
     left: ${(props) => {
-      return props.isOpen ? '15%' : '1%';
+      return props.isOpen ? '22rem' : '1rem';
     }};
     z-index: 5;
     transition: left 0.3s ease-in-out;
+    
   }
 `;
 
@@ -96,7 +100,7 @@ const SidebarItem = styled.div<SidebarProps>`
   border-radius: 6px;
 
   background-color: ${(props) => {
-    return props.isActive ? '#333333' : 'transparent';
+    return props.isDarkMode ? props.isActive ? '#333333' : 'transparent' : props.isActive ? '#ccc' : 'transparent';
   }};
   cursor: pointer;
   color: ${(props) => {
@@ -117,9 +121,9 @@ const SidebarItem = styled.div<SidebarProps>`
       }
     }};
   }
-  &:nth-child(1) {
-    margin-top: 20%;
-  }
+  // &:nth-child(1) {
+  //   margin-top: 20%;
+  // }
 `;
 
 const Overlay = styled.div<{ isOpen: boolean }>`

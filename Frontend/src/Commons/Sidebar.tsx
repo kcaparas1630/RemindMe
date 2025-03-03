@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import {
   HamburgerButton,
   Overlay,
@@ -12,8 +12,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { SidebarProps } from '../Interface/SidebarProps';
 import Button from './Button';
 
-const Sidebar: FC<SidebarProps> = ({ isDarkMode, items }) => {
-  const [isOpen, setIsOpen] = useState(true);
+const Sidebar: FC<SidebarProps> = ({ isDarkMode, items, isOpen, setIsOpen }) => {
+  
   const location = useLocation();
   const navigate = useNavigate();
   const toggleSidebar = () => {
@@ -47,6 +47,7 @@ const Sidebar: FC<SidebarProps> = ({ isDarkMode, items }) => {
         transition={{ duration: 0.3 }}
         isOpen={isOpen}
         isDarkMode={isDarkMode}
+        
       >
         {items.map((item, index) => {
           return (
