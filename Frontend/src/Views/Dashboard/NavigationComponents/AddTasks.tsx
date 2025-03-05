@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
-import GeneralProps from '../../Interface/General/GeneralProps';
-import TaskFormSection from './TaskFormSection';
-import getUserFromToken from '../../Hooks/GetUserNameFromToken';
+import GeneralProps from '../../../Interface/General/GeneralProps';
+import TaskFormSection from '../TaskFormSection';
+import getUserFromToken from '../../../Hooks/GetUserNameFromToken';
 
 const AddTasks: FC<GeneralProps> = ({ isDarkMode }) => {
   const queryClient = useQueryClient();

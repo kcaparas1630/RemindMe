@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {
@@ -11,22 +11,24 @@ import {
   ProgressBarTextContainer,
   ProgressBarText,
   ProgressBarTextHeader,
-} from './Styled-Components/CircularProgressBar';
+} from '../Styled-Components/CircularProgressBar';
 
-const CircularProgressContainer: FC = () => {
-  const tasksDone = 1;
+const CircularProgressContainer: React.FC = () => {
+  const tasksDone = 5;
   const totalTasks = 10;
-  const progress = (tasksDone / totalTasks) * 100;
+  const calculatedProgress = (tasksDone / totalTasks) * 100;
+
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // This component doesn't need to update progress dynamically
+      setProgress(calculatedProgress);
     }, 1000); // Delay to start the animation
 
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [calculatedProgress]);
 
   return (
     <CircularProgressBarContainer>
@@ -38,7 +40,7 @@ const CircularProgressContainer: FC = () => {
         <ProgressBarGraphContainer>
           <CircularProgressbar
             value={progress}
-            text={`${progress}%`}
+            text={`${tasksDone}/${totalTasks}\nRemaining: ${totalTasks - tasksDone}`}
             styles={{
               path: {
                 stroke: `#4CAF50`,
@@ -46,7 +48,10 @@ const CircularProgressContainer: FC = () => {
               },
               text: {
                 fill: '#ffffff',
-                fontSize: '0.8rem',
+                fontSize: '0.65rem',
+                whiteSpace: 'pre-line',
+                dominantBaseline: 'middle',
+                textAnchor: 'middle',
               },
               trail: {
                 stroke: '#404040',

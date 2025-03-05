@@ -20,10 +20,10 @@ const MainPageLayout = lazy(() => {
   return import('./Views/Dashboard/MainPage');
 });
 const Dashboard = lazy(() => {
-  return import('./Views/Dashboard/Dashboard');
+  return import('./Views/Dashboard/NavigationComponents/Dashboard');
 });
 const AddTasks = lazy(() => {
-  return import('./Views/Dashboard/AddTasks');
+  return import('./Views/Dashboard/NavigationComponents/AddTasks');
 });
 
 

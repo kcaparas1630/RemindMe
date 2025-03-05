@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { TableContainer, Table, TableHead, TableRow, TableHeader, TableCell, TableBody } from './Styled-Components/StyledTable';
-import TaskInterface from '../../Interface/TaskInterface';
+import { TableContainer, Table, TableHead, TableRow, TableHeader, TableCell, TableBody } from '../Styled-Components/StyledTable';
+import TaskInterface from '../../../Interface/TaskInterface';
 
 interface MobileTableProps {
     userTasks: TaskInterface[] | undefined;
