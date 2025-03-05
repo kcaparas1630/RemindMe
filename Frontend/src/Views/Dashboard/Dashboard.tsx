@@ -7,6 +7,8 @@ import { DashboardHeader1 } from './Styled-Components/StyledMain';
 import { useMediaQuery} from '@react-hook/media-query';
 import MobileTable from './MobileTable';
 import DesktopTable from './DesktopTable';
+import CircularProgressContainer from './CircularProgressContainer';
+
 const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const { userName, token } = getUserFromToken();
   const { users, isPending, isError, error } = GetUser(userName, token);
@@ -22,6 +24,8 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   return (
     <>
       <DashboardHeader1>Hello, {users?.firstName}</DashboardHeader1>
+      {/**Add a div flex row and contain Circular Progress and other divs. */}
+      <CircularProgressContainer />
       {users && (
         <>  
           {isMobile ? (

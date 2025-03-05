@@ -13,6 +13,7 @@ const MainContent = styled(motion.div)<{ isOpen: boolean }>`
     height: 100%;
     display: flex;
     padding: 0 24px;
+    gap: 24px;
     flex-direction: column;
     width: ${props => {
         return props.isOpen ? '80%' : '100%'
