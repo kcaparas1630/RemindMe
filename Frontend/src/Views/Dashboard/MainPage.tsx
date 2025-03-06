@@ -1,13 +1,12 @@
-import { FC, useState, JSX } from 'react';
-import Header from '../../Commons/Headers';
-import Button from '../../Commons/Button';
-import { useNavigate } from 'react-router-dom';
+import { FC, Suspense, useState } from 'react';
+// import Button from '../../Commons/Button';
+import { Outlet, useNavigate } from 'react-router-dom';
 import GeneralProps from '../../Interface/General/GeneralProps';
-import GetUser from '../../Hooks/GetUser';
-import WelcomeUser from './WelcomeUser';
-import getUserFromToken from '../../Hooks/GetUserNameFromToken';
 import { LayoutDashboard, PlusCircle } from 'lucide-react';
 import Sidebar from '../../Commons/Sidebar';
+import { MainContainer, MainContent } from './Styled-Components/StyledMain';
+import LoadingSpinner from '../../Commons/LoadingSpinner';
+import { SidebarItemType } from '../../Interface/SidebarProps';
 /**
  * this is going to change still.
  * 
@@ -18,77 +17,52 @@ import Sidebar from '../../Commons/Sidebar';
  * @author @Kcaparas
  */
 
-interface SidebarItem {
-  icon: JSX.Element;
-  label: string;
-  onClick: () => void;
-}
 
-const MainPage: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
-  const { userName, token } = getUserFromToken(); 
-  const { users } = GetUser(userName, token);
-  // IDK HOW TO NAME IT HAHAHA. When login, Greets the user
-  const [isWelcomeDone] = useState<boolean>(false);
-  const [isLogOutClicked, setIsLogoutClicked] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const [, setView] = useState('dashboard'); 
-
-  const sidebarItems: SidebarItem[] = [
+const MainPageLayout: FC<GeneralProps> = ({ isDarkMode }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const navigate = useNavigate(); 
+  const sidebarItems: SidebarItemType[] = [
     {
       icon: <LayoutDashboard size={20} />,
       label: 'Dashboard',
+      activePath: 'dashboard',
       onClick: () => {
-        setView('dashboard')
+        navigate('dashboard')
       }
     },
     {
       icon: <PlusCircle size={20} />,
       label: 'Add Task',
+      activePath: 'addTasks',
       onClick: () => {
-        setView('addTask')
+        navigate('addTasks')
       }
     }
   ];
-  const logoutHandler = () => {
-    setIsLogoutClicked(true);
-    localStorage.removeItem('loginToken');
-    navigate('/login');
-  };
 
   
   return (
-    <>
-      <Header
-        isDarkMode={isDarkMode}
-        toggleTheme={toggleTheme}
-      />
+    <MainContainer>
       <Sidebar 
         items={sidebarItems}
         isDarkMode={isDarkMode}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
       />
-      {!isWelcomeDone && (
-        <WelcomeUser
-          isDarkMode={isDarkMode}
-          userName={userName}
-          token={token}
-          firstName={users?.firstName}
-        />
-      )}
-      {isWelcomeDone && (
-        <>
-          <Button
-            type="button"
-            name="Logout"
-            disabled={isLogOutClicked}
-            isDarkMode={isDarkMode}
-            handleClick={logoutHandler}
-          >
-            Logout
-          </Button>
-        </>
-      )}
-    </>
+      <MainContent
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -100 }}
+        transition={{ duration: 0.5 }}
+        isOpen={isOpen}
+      >
+        <Suspense fallback={<LoadingSpinner isDarkMode={isDarkMode} />}>
+          <Outlet context={{ isDarkMode }} />
+        </Suspense>
+      </MainContent>
+    </MainContainer>
   );
+  
 };
 
-export default MainPage;
+export default MainPageLayout;
