@@ -62,6 +62,7 @@ const MainPageLayout: FC<GeneralProps> = ({ isDarkMode }) => {
       </MainContent>
     </MainContainer>
   );
+  
 };
 
 export default MainPageLayout;

@@ -11,7 +11,7 @@ import GeneralProps from '../Interface/General/GeneralProps';
 
 const Header: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   return (
-    <HeaderContainer>
+    <HeaderContainer isDarkMode={isDarkMode}>
       <ThemeToggle onClick={toggleTheme}>
         {isDarkMode ? <Moon size={24} /> : <Sun size={24} />}
       </ThemeToggle>

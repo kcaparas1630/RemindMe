@@ -14,13 +14,14 @@ const SidebarContainer = styled(motion.div)<SidebarProps>`
   }};
   z-index: 2;
   position: fixed;
+  padding-top: 3%;
 
   @media (min-width: 1024px) {
     width: 20%;
+    height: calc(94vh - 50px);
     position: ${(props) => {
       return props.isOpen ? 'relative' : 'fixed';
     }};
-    padding-top: 3%;
   }
 `;
 
@@ -30,7 +31,9 @@ const HamburgerButton = styled.button<isDarkMode>`
   top: 10%;
   left: 15px;
   z-index: 1;
-  background: none;
+  background-color: ${(props) => {
+        return props.isDarkMode ? '#212529' : '#F8F9FA'}
+    };
   border: 1px solid
     ${(props) => {
       if (props.isDarkMode) {
