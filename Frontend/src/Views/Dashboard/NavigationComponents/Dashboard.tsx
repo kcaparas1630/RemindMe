@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 import getUserFromToken from '../../../Hooks/GetUserNameFromToken';
 import GetUser from '../../../Hooks/GetUser';
 import LoadingSpinner from '../../../Commons/LoadingSpinner';
-import { CardRowContainer, DashboardHeader1 } from '../Styled-Components/StyledMain';
+import { CardRowContainer, DashboardHeader1, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
 import { useMediaQuery } from '@react-hook/media-query';
 import MobileTable from '../DashboardComponents/MobileTable';
 import DesktopTable from '../DashboardComponents/DesktopTable';
@@ -12,8 +12,11 @@ import QuickActions from '../DashboardComponents/QuickActions';
 import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
 import Goals from '../DashboardComponents/Goals';
+import Button from '../../../Commons/Button';
+import { useNavigate } from 'react-router-dom';
+
 const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
-  
+  const navigate = useNavigate();
   const { userName, token } = getUserFromToken();
   const { users, isPending, isError, error } = GetUser(userName, token);
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -47,21 +50,35 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
           })}
         </AnimatePresence>
       </DashboardHeader1>
-      {/**Add a div flex row and contain Circular Progress and other divs. */}
-      <CardRowContainer>
-        <CircularProgressContainer isDarkMode={isDarkMode} />
-        <Goals isDarkMode={isDarkMode} />
-        <QuickActions isDarkMode={isDarkMode} />
-      </CardRowContainer>
-
-      {users && (
+      {users && users.tasks.length > 0 ? (
         <>
+          <CardRowContainer>
+            <CircularProgressContainer isDarkMode={isDarkMode} users={users} />
+            <Goals isDarkMode={isDarkMode} />
+            <QuickActions isDarkMode={isDarkMode} />
+          </CardRowContainer>
+          
           {isMobile ? (
-            <MobileTable userTasks={users?.tasks} />
+            <MobileTable userTasks={users.tasks} />
           ) : (
-            <DesktopTable userTasks={users?.tasks} />
+            <DesktopTable userTasks={users.tasks} />
           )}
         </>
+      ): (
+        <NoTasksContainer>
+          <NoTasksText>You have no tasks yet. Create one to get started.</NoTasksText>
+          <Button
+            type="button"
+            name="Create Task"
+            handleClick={() => {
+              navigate('/create-task');
+            }}
+            disabled={false}
+            isDarkMode={isDarkMode}
+          >
+            Create Task
+          </Button>
+        </NoTasksContainer>
       )}
     </>
   );

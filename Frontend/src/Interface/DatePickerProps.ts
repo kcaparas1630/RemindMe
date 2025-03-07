@@ -1,5 +1,6 @@
 import { FieldError } from "react-hook-form";
-interface DatePickerProps {
+import isDarkMode from "./General/isDarkMode";
+interface DatePickerProps extends isDarkMode {
     inputName: string;
     labelName: string;
     error?: FieldError | undefined;

@@ -7,31 +7,36 @@
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import SelectFieldProps from '../Interface/SelectFieldProps';
-import { StyledSelect, InputContainer, StyledLabel } from './StyledCommons/StyledSelectField';
+import { StyledSelect, InputWrapper, FloatingLabel } from './StyledCommons/StyledSelectField';
 
-const SelectField: FC<SelectFieldProps> = ({inputName, labelName, registerName, options, ...props}) => {
+const SelectField: FC<SelectFieldProps> = ({
+  inputName, 
+  labelName, 
+  registerName, 
+  options, 
+  isDarkMode,
+  ...props
+}) => {
   const { register } = useFormContext();
   return (
-    <InputContainer>
-      <StyledLabel htmlFor={inputName}>{labelName}:</StyledLabel>
+    <InputWrapper>
       <StyledSelect
         id={inputName}
+        isDarkMode={isDarkMode}
         {...register(registerName)}
         {...props}
       >
-        <option
-          value=""
-          defaultValue='true'
-        >
-          Select an Option  
-        </option>
+        <option value="" defaultValue="">Select an Option</option>
         {options.map((optionItem) => {
           return (
-            <option key={optionItem.value} value={optionItem.value}>{optionItem.label}</option>
+            <option key={optionItem.value} value={optionItem.value}>
+              {optionItem.label}
+            </option>
           )
         })}
       </StyledSelect>
-    </InputContainer>
+      <FloatingLabel htmlFor={inputName}>{labelName}:</FloatingLabel>
+    </InputWrapper>
   );
 };
 

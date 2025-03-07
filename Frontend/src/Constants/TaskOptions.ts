@@ -15,4 +15,19 @@ const TaskOptions: OptionProps[] = [
     }
 ];
 
-export default TaskOptions;
+const TaskPriorityOptions: OptionProps[] = [
+    {
+        value: 'LOW',
+        label: 'LOW',
+    },
+    {
+        value: 'MEDIUM',
+        label: 'MEDIUM',
+    },
+    {
+        value: 'HIGH',
+        label: 'HIGH',
+    }
+];
+
+export { TaskOptions, TaskPriorityOptions };

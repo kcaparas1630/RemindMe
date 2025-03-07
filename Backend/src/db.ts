@@ -128,13 +128,36 @@ export class DatabaseService {
   }
 
   // Check if task name already exists
-  static checkTaskNameExists(taskName: string) {
+  static async checkTaskNameExists(taskName: string) {
     return prisma.task.count({
       where: {
-        taskName: taskName
+        AND: [
+          {
+            taskName: taskName
+          },
+          {
+            taskProgress: {
+              not: 'COMPLETED'
+            }
+          }
+        ]
       }
     }).then((count: number) => {
       return count > 0;
+    })
+  }
+
+  // Count all completed tasks
+  static async countCompletedTasks(userName: string) {
+    return prisma.task.count({
+      where: {
+        taskProgress: 'COMPLETED',
+        user: {
+          userName: userName,
+        }
+      }
+    }).then((count: number) => {
+      return count;
     })
   }
 }
