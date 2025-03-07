@@ -6,7 +6,9 @@ const maxDate: Date = new Date('2050-12-31');
 const taskValidationSchema = object({
   body: object({
     taskName: string().required('Task name is required'),
-    taskDescription: string().required('Task Description is required'),
+    taskPriority: string()
+      .oneOf(['LOW', 'MEDIUM', 'HIGH'])
+      .required('Task Priority is required'),
     taskProgress: string()
       .oneOf(['NOTSTARTED', 'STARTED', 'COMPLETED'])
       .required('Task Progress is required'),

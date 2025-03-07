@@ -32,12 +32,12 @@ const createTask = async (req: Request, res: Response, next: NextFunction): Prom
   try {
     const {
       taskName,
-      taskDescription,
+      taskPriority,
       taskProgress,
       taskDueDate,
     }: {
       taskName: Task['taskName'];
-      taskDescription: Task['taskDescription'];
+      taskPriority: Task['taskPriority'];
       taskProgress: Task['taskProgress'];
       taskDueDate: Task['taskDueDate'];
     } = req.body;
@@ -50,7 +50,7 @@ const createTask = async (req: Request, res: Response, next: NextFunction): Prom
     }
     const requestBody = await DatabaseService.addTask(
       taskName,
-      taskDescription,
+      taskPriority,
       taskProgress,
       new Date(taskDueDate),
       userId
@@ -121,7 +121,7 @@ const highlightTasksDueToday = async (req: Request, res: Response, next: NextFun
       if (isSameDay(taskItem.taskDueDate, new Date(Date.now()))) {
         tasksDueToday.push({
           taskName: taskItem.taskName,
-          taskDescription: taskItem.taskDescription,
+          taskPriority: taskItem.taskPriority,
           taskProgress: taskItem.taskProgress,
           taskDueDate: taskItem.taskDueDate,
         });

@@ -18,7 +18,7 @@ export class DatabaseService {
   // add task
   static async addTask(
     taskName: string,
-    taskDescription: string,
+    taskPriority: string,
     taskProgress: string,
     taskDueDate: Date,
     userId: number
@@ -26,7 +26,7 @@ export class DatabaseService {
     return prisma.task.create({
       data: {
         taskName,
-        taskDescription,
+        taskPriority,
         taskProgress,
         taskDueDate,
         user: {

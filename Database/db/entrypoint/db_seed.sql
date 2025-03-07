@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS task (
   ID SERIAL PRIMARY KEY,
   "taskName" VARCHAR(30) NOT NULL,
-  "taskDescription" VARCHAR(30) NOT NULL,
+  "taskPriority" VARCHAR(30) NOT NULL,
   "taskProgress" VARCHAR(30) NOT NULL,
   "taskTodayDate" DATE NOT NULL,
   "taskDueDate" DATE NOT NULL
