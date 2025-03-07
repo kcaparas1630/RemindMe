@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { TableContainer, Table, TableHead, TableRow, TableHeader, TableCell, TableBody } from '../Styled-Components/StyledTable';
+import { TableContainer, Table, TableHead, TableRow, TableHeader, TableCell, TableBody, TableCellPriority } from '../Styled-Components/StyledTable';
 import TaskInterface from '../../../Interface/TaskInterface';
 
 interface DesktopTableProps {
@@ -22,7 +22,9 @@ const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
             return (
               <TableRow key={task.id}>
                 <TableCell>{task.taskName}</TableCell>
-                <TableCell>{task.taskPriority}</TableCell>
+                <TableCell>
+                  <TableCellPriority priority={task.taskPriority as 'LOW' | 'MEDIUM' | 'HIGH'}>{task.taskPriority}</TableCellPriority>
+                </TableCell>
                 <TableCell>{task.taskProgress}</TableCell>
                 <TableCell>
                   {new Date(task.taskDueDate).toLocaleDateString('en-US', {

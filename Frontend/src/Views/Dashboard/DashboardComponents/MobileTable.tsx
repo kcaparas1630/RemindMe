@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { TableContainer, Table, TableHead, TableRow, TableHeader, TableCell, TableBody } from '../Styled-Components/StyledTable';
+import { TableContainer, Table, TableHead, TableRow, TableHeader, TableCell, TableBody, TableCellPriority } from '../Styled-Components/StyledTable';
 import TaskInterface from '../../../Interface/TaskInterface';
 
 interface MobileTableProps {
@@ -21,7 +21,7 @@ const MobileTable: FC<MobileTableProps> = ({ userTasks }) => {
             return (
               <TableRow key={task.id}>
                 <TableCell>{task.taskName}</TableCell>
-                <TableCell>{task.taskPriority}</TableCell>
+                <TableCell><TableCellPriority priority={task.taskPriority as 'LOW' | 'MEDIUM' | 'HIGH'}>{task.taskPriority}</TableCellPriority></TableCell>
                 <TableCell>
                   {new Date(task.taskDueDate).toLocaleDateString('en-US', {
                     year: 'numeric',
