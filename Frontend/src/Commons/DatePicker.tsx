@@ -4,15 +4,14 @@
  * @author @Kcaparas
  */
 import { FC } from 'react';
-import { InputWrapper, StyledLabel } from './StyledCommons/StyledInput';
-import DatePickerWrapper from './StyledCommons/StyledDatePicker';
+import { InputWrapper } from './StyledCommons/StyledInput';
+import { DatePickerWrapper, FloatingLabel } from './StyledCommons/StyledDatePicker';
 import DatePickerProps from '../Interface/DatePickerProps';
 import { useFormContext, useController } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
-
-const DatePickerField: FC<DatePickerProps> = ({ inputName, labelName }) => {
+const DatePickerField: FC<DatePickerProps> = ({ inputName, labelName, isDarkMode }) => {
   const { control } = useFormContext();
   const {
     field: { value, onChange }
@@ -24,8 +23,7 @@ const DatePickerField: FC<DatePickerProps> = ({ inputName, labelName }) => {
 
   return (
     <InputWrapper>
-      <StyledLabel htmlFor={inputName}>{labelName}:</StyledLabel>
-      <DatePickerWrapper>
+      <DatePickerWrapper isDarkMode={isDarkMode}>
         <DatePicker
           id={inputName}
           selected={value ? new Date(value) : new Date()}
@@ -35,7 +33,9 @@ const DatePickerField: FC<DatePickerProps> = ({ inputName, labelName }) => {
           portalId="root"
           popperPlacement="bottom-start"
           showIcon
+          placeholderText=" "
         />
+        <FloatingLabel isDarkMode={isDarkMode} htmlFor={inputName}>{labelName}:</FloatingLabel>
       </DatePickerWrapper>
     </InputWrapper>
   );

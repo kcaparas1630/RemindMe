@@ -10,9 +10,8 @@ import {
   InputWrapper,
   StyledForm,
 } from '../Styled-Components/StyledForms';
-import TextArea from '../../Commons/TextArea';
 import SelectField from '../../Commons/SelectField';
-import TaskOptions from '../../Constants/TaskOptions';
+import { TaskPriorityOptions, TaskOptions } from '../../Constants/TaskOptions';
 import DatePickerField from '../../Commons/DatePicker';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -33,7 +32,7 @@ const addTasks = async (credentials: TaskFormProps) => {
 
   const response = await axios.post('http://localhost:3000/api/task', {
     taskName: credentials.taskName,
-    taskDescription: credentials.taskDescription,
+    taskPriority: credentials.taskPriority,
     taskProgress: credentials.taskProgress,
     taskDueDate: credentials.taskDueDate,
   }, config);
@@ -47,7 +46,7 @@ const notify = (message: string) => {
 const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient }) => {
   const formData: TaskFormProps = {
     taskName: '',
-    taskDescription: '',
+    taskPriority: 'LOW',
     taskProgress: 'NOTSTARTED',
     taskDueDate: new Date(Date.now()),
   };
@@ -110,15 +109,16 @@ const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient
             )}
           </InputWrapper>
           <InputWrapper>
-            <TextArea
-              registerName="taskDescription"
-              inputName="taskDescription"
-              labelName="Task Description"
-              placeholder="Enter the task description"
-              error={methods.formState.errors.taskDescription}
+            <SelectField
+              inputName="taskPriority"
+              labelName="Task Priority"
+              registerName="taskPriority"
+              options={TaskPriorityOptions}
+              isDarkMode={isDarkMode}
+              error={methods.formState.errors.taskPriority}
             />
-            {methods.formState.errors.taskDescription && (
-              <ErrorMessage>{methods.formState.errors.taskDescription?.message}</ErrorMessage>
+            {methods.formState.errors.taskPriority && (
+              <ErrorMessage>{methods.formState.errors.taskPriority?.message}</ErrorMessage>
             )}
           </InputWrapper>
           <InputWrapper>
@@ -127,6 +127,7 @@ const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient
               labelName="Task Progress"
               registerName="taskProgress"
               options={TaskOptions}
+              isDarkMode={isDarkMode}
               error={methods.formState.errors.taskProgress}
             />
             {methods.formState.errors.taskProgress && (
@@ -137,6 +138,7 @@ const TaskFormSection: FC<DashboardProps> = ({ isDarkMode, userName, queryClient
             <DatePickerField
               inputName="taskDueDate"
               labelName="Task Due Date"
+              isDarkMode={isDarkMode}
               error={methods.formState.errors.taskDueDate}
             />
             {methods.formState.errors.taskDueDate && (
