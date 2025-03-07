@@ -12,7 +12,7 @@ const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
         <TableHead>
           <TableRow>
             <TableHeader>Task Name</TableHeader>
-            <TableHeader>Description</TableHeader>
+            <TableHeader>Priority</TableHeader>
             <TableHeader>Progress</TableHeader>
             <TableHeader>Due Date</TableHeader>
           </TableRow>
@@ -22,7 +22,7 @@ const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
             return (
               <TableRow key={task.id}>
                 <TableCell>{task.taskName}</TableCell>
-                <TableCell>{task.taskDescription}</TableCell>
+                <TableCell>{task.taskPriority}</TableCell>
                 <TableCell>{task.taskProgress}</TableCell>
                 <TableCell>
                   {new Date(task.taskDueDate).toLocaleDateString('en-US', {

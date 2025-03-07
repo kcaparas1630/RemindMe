@@ -12,6 +12,7 @@ const MobileTable: FC<MobileTableProps> = ({ userTasks }) => {
         <TableHead>
           <TableRow>
             <TableHeader>Task Name</TableHeader>
+            <TableHeader>Priority</TableHeader>
             <TableHeader>Due Date</TableHeader>
           </TableRow>
         </TableHead>
@@ -20,6 +21,7 @@ const MobileTable: FC<MobileTableProps> = ({ userTasks }) => {
             return (
               <TableRow key={task.id}>
                 <TableCell>{task.taskName}</TableCell>
+                <TableCell>{task.taskPriority}</TableCell>
                 <TableCell>
                   {new Date(task.taskDueDate).toLocaleDateString('en-US', {
                     year: 'numeric',
