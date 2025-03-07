@@ -1,6 +1,6 @@
 interface Task {
   taskName: string;
-  taskDescription: string;
+  taskPriority: string;
   taskProgress: string;
   taskDueDate: Date;
 }

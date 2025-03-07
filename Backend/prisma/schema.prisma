@@ -12,7 +12,7 @@ datasource db {
 model Task {
     id Int @id @default(autoincrement())
     taskName String @unique
-    taskDescription String
+    taskPriority String
     taskProgress String
     taskDueDate DateTime
     createdAt DateTime @default(now())
