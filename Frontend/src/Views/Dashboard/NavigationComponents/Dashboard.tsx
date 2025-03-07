@@ -53,7 +53,7 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
       {users && users.tasks.length > 0 ? (
         <>
           <CardRowContainer>
-            <CircularProgressContainer isDarkMode={isDarkMode} />
+            <CircularProgressContainer isDarkMode={isDarkMode} users={users} />
             <Goals isDarkMode={isDarkMode} />
             <QuickActions isDarkMode={isDarkMode} />
           </CardRowContainer>
