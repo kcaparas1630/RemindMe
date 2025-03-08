@@ -146,18 +146,4 @@ export class DatabaseService {
       return count > 0;
     })
   }
-
-  // Count all completed tasks
-  static async countCompletedTasks(userName: string) {
-    return prisma.task.count({
-      where: {
-        taskProgress: 'COMPLETED',
-        user: {
-          userName: userName,
-        }
-      }
-    }).then((count: number) => {
-      return count;
-    })
-  }
 }
