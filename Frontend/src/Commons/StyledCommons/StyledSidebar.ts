@@ -124,9 +124,6 @@ const SidebarItem = styled.div<SidebarProps>`
       }
     }};
   }
-  // &:nth-child(1) {
-  //   margin-top: 20%;
-  // }
 `;
 
 const Overlay = styled.div<{ isOpen: boolean }>`

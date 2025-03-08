@@ -1,5 +1,5 @@
 import GeneralProps from '../../../Interface/General/GeneralProps';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import getUserFromToken from '../../../Hooks/GetUserNameFromToken';
 import GetUser from '../../../Hooks/GetUser';
 import LoadingSpinner from '../../../Commons/LoadingSpinner';
@@ -14,12 +14,14 @@ import { AnimatePresence } from 'framer-motion';
 import Goals from '../DashboardComponents/Goals';
 import Button from '../../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
-
+import Modal from '../../../Commons/Modal';
 const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const navigate = useNavigate();
   const { userName, token } = getUserFromToken();
   const { users, isPending, isError, error } = GetUser(userName, token);
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   if (isPending) {
     return <LoadingSpinner isDarkMode={isDarkMode} />;
   }
@@ -30,6 +32,21 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const welcomeText = `Hello, ${users?.firstName}`;
   return (
     <>
+      <Modal isOpen={isModalOpen} isDarkMode={isDarkMode} setIsOpen={setIsModalOpen}>
+        <h2>Hello, {users?.firstName}</h2>
+        <h3>What is your goal for this week?</h3>
+      </Modal>
+      <Button
+        type="button"
+        name="Open Modal"
+        handleClick={() => {
+          setIsModalOpen(!isModalOpen);
+        }}
+        disabled={false}
+        isDarkMode={isDarkMode}
+      >
+        Open Modal
+      </Button>
       <DashboardHeader1>
         <AnimatePresence>
           {welcomeText.split('').map((char, index) => {

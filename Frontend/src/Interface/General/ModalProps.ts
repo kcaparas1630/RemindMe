@@ -1,8 +1,10 @@
 import isDarkMode from "./isDarkMode";
+import React from "react";
 
 interface ModalProps extends isDarkMode {
   isOpen: boolean;
-  message: string;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  children: React.ReactNode;
   isLoading?: boolean;
 }
 
