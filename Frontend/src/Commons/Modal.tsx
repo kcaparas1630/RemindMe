@@ -1,18 +1,20 @@
-import { ModalOverlay, ModalContent } from './StyledCommons/StyledModal';
+import { ModalOverlay, ModalContent, ModalContentWrapper } from './StyledCommons/StyledModal';
 import { FC } from 'react';
-import LoadingSpinner from './LoadingSpinner';
 import ModalProps from '../Interface/General/ModalProps';
 
 
-const Modal: FC<ModalProps> = ({ isOpen, message, isDarkMode, isLoading = false }) => {
+const Modal: FC<ModalProps> = ({ isOpen, children, isDarkMode, setIsOpen }) => {
   if (!isOpen) return null;
-
+  const handleClose = () => {
+    setIsOpen(false);
+  };
   return (
-    <ModalOverlay>
-      <ModalContent isDarkMode={isDarkMode}>
-        {isLoading && <LoadingSpinner isDarkMode={isDarkMode} />}
-        {message}
-      </ModalContent>
+    <ModalOverlay isOpen={isOpen} onClick={handleClose}>
+      <ModalContentWrapper>
+        <ModalContent isDarkMode={isDarkMode}>
+          {children}
+        </ModalContent>
+      </ModalContentWrapper>
     </ModalOverlay>
   );
 };
