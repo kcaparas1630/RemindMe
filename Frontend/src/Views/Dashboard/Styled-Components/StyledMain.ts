@@ -57,13 +57,18 @@ const NoTasksContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+  flex-direction: column;
 
+`;
+const ButtonContainer = styled.div`
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
 const NoTasksText = styled.h2`
   font-size: 2rem;
   font-weight: 600;
 `;
 
-export { MainContainer, MainContent, DashboardHeader1, CardRowContainer, NoTasksContainer, NoTasksText };
+export { MainContainer, MainContent, DashboardHeader1, CardRowContainer, NoTasksContainer, NoTasksText, ButtonContainer };
