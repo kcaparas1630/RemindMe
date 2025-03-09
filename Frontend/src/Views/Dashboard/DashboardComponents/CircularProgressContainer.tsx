@@ -37,9 +37,10 @@ const CircularProgressContainer: FC<CircularProgressContainerProps> = ({ isDarkM
       clearTimeout(timer);
     };
   }, [calculatedProgress]);
-
+  // used empty tag to avoid extra DOM elements
+  const rightItem = <>{new Date().toLocaleDateString()}</>
   return (
-    <CardLayout title="Overview" isDarkMode={isDarkMode}>
+    <CardLayout title="Overview" isDarkMode={isDarkMode} rightItem={rightItem}>
       <ProgressBarGraphContainer>
         <CircularProgressbar
           value={progress}
