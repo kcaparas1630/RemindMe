@@ -55,18 +55,36 @@ const CardLayoutTitleText = styled.h3`
   }
 `;
 
-const CardLayoutDateText = styled.p`
+const CardLayoutRightItem = styled.div`
   font-size: 0.8rem;
   font-weight: 400;
   position: absolute;
   margin: 0;
-  top: 25%;
+  top: 50%;
+  transform: translateY(-50%);
   right: 3%;
+  width: auto;
 
   @media (min-width: 1024px) {
     font-size: 1rem;
-    top: 20%;
     right: 3%;
+  }
+`;
+
+const CardLayoutRightItemButton = styled.button<{ isDarkMode: boolean }>`
+  outline: none;
+  border: none;
+  background-color: transparent;
+  width: 100%;
+  color: ${(props) => {
+    return props.isDarkMode ? '#DEE2E6' : '#212529'
+  }};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    color: ${(props) => {
+      return props.isDarkMode ? '#2A9D8F' : '#D3D3D3';
+    }}
   }
 `;
 
@@ -89,6 +107,7 @@ export {
   CardLayoutHeader,
   CardLayoutTitle,
   CardLayoutTitleText,
-  CardLayoutDateText,
+  CardLayoutRightItem,
+  CardLayoutRightItemButton,
   CardLayoutContent,
 };

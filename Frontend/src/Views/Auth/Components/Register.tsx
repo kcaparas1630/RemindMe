@@ -39,7 +39,7 @@ import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import ApiErrorResponse from '../../../Interface/ErrorResponse';
 import RegisterTaskImage from '../../../../assets/register-task.svg';
-
+import LoadingSpinner from '../../../Commons/LoadingSpinner';
 const registerUser = async (credentials: RegisterFormProps) => {
   const response = await axios.post('http://localhost:3000/api/user/register', {
     firstName: credentials.firstName,
@@ -209,12 +209,12 @@ const Register: FC<GeneralProps> = ({ isDarkMode }) => {
       </Container>
       <Modal
         isOpen={isModalOpen}
-        message={`${methods.getValues(
-          'firstName'
-        )}, your registration is successful! Please login with your credentials.`}
         isDarkMode={isDarkMode}
         isLoading={isLoading}
-      />
+      >
+        <h2>{methods.getValues('firstName')}, your registration is successful! Please login with your credentials.</h2>
+        {isLoading && <LoadingSpinner isDarkMode={isDarkMode} />}      
+      </Modal>
     </>
   );
 };

@@ -3,7 +3,7 @@ import { FC, ReactNode, useState } from 'react';
 import getUserFromToken from '../../../Hooks/GetUserNameFromToken';
 import GetUser from '../../../Hooks/GetUser';
 import LoadingSpinner from '../../../Commons/LoadingSpinner';
-import { CardRowContainer, DashboardHeader1, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
+import { ButtonContainer, CardRowContainer, DashboardHeader1, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
 import { useMediaQuery } from '@react-hook/media-query';
 import MobileTable from '../DashboardComponents/MobileTable';
 import DesktopTable from '../DashboardComponents/DesktopTable';
@@ -36,17 +36,6 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
         <h2>Hello, {users?.firstName}</h2>
         <h3>What is your goal for this week?</h3>
       </Modal>
-      <Button
-        type="button"
-        name="Open Modal"
-        handleClick={() => {
-          setIsModalOpen(!isModalOpen);
-        }}
-        disabled={false}
-        isDarkMode={isDarkMode}
-      >
-        Open Modal
-      </Button>
       <DashboardHeader1>
         <AnimatePresence>
           {welcomeText.split('').map((char, index) => {
@@ -71,8 +60,8 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
         <>
           <CardRowContainer>
             <CircularProgressContainer isDarkMode={isDarkMode} users={users} />
-            <Goals isDarkMode={isDarkMode} />
-            <QuickActions isDarkMode={isDarkMode} />
+            <Goals isDarkMode={isDarkMode} setIsModalOpen={setIsModalOpen} />
+            <QuickActions isDarkMode={isDarkMode} setIsModalOpen={setIsModalOpen} />
           </CardRowContainer>
           
           {isMobile ? (
@@ -84,17 +73,19 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
       ): (
         <NoTasksContainer>
           <NoTasksText>You have no tasks yet. Create one to get started.</NoTasksText>
-          <Button
-            type="button"
-            name="Create Task"
-            handleClick={() => {
-              navigate('/create-task');
-            }}
+          <ButtonContainer>
+            <Button
+              type="button"
+              name="Create Task"
+              handleClick={() => {
+                navigate('/main/addTasks');
+              }}
             disabled={false}
             isDarkMode={isDarkMode}
           >
-            Create Task
-          </Button>
+              Create Task
+            </Button>
+          </ButtonContainer>
         </NoTasksContainer>
       )}
     </>
