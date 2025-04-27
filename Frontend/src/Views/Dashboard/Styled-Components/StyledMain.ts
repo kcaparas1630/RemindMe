@@ -27,13 +27,11 @@ const MainContent = styled.div`
   }
 `;
 
-const DashboardHeader1 = styled.h1`
+const DashboardHeader2 = styled.h2`
   font-size: 2rem;
   font-weight: 600;
   margin-top: 5rem;
 `;
-
-
 
 const NoTasksContainer = styled.div`
   width: 100%;
@@ -53,4 +51,4 @@ const NoTasksText = styled.h2`
   font-weight: 600;
 `;
 
-export { MainContainer, MainContent, DashboardHeader1, NoTasksContainer, NoTasksText, ButtonContainer };
+export { MainContainer, MainContent, DashboardHeader2, NoTasksContainer, NoTasksText, ButtonContainer };

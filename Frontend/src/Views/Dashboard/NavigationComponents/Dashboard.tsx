@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 import getUserFromToken from '../../../Hooks/GetUserNameFromToken';
 import GetUser from '../../../Hooks/GetUser';
 import LoadingSpinner from '../../../Commons/LoadingSpinner';
-import { ButtonContainer, DashboardHeader1, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
+import { ButtonContainer, DashboardHeader2, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
 import { useMediaQuery } from '@react-hook/media-query';
 import MobileTable from '../DashboardComponents/MobileTable';
 import DesktopTable from '../DashboardComponents/DesktopTable';
@@ -28,7 +28,7 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const welcomeText = `Hello, ${users?.firstName}`;
   return (
     <>
-      <DashboardHeader1>
+      <DashboardHeader2>
         <AnimatePresence>
           {welcomeText.split('').map((char, index) => {
             return (
@@ -47,7 +47,7 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
             );
           })}
         </AnimatePresence>
-      </DashboardHeader1>
+      </DashboardHeader2>
       {users && users.tasks.length > 0 ? (
         <>
           {isMobile ? (
