@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 
 const MainContainer = styled.main`
   width: 100%;
-  min-height: calc(100vh - 50px); // minus header height
+  min-height: calc(100vh - 51px); // minus header height
   display: flex;
-  padding-bottom: 24px;
+  // padding-bottom: 24px;
 
   @media (min-width: 1024px) {
     padding-bottom: 0;
