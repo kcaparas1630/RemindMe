@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 import getUserFromToken from '../../../Hooks/GetUserNameFromToken';
 import GetUser from '../../../Hooks/GetUser';
 import LoadingSpinner from '../../../Commons/LoadingSpinner';
-import { ButtonContainer, DashboardHeader2, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
+import { ButtonContainer, DashboardHeader2, DashboardHeaderGroup, DashboardHeaderText, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
 import { useMediaQuery } from '@react-hook/media-query';
 import MobileTable from '../DashboardComponents/MobileTable';
 import DesktopTable from '../DashboardComponents/DesktopTable';
@@ -29,8 +29,9 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const welcomeText = `Hello, ${users?.firstName}`;
   return (
     <>
-      <DashboardHeader2>
-        <AnimatePresence>
+      <DashboardHeaderGroup>
+        <DashboardHeader2>
+          <AnimatePresence>
           {welcomeText.split('').map((char, index) => {
             return (
               <motion.span
@@ -49,6 +50,8 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
           })}
         </AnimatePresence>
       </DashboardHeader2>
+      <DashboardHeaderText isDarkMode={isDarkMode}>Stay on top of your tasks</DashboardHeaderText>
+      </DashboardHeaderGroup>
       {users && users.tasks.length > 0 ? (
         <>
           <Overview users={users} isDarkMode={isDarkMode} />

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-
+import isDarkMode from '../../../Interface/General/isDarkMode';
 const MainContainer = styled.main`
   width: 100%;
   min-height: calc(100vh - 51px); // minus header height
@@ -30,7 +30,23 @@ const MainContent = styled.div`
 const DashboardHeader2 = styled.h2`
   font-size: 2rem;
   font-weight: 600;
-  margin-top: 5rem;
+  margin: 5rem 0 0 0;
+`;
+
+const DashboardHeaderGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+`;
+
+const DashboardHeaderText = styled.p<isDarkMode>`
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+  color: ${(props) => {
+    return props.isDarkMode ? '#fff' : '#B89A55';
+  }};
 `;
 
 const NoTasksContainer = styled.div`
@@ -38,7 +54,6 @@ const NoTasksContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-
 `;
 const ButtonContainer = styled.div`
   width: 20%;
@@ -51,4 +66,13 @@ const NoTasksText = styled.h2`
   font-weight: 600;
 `;
 
-export { MainContainer, MainContent, DashboardHeader2, NoTasksContainer, NoTasksText, ButtonContainer };
+export {
+  MainContainer,
+  MainContent,
+  DashboardHeader2,
+  DashboardHeaderGroup,
+  DashboardHeaderText,
+  NoTasksContainer,
+  NoTasksText,
+  ButtonContainer,
+};
