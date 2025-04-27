@@ -23,6 +23,10 @@ const HeaderLeft = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @media (min-width: 1024px) {
+        left: 5%;
+    }
 `;
 const PageTitle = styled.h1`
     font-size: 1.2rem;
