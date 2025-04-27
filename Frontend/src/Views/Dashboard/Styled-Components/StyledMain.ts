@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { motion } from 'motion/react';
 
 const MainContainer = styled.main`
   width: 100%;
@@ -12,7 +11,7 @@ const MainContainer = styled.main`
   }
 `;
 
-const MainContent = styled(motion.div)<{ isOpen: boolean }>`
+const MainContent = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -21,17 +20,10 @@ const MainContent = styled(motion.div)<{ isOpen: boolean }>`
   flex-direction: column;
 
   @media (min-width: 1024px) {
-    width: ${(props) => {
-      return props.isOpen ? '80%' : '100%';
-    }};
+    width: 100%;
     height: 100%;
     transition: all 0.3s ease-in-out;
     margin-left: auto;
-    transform: translateX(
-      ${(props) => {
-        return props.isOpen ? '0' : '20%';
-      }}
-    );
   }
 `;
 
@@ -41,17 +33,7 @@ const DashboardHeader1 = styled.h1`
   margin-top: 5rem;
 `;
 
-const CardRowContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
 
-  @media (min-width: 1024px) {
-    flex-direction: row;
-  }
-`;
 
 const NoTasksContainer = styled.div`
   width: 100%;
@@ -71,4 +53,4 @@ const NoTasksText = styled.h2`
   font-weight: 600;
 `;
 
-export { MainContainer, MainContent, DashboardHeader1, CardRowContainer, NoTasksContainer, NoTasksText, ButtonContainer };
+export { MainContainer, MainContent, DashboardHeader1, NoTasksContainer, NoTasksText, ButtonContainer };
