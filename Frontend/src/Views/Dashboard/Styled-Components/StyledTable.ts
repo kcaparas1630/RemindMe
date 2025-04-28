@@ -2,7 +2,11 @@ import styled from '@emotion/styled';
 
 // Container to handle the table display
 const TableContainer = styled.div`
-  width: 80%;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    width: 80%;
+  }
 `;
 
 const Table = styled.table`
