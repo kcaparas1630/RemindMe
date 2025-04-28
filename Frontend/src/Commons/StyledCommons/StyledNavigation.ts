@@ -2,10 +2,10 @@ import styled from '@emotion/styled';
 
 export const NavigationContainer = styled.div<{ isDarkMode?: boolean }>`
   position: fixed;
-  bottom: 16px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
+  width: 100%;
   max-width: 600px;
   height: 60px;
   background-color: ${({ isDarkMode }) => {
@@ -18,6 +18,14 @@ export const NavigationContainer = styled.div<{ isDarkMode?: boolean }>`
   align-items: center;
   padding: 0 20px;
   z-index: 1000;
+
+  @media (min-width: 1024px) {
+    width: 100vw;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0 40px;
+  }
 `;
 
 export const NavigationItem = styled.div<{ isActive?: boolean; isDarkMode?: boolean }>`
@@ -40,6 +48,7 @@ export const NavigationItem = styled.div<{ isActive?: boolean; isDarkMode?: bool
   &:hover {
     color: #4CAF50;
   }
+
 `;
 
 export const NavigationLabel = styled.span<{ isActive?: boolean; isDarkMode?: boolean }>`

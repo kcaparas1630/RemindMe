@@ -32,7 +32,7 @@ const Navigation: React.FC<NavigationProps> = ({ isDarkMode }) => {
     { 
       icon: <ListTodo size={24} />, 
       label: 'Tasks', 
-      path: '/main/tasks' 
+      path: '/main/addTasks' 
     },
     { 
       icon: <User size={24} />, 
