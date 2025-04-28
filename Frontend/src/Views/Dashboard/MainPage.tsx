@@ -5,6 +5,7 @@ import GeneralProps from '../../Interface/General/GeneralProps';
 // import Sidebar from '../../Commons/Sidebar';
 import { MainContainer, MainContent } from './Styled-Components/StyledMain';
 import LoadingSpinner from '../../Commons/LoadingSpinner';
+import Navigation from '../../Commons/Navigation';
 // import { SidebarItemType } from '../../Interface/SidebarProps';
 /**
  * this is going to change still.
@@ -52,6 +53,7 @@ const MainPageLayout: FC<GeneralProps> = ({ isDarkMode }) => {
         <Suspense fallback={<LoadingSpinner isDarkMode={isDarkMode} />}>
           <Outlet context={{ isDarkMode }} />
         </Suspense>
+        <Navigation isDarkMode={isDarkMode} />
       </MainContent>
     </MainContainer>
   );
