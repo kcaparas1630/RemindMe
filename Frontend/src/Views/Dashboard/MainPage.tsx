@@ -1,12 +1,11 @@
-import { FC, Suspense, useState } from 'react';
+import { FC, Suspense } from 'react';
 // import Button from '../../Commons/Button';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import GeneralProps from '../../Interface/General/GeneralProps';
-import { LayoutDashboard, PlusCircle } from 'lucide-react';
-import Sidebar from '../../Commons/Sidebar';
+// import Sidebar from '../../Commons/Sidebar';
 import { MainContainer, MainContent } from './Styled-Components/StyledMain';
 import LoadingSpinner from '../../Commons/LoadingSpinner';
-import { SidebarItemType } from '../../Interface/SidebarProps';
+// import { SidebarItemType } from '../../Interface/SidebarProps';
 /**
  * this is going to change still.
  * 
@@ -19,43 +18,37 @@ import { SidebarItemType } from '../../Interface/SidebarProps';
 
 
 const MainPageLayout: FC<GeneralProps> = ({ isDarkMode }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const navigate = useNavigate(); 
-  const sidebarItems: SidebarItemType[] = [
-    {
-      icon: <LayoutDashboard size={20} />,
-      label: 'Dashboard',
-      activePath: 'dashboard',
-      onClick: () => {
-        navigate('dashboard')
-      }
-    },
-    {
-      icon: <PlusCircle size={20} />,
-      label: 'Add Task',
-      activePath: 'addTasks',
-      onClick: () => {
-        navigate('addTasks')
-      }
-    }
-  ];
+  // const [isOpen, setIsOpen] = useState<boolean>(true);
+  // const navigate = useNavigate(); 
+  // const sidebarItems: SidebarItemType[] = [
+  //   {
+  //     icon: <LayoutDashboard size={20} />,
+  //     label: 'Dashboard',
+  //     activePath: 'dashboard',
+  //     onClick: () => {
+  //       navigate('dashboard')
+  //     }
+  //   },
+  //   {
+  //     icon: <PlusCircle size={20} />,
+  //     label: 'Add Task',
+  //     activePath: 'addTasks',
+  //     onClick: () => {
+  //       navigate('addTasks')
+  //     }
+  //   }
+  // ];
 
   
   return (
     <MainContainer>
-      <Sidebar 
+      {/* <Sidebar 
         items={sidebarItems}
         isDarkMode={isDarkMode}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-      />
-      <MainContent
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -100 }}
-        transition={{ duration: 0.5 }}
-        isOpen={isOpen}
-      >
+      /> */}
+      <MainContent>
         <Suspense fallback={<LoadingSpinner isDarkMode={isDarkMode} />}>
           <Outlet context={{ isDarkMode }} />
         </Suspense>

@@ -1,18 +1,17 @@
 import styled from '@emotion/styled';
-import { motion } from 'motion/react';
-
+import isDarkMode from '../../../Interface/General/isDarkMode';
 const MainContainer = styled.main`
   width: 100%;
-  min-height: calc(100vh - 50px); // minus header height
+  min-height: calc(100vh - 51px); // minus header height
   display: flex;
-  padding-bottom: 24px;
+  // padding-bottom: 24px;
 
   @media (min-width: 1024px) {
     padding-bottom: 0;
   }
 `;
 
-const MainContent = styled(motion.div)<{ isOpen: boolean }>`
+const MainContent = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -21,36 +20,33 @@ const MainContent = styled(motion.div)<{ isOpen: boolean }>`
   flex-direction: column;
 
   @media (min-width: 1024px) {
-    width: ${(props) => {
-      return props.isOpen ? '80%' : '100%';
-    }};
+    width: 100%;
     height: 100%;
     transition: all 0.3s ease-in-out;
-    margin-left: auto;
-    transform: translateX(
-      ${(props) => {
-        return props.isOpen ? '0' : '20%';
-      }}
-    );
+    margin-left: 15%;
   }
 `;
 
-const DashboardHeader1 = styled.h1`
+const DashboardHeader2 = styled.h2`
   font-size: 2rem;
   font-weight: 600;
-  margin-top: 5rem;
+  margin: 5rem 0 0 0;
 `;
 
-const CardRowContainer = styled.div`
-  width: 100%;
-  height: 100%;
+const DashboardHeaderGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+`;
 
-  @media (min-width: 1024px) {
-    flex-direction: row;
-  }
+const DashboardHeaderText = styled.p<isDarkMode>`
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+  color: ${(props) => {
+    return props.isDarkMode ? '#fff' : '#B89A55';
+  }};
 `;
 
 const NoTasksContainer = styled.div`
@@ -58,7 +54,6 @@ const NoTasksContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-
 `;
 const ButtonContainer = styled.div`
   width: 20%;
@@ -71,4 +66,13 @@ const NoTasksText = styled.h2`
   font-weight: 600;
 `;
 
-export { MainContainer, MainContent, DashboardHeader1, CardRowContainer, NoTasksContainer, NoTasksText, ButtonContainer };
+export {
+  MainContainer,
+  MainContent,
+  DashboardHeader2,
+  DashboardHeaderGroup,
+  DashboardHeaderText,
+  NoTasksContainer,
+  NoTasksText,
+  ButtonContainer,
+};

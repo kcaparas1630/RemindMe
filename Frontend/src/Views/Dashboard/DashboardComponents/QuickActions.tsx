@@ -1,62 +1,46 @@
 import { FC } from 'react';
-import CardLayout from '../../../Commons/CardLayout';
-import { Plus } from 'lucide-react';
-import {
-  QuickActionsContainer,
-  QuickActionsItem,
-  QuickActionsItemIcon,
-  QuickActionsItemText,
-} from '../Styled-Components/QuickActions';
+import { OverviewContainer, OverviewHeader, QuickActionsButtonContainer, QuickActionsButtonGroup } from '../Styled-Components/StyledOverview';
+import Button from '../../../Commons/Button';
 import isDarkMode from '../../../Interface/General/isDarkMode';
-import { Dispatch, SetStateAction } from 'react';
-import { CardLayoutRightItemButton } from '../../../Commons/StyledCommons/StyledCard';
+import { useNavigate } from 'react-router-dom';
 
-interface QuickActionsProps extends isDarkMode {
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+
+const QuickActions: FC<isDarkMode> = ({ isDarkMode }) => {
+  const navigate = useNavigate();
+
+  const navigateToAddTask = () => {
+    navigate('/main/addTasks');
+  }
+
+  const navigateToCalendar = () => {
+    //eslint-disable-next-line no-console
+    console.log('Calendar'); // TODO: Add calendar functionality
+    // navigate('/main/calendar');
+  }
+
+  const navigateToSettings = () => {
+    //eslint-disable-next-line no-console
+    console.log('Settings'); // TODO: Add settings functionality
+    // navigate('/main/settings');
+  }
+    return (
+        <OverviewContainer>
+            <OverviewHeader isDarkMode={isDarkMode}>Quick Actions</OverviewHeader>
+            <QuickActionsButtonContainer>
+              <QuickActionsButtonGroup>
+                <Button type="button"  isDarkMode={isDarkMode} name="Add Task" handleClick={navigateToAddTask} disabled={false} >
+                    Add Task
+                </Button>
+                <Button type="button" isDarkMode={isDarkMode} name="Calendar" handleClick={navigateToCalendar} disabled={false} >
+                    Calendar
+                </Button>
+                <Button type="button" isDarkMode={isDarkMode} name="Settings" handleClick={navigateToSettings} disabled={false} >
+                    Settings
+                </Button>
+              </QuickActionsButtonGroup>
+            </QuickActionsButtonContainer>
+        </OverviewContainer>
+    )
 }
-const QuickActions: FC<QuickActionsProps> = ({ isDarkMode, setIsModalOpen }) => {
-  const handleAddGoal = () => {
-    setIsModalOpen(true);
-  };
-  const plusIconButton = (
-    <CardLayoutRightItemButton
-      isDarkMode={isDarkMode}
-      type="button"
-      name="Add Quick Action"
-      disabled={false}
-      onClick={handleAddGoal}
-    >
-      <Plus size={24} />
-    </CardLayoutRightItemButton>
-  );
-  return (
-    <CardLayout
-      title="Quick Actions"
-      isDarkMode={isDarkMode}
-      rightItem={plusIconButton}
-    >
-      <QuickActionsContainer>
-        <QuickActionsItem isDarkMode={isDarkMode}>
-          <QuickActionsItemText>Add Task</QuickActionsItemText>
-          <QuickActionsItemIcon>
-            <Plus />
-          </QuickActionsItemIcon>
-        </QuickActionsItem>
-        <QuickActionsItem isDarkMode={isDarkMode}>
-          <QuickActionsItemText>Add Task</QuickActionsItemText>
-          <QuickActionsItemIcon>
-            <Plus />
-          </QuickActionsItemIcon>
-        </QuickActionsItem>
-        <QuickActionsItem isDarkMode={isDarkMode}>
-          <QuickActionsItemText>Add Task</QuickActionsItemText>
-          <QuickActionsItemIcon>
-            <Plus />
-          </QuickActionsItemIcon>
-        </QuickActionsItem>
-      </QuickActionsContainer>
-    </CardLayout>
-  );
-};
 
 export default QuickActions;

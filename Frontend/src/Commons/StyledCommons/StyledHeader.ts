@@ -15,6 +15,25 @@ const HeaderContainer = styled.header<{ isDarkMode: boolean }>`
   border-bottom: 1px solid #ced4da;
 `;
 
+const HeaderLeft = styled.div`
+    position: absolute;
+    left: 12%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (min-width: 1024px) {
+        left: 5%;
+    }
+`;
+const PageTitle = styled.h1`
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+`;
+
 const ThemeToggle = styled.div`
   position: absolute;
   right: 20px;
@@ -26,4 +45,4 @@ const ThemeToggle = styled.div`
   cursor: pointer;
 `;
 
-export { HeaderContainer, ThemeToggle };
+export { HeaderContainer, HeaderLeft, PageTitle, ThemeToggle };

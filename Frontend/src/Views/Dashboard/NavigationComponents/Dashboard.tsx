@@ -1,26 +1,24 @@
 import GeneralProps from '../../../Interface/General/GeneralProps';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import getUserFromToken from '../../../Hooks/GetUserNameFromToken';
 import GetUser from '../../../Hooks/GetUser';
 import LoadingSpinner from '../../../Commons/LoadingSpinner';
-import { ButtonContainer, CardRowContainer, DashboardHeader1, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
+import { ButtonContainer, DashboardHeader2, DashboardHeaderGroup, DashboardHeaderText, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
 import { useMediaQuery } from '@react-hook/media-query';
 import MobileTable from '../DashboardComponents/MobileTable';
 import DesktopTable from '../DashboardComponents/DesktopTable';
-import CircularProgressContainer from '../DashboardComponents/CircularProgressContainer';
-import QuickActions from '../DashboardComponents/QuickActions';
 import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
-import Goals from '../DashboardComponents/Goals';
 import Button from '../../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
-import Modal from '../../../Commons/Modal';
+import Overview from '../DashboardComponents/Overview';
+import QuickActions from '../DashboardComponents/QuickActions';
+import Goals from '../DashboardComponents/Goals';
 const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const navigate = useNavigate();
   const { userName, token } = getUserFromToken();
   const { users, isPending, isError, error } = GetUser(userName, token);
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   if (isPending) {
     return <LoadingSpinner isDarkMode={isDarkMode} />;
@@ -32,12 +30,9 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const welcomeText = `Hello, ${users?.firstName}`;
   return (
     <>
-      <Modal isOpen={isModalOpen} isDarkMode={isDarkMode} setIsOpen={setIsModalOpen}>
-        <h2>Hello, {users?.firstName}</h2>
-        <h3>What is your goal for this week?</h3>
-      </Modal>
-      <DashboardHeader1>
-        <AnimatePresence>
+      <DashboardHeaderGroup>
+        <DashboardHeader2>
+          <AnimatePresence>
           {welcomeText.split('').map((char, index) => {
             return (
               <motion.span
@@ -55,15 +50,15 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
             );
           })}
         </AnimatePresence>
-      </DashboardHeader1>
+      </DashboardHeader2>
+      <DashboardHeaderText isDarkMode={isDarkMode}>Stay on top of your tasks</DashboardHeaderText>
+      </DashboardHeaderGroup>
       {users && users.tasks.length > 0 ? (
         <>
-          <CardRowContainer>
-            <CircularProgressContainer isDarkMode={isDarkMode} users={users} />
-            <Goals isDarkMode={isDarkMode} setIsModalOpen={setIsModalOpen} />
-            <QuickActions isDarkMode={isDarkMode} setIsModalOpen={setIsModalOpen} />
-          </CardRowContainer>
-          
+          <Overview users={users} isDarkMode={isDarkMode} />
+          <Goals />
+          <QuickActions isDarkMode={isDarkMode} />
+          <h3>Tasks</h3>
           {isMobile ? (
             <MobileTable userTasks={users.tasks} />
           ) : (
