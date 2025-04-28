@@ -48,4 +48,17 @@ const Styled404ButtonContainer = styled.div`
     justify-content: center;
 `;
 
-export { Styled404Container, Styled404ImageContainer, Styled404Image, Styled404HeaderText, Styled404ContentText, Styled404TextContainer, Styled404ButtonContainer };
+const StyledUnderline = styled.div`
+    width: 5%;
+    height: 1px;
+    background-color: #ddd;
+`;
+const StyledErrorContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 12px;
+`;
+
+export { Styled404Container, Styled404ImageContainer, Styled404Image, Styled404HeaderText, Styled404ContentText, Styled404TextContainer, Styled404ButtonContainer, StyledUnderline, StyledErrorContainer };

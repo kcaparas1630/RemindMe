@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Styled404Container, Styled404ImageContainer, Styled404Image, Styled404HeaderText, Styled404ContentText, Styled404TextContainer, Styled404ButtonContainer } from './Styled-Components/Styled404';
+import { Styled404Container, Styled404ImageContainer, Styled404Image, Styled404HeaderText, Styled404ContentText, Styled404TextContainer, Styled404ButtonContainer, StyledErrorContainer, StyledUnderline } from './Styled-Components/Styled404';
 import isDarkMode from '../../Interface/General/isDarkMode';
 import coffeeholding from '../../../assets/coffee holding.svg';
 import Button from '../../Commons/Button';
@@ -16,7 +16,10 @@ const NotFoundPage: FC<isDarkMode> = ({ isDarkMode }) => {
                 <Styled404Image src={coffeeholding} alt="404 coffee holding" />
             </Styled404ImageContainer>
             <Styled404TextContainer>
-                <Styled404ContentText>Error 404</Styled404ContentText>
+                <StyledErrorContainer>
+                    <Styled404ContentText>Error 404</Styled404ContentText>
+                    <StyledUnderline />
+                </StyledErrorContainer>
                 <Styled404HeaderText>there is {isDarkMode ? 'dark' : 'light'} here too.</Styled404HeaderText>
                 <Styled404ContentText>The page you are looking for does not exist. It might have been moved or deleted.</Styled404ContentText>
                 <Styled404ButtonContainer>
