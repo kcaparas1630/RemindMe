@@ -26,6 +26,10 @@ const AddTasks = lazy(() => {
   return import('./Views/Dashboard/NavigationComponents/AddTasks');
 });
 
+const NotFoundPage = lazy(() => {
+  return import('./Views/404/404');
+})
+
 
 const AnimatedRoutes = ({
   isDarkMode,
@@ -70,6 +74,7 @@ const AnimatedRoutes = ({
             />
           </Route>
         </Route>
+        <Route path="*" element={<NotFoundPage isDarkMode={isDarkMode} />} />
       </Routes>
     </AnimatePresence>
   );
