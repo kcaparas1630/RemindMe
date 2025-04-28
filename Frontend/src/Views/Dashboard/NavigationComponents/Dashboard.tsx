@@ -12,7 +12,8 @@ import { AnimatePresence } from 'framer-motion';
 import Button from '../../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
 import Overview from '../DashboardComponents/Overview';
-
+import QuickActions from '../DashboardComponents/QuickActions';
+import Goals from '../DashboardComponents/Goals';
 const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const navigate = useNavigate();
   const { userName, token } = getUserFromToken();
@@ -55,6 +56,8 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
       {users && users.tasks.length > 0 ? (
         <>
           <Overview users={users} isDarkMode={isDarkMode} />
+          <Goals />
+          <QuickActions isDarkMode={isDarkMode} />
           <h3>Tasks</h3>
           {isMobile ? (
             <MobileTable userTasks={users.tasks} />

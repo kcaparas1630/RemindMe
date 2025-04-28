@@ -3,9 +3,10 @@ import isDarkMode from '../../../Interface/General/isDarkMode';
 
 const OverviewContainer = styled.div`
   width: 100%;
-  height: 20vh;
+  height: 30vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 1.5rem;
 
   @media (min-width: 1024px) {
@@ -62,6 +63,29 @@ const OverviewItemContent = styled.p<isDarkMode>`
   margin: 0;
 `;
 
+const QuickActionsButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  @media (min-width: 1024px) {
+    width: 70%;
+    align-items: center;
+  }
+`;
+
+const QuickActionsButtonGroup = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  @media (min-width: 1024px) {
+    width: 50%;
+  }
+`;
+
 export {
   OverviewContainer,
   OverviewHeader,
@@ -69,4 +93,6 @@ export {
   OverviewItem,
   OverviewItemHeader,
   OverviewItemContent,
+  QuickActionsButtonContainer,
+  QuickActionsButtonGroup,
 };

@@ -23,7 +23,7 @@ const MainContent = styled.div`
     width: 100%;
     height: 100%;
     transition: all 0.3s ease-in-out;
-    margin-left: auto;
+    margin-left: 15%;
   }
 `;
 
