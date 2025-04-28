@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import Overview from '../DashboardComponents/Overview';
 import QuickActions from '../DashboardComponents/QuickActions';
 import Goals from '../DashboardComponents/Goals';
+import { OverviewHeader } from '../Styled-Components/StyledOverview';
 const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const navigate = useNavigate();
   const { userName, token } = getUserFromToken();
@@ -58,7 +59,7 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
           <Overview users={users} isDarkMode={isDarkMode} />
           <Goals />
           <QuickActions isDarkMode={isDarkMode} />
-          <h3>Tasks</h3>
+          <OverviewHeader isDarkMode={isDarkMode}>Tasks</OverviewHeader>
           {isMobile ? (
             <MobileTable userTasks={users.tasks} />
           ) : (
