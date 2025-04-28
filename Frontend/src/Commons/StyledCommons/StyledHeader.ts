@@ -9,29 +9,28 @@ const HeaderContainer = styled.header<{ isDarkMode: boolean }>`
   justify-content: flex-end;
   align-items: center;
   background-color: ${(props) => {
-        return props.isDarkMode ? '#212529' : '#F8F9FA'}
-    };
+    return props.isDarkMode ? '#212529' : '#F8F9FA';
+  }};
   z-index: 5;
   border-bottom: 1px solid #ced4da;
 `;
 
 const HeaderLeft = styled.div`
-    position: absolute;
-    left: 12%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: absolute;
+  left: 12%;
+  width: 150px;
+  height: 40px;
+  display: flex;
+  align-items: center;
 
-    @media (min-width: 1024px) {
-        left: 5%;
-    }
+  @media (min-width: 1024px) {
+    left: 5%;
+  }
 `;
 const PageTitle = styled.h1`
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
 `;
 
 const ThemeToggle = styled.div`
