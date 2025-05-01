@@ -14,13 +14,14 @@ const MainContent = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  padding: 0 24px 80px 24px;
+  padding: 0 12px 80px 12px;
   gap: 24px;
   flex-direction: column;
 
   @media (min-width: 1024px) {
     width: 100%;
     height: 100%;
+    padding: 0 24px 80px 24px;
     transition: all 0.3s ease-in-out;
     margin-left: 15%;
   }
