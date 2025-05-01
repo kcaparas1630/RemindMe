@@ -88,4 +88,11 @@ const TableCellPriority = styled.div<{ priority: 'LOW' | 'MEDIUM' | 'HIGH' }>`
   }
 `;
 
-export { TableContainer, Table, TableHead, TableBody, TableRow, TableHeader, TableCell, TableCellPriority };
+const TableCellActionsGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+`;
+
+export { TableContainer, Table, TableHead, TableBody, TableRow, TableHeader, TableCell, TableCellPriority, TableCellActionsGroup };
