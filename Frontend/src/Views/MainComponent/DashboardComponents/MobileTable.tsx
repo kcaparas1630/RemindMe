@@ -1,35 +1,29 @@
 import { FC } from 'react';
-import Table from '../../../Commons/Table';
 import {TableRow, TableHeader, TableCell, TableCellPriority } from '../Styled-Components/StyledTable';
 import TaskInterface from '../../../Interface/TaskInterface';
-
-interface DesktopTableProps {
+import Table from '../../../Commons/Table.tsx';
+interface MobileTableProps {
     userTasks: TaskInterface[] | undefined;
 }
-const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
+const MobileTable: FC<MobileTableProps> = ({ userTasks }) => {
   const headerContent = () => {
     return (
       <>
         <TableHeader>Task Name</TableHeader>
         <TableHeader>Priority</TableHeader>
-        <TableHeader>Progress</TableHeader>
         <TableHeader>Due Date</TableHeader>
       </>
-    )
-  }
+    );
+  };
 
   const bodyContent = () => {
     return (
       <>
-        {userTasks &&
-          userTasks.map((task) => {
+      {userTasks && userTasks.map((task) => {
             return (
               <TableRow key={task.id}>
                 <TableCell>{task.taskName}</TableCell>
-                <TableCell>
-                  <TableCellPriority priority={task.taskPriority as 'LOW' | 'MEDIUM' | 'HIGH'}>{task.taskPriority}</TableCellPriority>
-                </TableCell>
-                <TableCell>{task.taskProgress}</TableCell>
+                <TableCell><TableCellPriority priority={task.taskPriority as 'LOW' | 'MEDIUM' | 'HIGH'}>{task.taskPriority}</TableCellPriority></TableCell>
                 <TableCell>
                   {new Date(task.taskDueDate).toLocaleDateString('en-US', {
                     year: 'numeric',
@@ -38,8 +32,9 @@ const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
                   })}
                 </TableCell>
               </TableRow>
-            )
+            );
           })}
+
       </>
     );
   };
@@ -49,4 +44,4 @@ const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
   );
 };
 
-export default DesktopTable;
+export default MobileTable;

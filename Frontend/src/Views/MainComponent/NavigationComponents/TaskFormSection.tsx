@@ -1,23 +1,23 @@
 import { FC } from 'react';
-import InputField from '../../Commons/InputFields';
-import Button from '../../Commons/Button';
+import InputField from '../../../Commons/InputFields';
+import Button from '../../../Commons/Button';
 import axios from 'axios';
-import TaskFormProps from '../../Interface/TaskFormProps';
-import taskValidationSchema from './Schema/TaskSchema';
+import TaskFormProps from '../../../Interface/TaskFormProps';
+import taskValidationSchema from '../Schema/TaskSchema';
 import {
   FormContainer,
   ErrorMessage,
   InputWrapper,
   StyledForm,
-} from '../Styled-Components/StyledForms';
-import SelectField from '../../Commons/SelectField';
-import { TaskPriorityOptions, TaskOptions } from '../../Constants/TaskOptions';
-import DatePickerField from '../../Commons/DatePicker';
+} from '../../Styled-Components/StyledForms';
+import SelectField from '../../../Commons/SelectField';
+import { TaskPriorityOptions, TaskOptions } from '../../../Constants/TaskOptions';
+import DatePickerField from '../../../Commons/DatePicker';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
-import ApiErrorResponse from '../../Interface/ErrorResponse';
-import DashboardProps from '../../Interface/DashboardProps';
+import ApiErrorResponse from '../../../Interface/ErrorResponse';
+import DashboardProps from '../../../Interface/DashboardProps';
 import { toast } from 'react-toastify';
 
 const addTasks = async (credentials: TaskFormProps) => {

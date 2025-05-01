@@ -17,13 +17,13 @@ import Header from './Commons/Headers';
 const queryClient = new QueryClient();
 
 const MainPageLayout = lazy(() => {
-  return import('./Views/Dashboard/MainPage');
+  return import('./Views/MainComponent/MainPage');
 });
 const Dashboard = lazy(() => {
-  return import('./Views/Dashboard/NavigationComponents/Dashboard');
+  return import('./Views/MainComponent/DashboardComponents/Dashboard');
 });
 const AddTasks = lazy(() => {
-  return import('./Views/Dashboard/NavigationComponents/AddTasks');
+  return import('./Views/MainComponent/NavigationComponents/AddTasks');
 });
 
 const NotFoundPage = lazy(() => {

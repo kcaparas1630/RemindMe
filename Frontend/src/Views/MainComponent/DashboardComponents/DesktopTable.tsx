@@ -1,29 +1,35 @@
 import { FC } from 'react';
+import Table from '../../../Commons/Table.tsx';
 import {TableRow, TableHeader, TableCell, TableCellPriority } from '../Styled-Components/StyledTable';
 import TaskInterface from '../../../Interface/TaskInterface';
-import Table from '../../../Commons/Table';
-interface MobileTableProps {
+
+interface DesktopTableProps {
     userTasks: TaskInterface[] | undefined;
 }
-const MobileTable: FC<MobileTableProps> = ({ userTasks }) => {
+const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
   const headerContent = () => {
     return (
       <>
         <TableHeader>Task Name</TableHeader>
         <TableHeader>Priority</TableHeader>
+        <TableHeader>Progress</TableHeader>
         <TableHeader>Due Date</TableHeader>
       </>
-    );
-  };
+    )
+  }
 
   const bodyContent = () => {
     return (
       <>
-      {userTasks && userTasks.map((task) => {
+        {userTasks &&
+          userTasks.map((task) => {
             return (
               <TableRow key={task.id}>
                 <TableCell>{task.taskName}</TableCell>
-                <TableCell><TableCellPriority priority={task.taskPriority as 'LOW' | 'MEDIUM' | 'HIGH'}>{task.taskPriority}</TableCellPriority></TableCell>
+                <TableCell>
+                  <TableCellPriority priority={task.taskPriority as 'LOW' | 'MEDIUM' | 'HIGH'}>{task.taskPriority}</TableCellPriority>
+                </TableCell>
+                <TableCell>{task.taskProgress}</TableCell>
                 <TableCell>
                   {new Date(task.taskDueDate).toLocaleDateString('en-US', {
                     year: 'numeric',
@@ -32,9 +38,8 @@ const MobileTable: FC<MobileTableProps> = ({ userTasks }) => {
                   })}
                 </TableCell>
               </TableRow>
-            );
+            )
           })}
-
       </>
     );
   };
@@ -44,4 +49,4 @@ const MobileTable: FC<MobileTableProps> = ({ userTasks }) => {
   );
 };
 
-export default MobileTable;
+export default DesktopTable;
