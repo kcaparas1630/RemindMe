@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { TableContainer, Table as StyledTable, TableHead, TableRow, TableBody } from '../Views/MainComponent/Styled-Components/StyledTable';
+import { TableContainer, Table as StyledTable, TableHead, TableRow, TableBody } from './StyledCommons/StyledTable';
 
 interface TableProps {
     headerContent?: ReactNode;

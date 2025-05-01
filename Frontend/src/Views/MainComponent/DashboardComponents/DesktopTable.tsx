@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Table from '../../../Commons/Table.tsx';
-import {TableRow, TableHeader, TableCell, TableCellPriority } from '../Styled-Components/StyledTable';
+import {TableRow, TableHeader, TableCell, TableCellPriority } from '../../../Commons/StyledCommons/StyledTable.ts';
 import TaskInterface from '../../../Interface/TaskInterface';
 
 interface DesktopTableProps {
