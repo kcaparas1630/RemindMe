@@ -5,9 +5,9 @@ import {
   TableCell,
   TableCellPriority,
   TableCellActionsGroup,
-} from '../../../Commons/StyledCommons/StyledTable.ts';
+} from '../../../Commons/StyledCommons/StyledDesktopTable.ts';
 import TaskInterface from '../../../Interface/TaskInterface';
-import Table from '../../../Commons/Table.tsx';
+import DesktopTable from '../../../Commons/DesktopTable.tsx';
 import Button from '../../../Commons/Button.tsx';
 import { EditIcon, TrashIcon } from 'lucide-react';
 interface MobileTableProps {
@@ -73,7 +73,7 @@ const MobileTable: FC<MobileTableProps> = ({ userTasks }) => {
   };
 
   return (
-    <Table
+    <DesktopTable
       headerContent={headerContent()}
       bodyContent={bodyContent()}
     />

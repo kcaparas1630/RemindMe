@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import {TableRow, TableHeader, TableCell, TableCellPriority } from '../../../Commons/StyledCommons/StyledDesktopTable.ts';
+import {TableRow, TableHeader, TableCell, TableCellPriority } from '../Styled-Components/StyledTable';
 import TaskInterface from '../../../Interface/TaskInterface';
-import DesktopTable from '../../../Commons/DesktopTable.tsx';
+import Table from '../../../Commons/DesktopTable';
 interface MobileTableProps {
     userTasks: TaskInterface[] | undefined;
 }
@@ -40,7 +40,7 @@ const MobileTable: FC<MobileTableProps> = ({ userTasks }) => {
   };
 
   return (
-    <DesktopTable headerContent={headerContent()} bodyContent={bodyContent()} />
+    <Table headerContent={headerContent()} bodyContent={bodyContent()} />
   );
 };
 

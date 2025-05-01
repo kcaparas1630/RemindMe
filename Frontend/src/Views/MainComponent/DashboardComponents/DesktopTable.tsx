@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import Table from '../../../Commons/Table.tsx';
-import {TableRow, TableHeader, TableCell, TableCellPriority } from '../../../Commons/StyledCommons/StyledTable.ts';
+import DesktopTable from '../../../Commons/DesktopTable.tsx';
+import {TableRow, TableHeader, TableCell, TableCellPriority } from '../../../Commons/StyledCommons/StyledDesktopTable.ts';
 import TaskInterface from '../../../Interface/TaskInterface';
 
 interface DesktopTableProps {
     userTasks: TaskInterface[] | undefined;
 }
-const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
+const DesktopTableComponent: FC<DesktopTableProps> = ({ userTasks }) => {
   const headerContent = () => {
     return (
       <>
@@ -45,8 +45,8 @@ const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
   };
 
   return (
-    <Table headerContent={headerContent()} bodyContent={bodyContent()} />
+    <DesktopTable headerContent={headerContent()} bodyContent={bodyContent()} />
   );
 };
 
-export default DesktopTable;
+export default DesktopTableComponent;

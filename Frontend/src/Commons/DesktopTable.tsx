@@ -1,15 +1,15 @@
 import { FC, ReactNode } from 'react';
-import { TableContainer, Table as StyledTable, TableHead, TableRow, TableBody } from './StyledCommons/StyledTable';
+import { TableContainer, Table as StyledTable, TableHead, TableRow, TableBody } from './StyledCommons/StyledDesktopTable';
 
-interface TableProps {
+interface DesktopTableProps {
     headerContent?: ReactNode;
     bodyContent?: ReactNode;
 }
 
-const Table: FC<TableProps> = ({ headerContent, bodyContent, ...props }) => {
+const DesktopTable: FC<DesktopTableProps> = ({ headerContent, bodyContent }) => {
     return (
         <TableContainer>
-            <StyledTable {...props}>
+            <StyledTable>
                 <TableHead>
                     <TableRow>
                         {headerContent}
@@ -23,4 +23,4 @@ const Table: FC<TableProps> = ({ headerContent, bodyContent, ...props }) => {
     );
 };
 
-export default Table;
+export default DesktopTable;

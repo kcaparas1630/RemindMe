@@ -6,7 +6,7 @@ import TaskFormSection from './TaskFormSection';
 import getUserFromToken from '../../../Hooks/GetUserNameFromToken';
 import TabButton from '../../../Commons/TabButton';
 import { TaskNavigation } from '../Styled-Components/StyledTasks';
-import MobileTable from './MobileTable';
+import MobileTableComponent from '../../../Commons/MobileTableComponent';
 import GetUser from '../../../Hooks/GetUser';
 import LoadingSpinner from '../../../Commons/LoadingSpinner';
 
@@ -36,7 +36,7 @@ const AddTasks: FC<GeneralProps> = ({ isDarkMode }) => {
         <TabButton id="tasks-list" label="Task List" isActive={activeTab === 'tasks-list'} controls="tasks-list-panel" onClick={() => {handleTabClick('tasks-list')}} isDarkMode={isDarkMode} />
         <TabButton id="add-task" label="Add Task" isActive={activeTab === 'add-task'} controls="add-tasks-panel" onClick={() => {handleTabClick('add-task')}} isDarkMode={isDarkMode} />
       </TaskNavigation>
-      {activeTab === 'tasks-list' && <MobileTable userTasks={users?.tasks} />}
+      {activeTab === 'tasks-list' && <MobileTableComponent />}
       {activeTab === 'add-task' && <TaskFormSection userName={userName} queryClient={queryClient} isDarkMode={isDarkMode} />}
     </>
   );
