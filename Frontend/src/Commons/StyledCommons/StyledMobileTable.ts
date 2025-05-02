@@ -4,6 +4,9 @@ const MobileTableContainer = styled.div`
   width: 100%;
   height: 100%;
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 const DataRow = styled.div`
@@ -22,7 +25,7 @@ const DataCellHeader = styled.h3`
   margin: 0;
 `;
 
-const DataCell = styled.p`
+const DataCell = styled.div`
   font-size: 1.2rem;
   font-weight: 400;
   text-align: right;
