@@ -36,7 +36,7 @@ const AddTasks: FC<GeneralProps> = ({ isDarkMode }) => {
         <TabButton id="tasks-list" label="Task List" isActive={activeTab === 'tasks-list'} controls="tasks-list-panel" onClick={() => {handleTabClick('tasks-list')}} isDarkMode={isDarkMode} />
         <TabButton id="add-task" label="Add Task" isActive={activeTab === 'add-task'} controls="add-tasks-panel" onClick={() => {handleTabClick('add-task')}} isDarkMode={isDarkMode} />
       </TaskNavigation>
-      {activeTab === 'tasks-list' && <MobileTable userTasks={users?.tasks} isDarkMode={isDarkMode} />}
+      {activeTab === 'tasks-list' && <MobileTable userTasks={users?.tasks} isDarkMode={isDarkMode} userName={userName} />}
       {activeTab === 'add-task' && <TaskFormSection userName={userName} queryClient={queryClient} isDarkMode={isDarkMode} />}
     </>
   );
