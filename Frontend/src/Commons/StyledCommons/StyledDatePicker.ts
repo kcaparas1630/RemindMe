@@ -19,8 +19,7 @@ const DatePickerWrapper = styled.div<{ isDarkMode: boolean }>`
     outline: none;
     border: 1px solid gray;
     border-radius: 5px;
-    padding: 2rem 0;
-    padding-left: 3rem !important;
+    padding-left: 2.5rem !important;
     color: gray;
     background-color: ${(props) => {
       return props.isDarkMode ? '#212529' : '#F8F9FA';

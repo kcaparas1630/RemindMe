@@ -3,7 +3,7 @@ import { FC, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import GeneralProps from '../../Interface/General/GeneralProps';
 // import Sidebar from '../../Commons/Sidebar';
-import { MainContainer, MainContent } from '../MainComponent/Styled-Components/StyledMain';
+import { MainContainer, MainContent } from './Styled-Components/StyledMain';
 import LoadingSpinner from '../../Commons/LoadingSpinner';
 import Navigation from '../../Commons/Navigation';
 // import { SidebarItemType } from '../../Interface/SidebarProps';

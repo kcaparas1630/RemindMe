@@ -1,24 +1,28 @@
 import { FC } from 'react';
-import { TableContainer, Table, TableHead, TableRow, TableHeader, TableCell, TableBody, TableCellPriority } from '../Styled-Components/StyledTable';
+import DesktopTable from '../../../Commons/DesktopTable.tsx';
+import {TableRow, TableHeader, TableCell, TableCellPriority } from '../../../Commons/StyledCommons/StyledDesktopTable.ts';
 import TaskInterface from '../../../Interface/TaskInterface';
 
 interface DesktopTableProps {
     userTasks: TaskInterface[] | undefined;
 }
-const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
-  return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableHeader>Task Name</TableHeader>
-            <TableHeader>Priority</TableHeader>
-            <TableHeader>Progress</TableHeader>
-            <TableHeader>Due Date</TableHeader>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {userTasks && userTasks.map((task) => {
+const DesktopTableComponent: FC<DesktopTableProps> = ({ userTasks }) => {
+  const headerContent = () => {
+    return (
+      <>
+        <TableHeader>Task Name</TableHeader>
+        <TableHeader>Priority</TableHeader>
+        <TableHeader>Progress</TableHeader>
+        <TableHeader>Due Date</TableHeader>
+      </>
+    )
+  }
+
+  const bodyContent = () => {
+    return (
+      <>
+        {userTasks &&
+          userTasks.map((task) => {
             return (
               <TableRow key={task.id}>
                 <TableCell>{task.taskName}</TableCell>
@@ -34,12 +38,15 @@ const DesktopTable: FC<DesktopTableProps> = ({ userTasks }) => {
                   })}
                 </TableCell>
               </TableRow>
-            );
+            )
           })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+      </>
+    );
+  };
+
+  return (
+    <DesktopTable headerContent={headerContent()} bodyContent={bodyContent()} />
   );
 };
 
-export default DesktopTable;
+export default DesktopTableComponent;

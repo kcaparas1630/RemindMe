@@ -13,7 +13,7 @@ import { useLocation } from 'react-router-dom';
 const Header: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   const pathToTitle: Record<string, string> = {
     '/main/dashboard': 'Dashboard',
-    '/main/addTasks': 'Add Tasks',
+    '/main/addTasks': 'Tasks',
   }
   const location = useLocation();
   const pageTitle = pathToTitle[location.pathname];
@@ -21,7 +21,6 @@ const Header: FC<GeneralProps> = ({ isDarkMode, toggleTheme }) => {
   return (
     <HeaderContainer isDarkMode={isDarkMode}>
       <HeaderLeft>
-        {/** This will be dynamic later on. Extract page title from the route. */}
         <PageTitle>{pageTitle}</PageTitle>
       </HeaderLeft>
       <ThemeToggle onClick={toggleTheme}>

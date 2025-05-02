@@ -24,7 +24,7 @@ const HeaderLeft = styled.div`
   align-items: center;
 
   @media (min-width: 1024px) {
-    left: 5%;
+    left: 3%;
   }
 `;
 const PageTitle = styled.h1`
