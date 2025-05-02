@@ -1,20 +1,16 @@
 import { FC, ReactNode } from 'react';
-import { MobileTableContainer, MobileTable, MobileTableHead, MobileTableBody, MobileTableRow, MobileTableCell, MobileTableCellHeader } from './StyledCommons/StyledMobileTable';
+import { MobileTableContainer, DataRow } from './StyledCommons/StyledMobileTable';
 
 interface MobileTableProps {
-    headerContent?: ReactNode;
-    bodyContent?: ReactNode;
+    content: ReactNode
 }
 
-const MobileTableComponent: FC = () => {
+const MobileTableComponent: FC<MobileTableProps> = ({ content }) => {
     return (
         <MobileTableContainer>
-            <MobileTable>
-                <MobileTableRow>
-                    <MobileTableCellHeader>Task Name</MobileTableCellHeader>
-                    <MobileTableCell>Something</MobileTableCell>
-                </MobileTableRow>
-            </MobileTable>
+            <DataRow>
+                {content}
+            </DataRow>
         </MobileTableContainer>
     )
 }

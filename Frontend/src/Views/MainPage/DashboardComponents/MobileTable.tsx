@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import {TableRow, TableHeader, TableCell, TableCellPriority } from '../Styled-Components/StyledTable';
+import {TableRow, TableHeader, TableCell, TableCellPriority } from '../../../Commons/StyledCommons/StyledDesktopTable';
 import TaskInterface from '../../../Interface/TaskInterface';
 import Table from '../../../Commons/DesktopTable';
 interface MobileTableProps {

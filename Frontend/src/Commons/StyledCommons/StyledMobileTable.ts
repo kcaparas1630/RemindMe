@@ -2,39 +2,36 @@ import styled from '@emotion/styled';
 
 const MobileTableContainer = styled.div`
   width: 100%;
+  height: 100%;
   margin-top: 10px;
 `;
 
-const MobileTable = styled.table`
+const DataRow = styled.div`
+  display: flex;
   width: 100%;
-`;
+  padding: 10px 0;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8rem;
+`
 
-const MobileTableHead = styled.thead`
-  display: table-header-group;
-`;
-
-const MobileTableBody = styled.tbody`
-  width: 100%;
-`;
-
-const MobileTableRow = styled.tr`
-  display: table-row;
-  border: 1px solid #ddd;
-`;
-
-const MobileTableCell = styled.td`
-  display: table-cell;
-  text-align: right;
-`;
-
-const MobileTableCellHeader = styled.th`
+const DataCellHeader = styled.h3`
+  font-size: 1.2rem;
+  font-weight: 600;
   text-align: left;
-  font-weight: bold;
-  vertical-align: middle;
-
-  @media (min-width: 769px) {
-    display: table-cell;
-  }
+  margin: 0;
 `;
 
-export { MobileTableContainer, MobileTable, MobileTableHead, MobileTableBody, MobileTableRow, MobileTableCell, MobileTableCellHeader };
+const DataCell = styled.p`
+  font-size: 1.2rem;
+  font-weight: 400;
+  text-align: right;
+  margin: 0;
+`;
+
+const DataCellActions = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+export { MobileTableContainer, DataRow, DataCellHeader, DataCell, DataCellActions };
