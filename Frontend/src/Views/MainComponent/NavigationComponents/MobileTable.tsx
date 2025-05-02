@@ -6,6 +6,7 @@ import {
   DataCellHeader,
   DataCell,
   DataCellActions,
+  MobileDivider
 } from '../../../Commons/StyledCommons/StyledMobileTable';
 import { TableCellPriority } from '../../../Commons/StyledCommons/StyledDesktopTable.ts';
 import Button from '../../../Commons/Button.tsx';
@@ -42,7 +43,7 @@ const MobileTable: FC<MobileTableProps> = ({ userTasks, isDarkMode, userName }) 
     return (
       <>
         {userTasks &&
-          userTasks.map((task) => {
+          userTasks.map((task, index) => {
             return (
               <div key={task.id}>
                 {editingTaskId === task.id ? (
@@ -99,6 +100,7 @@ const MobileTable: FC<MobileTableProps> = ({ userTasks, isDarkMode, userName }) 
                     </DataRow>
                   </>
                 )}
+                {index !== userTasks.length - 1 && <MobileDivider />}
               </div>
             );
           })}

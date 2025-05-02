@@ -9,6 +9,12 @@ const MobileTableContainer = styled.div`
   gap: 1rem;
 `;
 
+const MobileDivider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
+`;
+
 const DataRow = styled.div`
   display: flex;
   width: 100%;
@@ -37,4 +43,4 @@ const DataCellActions = styled.div`
   gap: 1rem;
 `;
 
-export { MobileTableContainer, DataRow, DataCellHeader, DataCell, DataCellActions };
+export { MobileTableContainer, DataRow, DataCellHeader, DataCell, DataCellActions, MobileDivider };
