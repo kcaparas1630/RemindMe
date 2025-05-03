@@ -7,17 +7,18 @@ const InputWrapper = styled.div`
 `;
 
 const StyledInput = styled.input<isDarkMode>`
+  width: 100%;
+  max-width: 264px;
   font-size: 1rem;
   outline: none;
   border: 1px solid gray;
   border-radius: 5px;
-  padding: 1rem 0;
+  padding: 1rem;
   color: gray;
   background-color: ${(props) => {
     return props.isDarkMode ? '#212529' : '#F8F9FA';
   }};
   transition: 0.1s ease-out;
-  width: 100%;
 
   &:focus {
     border-color: ${(props) => {
@@ -46,6 +47,10 @@ const StyledInput = styled.input<isDarkMode>`
 
   &:not(:focus)::placeholder {
     opacity: 0;
+  }
+
+  @media (min-width: 1024px) {
+    max-width: 230px; // no one will know :) and don't ask me why.
   }
 `;
 

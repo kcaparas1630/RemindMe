@@ -2,12 +2,12 @@ import styled from '@emotion/styled';
 import isDarkMode from '../../Interface/General/isDarkMode';
 
 const FormContainer = styled.div<isDarkMode>`
-  label: LoginFormContainer;
+  label: FormContainer;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 16px;
+  padding: 12px 16px;
   width: 90%;
   max-width: 300px;
   color: ${(props) => {

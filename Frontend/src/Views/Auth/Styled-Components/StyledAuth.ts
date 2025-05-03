@@ -6,7 +6,7 @@ const Container = styled.section`
   label: ContainerWrapper;
   display: flex;
   width: 100%;
-  height: calc(100vh - 52px);
+  min-height: calc(100vh - 51px);
   position: relative;
   flex-direction: column;
   justify-content: center;
@@ -94,7 +94,7 @@ const FormHolderContainer = styled(motion.div)`
 `;
 
 const FormHeader1 = styled.h1`
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 600;
   margin: 0;
   opacity: ${({ theme }) => {

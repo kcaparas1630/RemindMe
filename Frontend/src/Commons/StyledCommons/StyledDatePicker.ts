@@ -7,11 +7,15 @@ const DatePickerWrapper = styled.div<{ isDarkMode: boolean }>`
   .react-datepicker-wrapper {
     width: 85%;
   }
-  
+
   .react-datepicker-popper {
     z-index: 9999;
   }
-  
+
+  .react-datepicker__input-container input {
+    padding: 0;
+  }
+
   input {
     width: 100%;
     height: 53px;
@@ -54,7 +58,7 @@ const DatePickerWrapper = styled.div<{ isDarkMode: boolean }>`
 
   .react-datepicker__calendar-icon {
     padding: 0.5rem;
-    margin-top: 0.8rem;
+    margin-top: 0.5rem;
     width: 1.5em;
     height: 1.5em;
   }
@@ -68,8 +72,8 @@ const FloatingLabel = styled.label<{ isDarkMode: boolean }>`
   transform: translateY(-50%);
   color: gray;
   background-color: ${(props) => {
-        return props.isDarkMode ? '#212529' : '#F8F9FA';
-      }};
+    return props.isDarkMode ? '#212529' : '#F8F9FA';
+  }};
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   transition: 0.1s ease-out;
