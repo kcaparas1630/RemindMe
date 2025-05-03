@@ -12,7 +12,9 @@ const Modal: FC<ModalProps> = ({ isOpen, children, isDarkMode, setIsOpen }) => {
   };
   return (
     <ModalOverlay isOpen={isOpen} onClick={handleClose}>
-      <ModalContentWrapper>
+      <ModalContentWrapper onClick={(e) =>{
+        e.stopPropagation();
+      }}>
         <ModalContent isDarkMode={isDarkMode}>
           {children}
         </ModalContent>

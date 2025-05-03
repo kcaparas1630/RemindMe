@@ -35,19 +35,17 @@ const ModalContent = styled.div<{ isDarkMode: boolean }>`
   }};
   padding: 2rem;
   border-radius: 8px;
-  text-align: center;
-  width: 70vw;
-  height: 50vh;
   display: flex;
-  gap: 24px;
   flex-direction: column;
-  align-items: center;
+  gap: 24px;
   justify-content: center;
-
-  @media (min-width: 1024px) {
-    width: 50vw;
-    height: 50vh;
-  }
+  align-items: center;
+  width: auto;
+  height: auto;
+  max-width: 95vw;
+  max-height: 90vh;
+  box-sizing: border-box;
+  overflow: auto;
 `;
 
 export { ModalOverlay, ModalContent, ModalContentWrapper };

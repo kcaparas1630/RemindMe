@@ -5,8 +5,6 @@ import GetUser from '../../../Hooks/GetUser';
 import LoadingSpinner from '../../../Commons/LoadingSpinner';
 import { ButtonContainer, DashboardHeader2, DashboardHeaderGroup, DashboardHeaderText, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
 import { useMediaQuery } from '@react-hook/media-query';
-import MobileTable from './MobileTable';
-import DesktopTable from './DesktopTable';
 import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
 import Button from '../../../Commons/Button';
@@ -15,10 +13,13 @@ import Overview from './Overview';
 import QuickActions from './QuickActions';
 import Goals from './Goals';
 import { OverviewHeader } from '../Styled-Components/StyledOverview';
+import DashboardTable from './DashboardTable';
+
 const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const navigate = useNavigate();
   const { userName, token } = getUserFromToken();
   const { users, isPending, isError, error } = GetUser(userName, token);
+  // will create a state manager for this.
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   if (isPending) {
@@ -61,9 +62,9 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
           <QuickActions isDarkMode={isDarkMode} />
           <OverviewHeader isDarkMode={isDarkMode}>Tasks</OverviewHeader>
           {isMobile ? (
-            <MobileTable userTasks={users.tasks} />
+            <DashboardTable userTasks={users.tasks} variant="mobile" />
           ) : (
-            <DesktopTable userTasks={users.tasks} />
+            <DashboardTable userTasks={users.tasks} variant="desktop" />
           )}
         </>
       ): (
