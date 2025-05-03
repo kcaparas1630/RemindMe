@@ -5,16 +5,17 @@ import GetUser from '../../../Hooks/GetUser';
 import LoadingSpinner from '../../../Commons/LoadingSpinner';
 import { ButtonContainer, DashboardHeader2, DashboardHeaderGroup, DashboardHeaderText, NoTasksContainer, NoTasksText } from '../Styled-Components/StyledMain';
 import { useMediaQuery } from '@react-hook/media-query';
-import MobileTable from '../DashboardComponents/MobileTable';
-import DesktopTable from '../DashboardComponents/DesktopTable';
+import MobileTableDashboardComponent from './MobileTable';
+import DesktopTableDashboardComponent from './DesktopTable';
 import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
 import Button from '../../../Commons/Button';
 import { useNavigate } from 'react-router-dom';
-import Overview from '../DashboardComponents/Overview';
-import QuickActions from '../DashboardComponents/QuickActions';
-import Goals from '../DashboardComponents/Goals';
+import Overview from './Overview';
+import QuickActions from './QuickActions';
+import Goals from './Goals';
 import { OverviewHeader } from '../Styled-Components/StyledOverview';
+
 const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
   const navigate = useNavigate();
   const { userName, token } = getUserFromToken();
@@ -61,9 +62,9 @@ const Dashboard: FC<GeneralProps> = ({ isDarkMode }): ReactNode => {
           <QuickActions isDarkMode={isDarkMode} />
           <OverviewHeader isDarkMode={isDarkMode}>Tasks</OverviewHeader>
           {isMobile ? (
-            <MobileTable userTasks={users.tasks} />
+            <MobileTableDashboardComponent userTasks={users.tasks} />
           ) : (
-            <DesktopTable userTasks={users.tasks} />
+            <DesktopTableDashboardComponent userTasks={users.tasks} />
           )}
         </>
       ): (

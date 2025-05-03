@@ -20,10 +20,10 @@ const MainPageLayout = lazy(() => {
   return import('./Views/Dashboard/MainPage');
 });
 const Dashboard = lazy(() => {
-  return import('./Views/Dashboard/NavigationComponents/Dashboard');
+  return import('./Views/Dashboard/DashboardComponents/Dashboard');
 });
-const AddTasks = lazy(() => {
-  return import('./Views/Dashboard/NavigationComponents/AddTasks');
+const TaskPage = lazy(() => {
+  return import('./Views/Dashboard/NavigationComponents/TaskPage');
 });
 
 
@@ -65,8 +65,8 @@ const AnimatedRoutes = ({
               element={<Dashboard isDarkMode={isDarkMode} />}
             />
             <Route
-              path="addTasks"
-              element={<AddTasks isDarkMode={isDarkMode} />}
+              path="tasks"
+              element={<TaskPage isDarkMode={isDarkMode} />}
             />
           </Route>
         </Route>
