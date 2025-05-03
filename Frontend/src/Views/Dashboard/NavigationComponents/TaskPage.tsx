@@ -50,6 +50,9 @@ const TaskPage: FC<GeneralProps> = ({ isDarkMode }) => {
   }
 
   const handleTabClick = (tab: string) => {
+    if (tab !== activeTab) {
+      setEditingTaskId(null);
+    }
     setActiveTab(tab);
   };
 
@@ -60,7 +63,11 @@ const TaskPage: FC<GeneralProps> = ({ isDarkMode }) => {
         <TabButton id="tasks-list" label="Task List" isActive={activeTab === 'tasks-list'} controls="tasks-list-panel" onClick={() => {handleTabClick('tasks-list')}} isDarkMode={isDarkMode} />
         <TabButton id="add-task" label="Add Task" isActive={activeTab === 'add-task'} controls="add-tasks-panel" onClick={() => {handleTabClick('add-task')}} isDarkMode={isDarkMode} />
       </TaskNavigation>
-      {activeTab === 'tasks-list' && isMobile ? <MobileTableTaskComponent userTasks={users?.tasks} isDarkMode={isDarkMode} userName={userName} handleEditClick={handleEditClick} handleCancelClick={handleCancelClick} editingTaskId={editingTaskId} /> : <DesktopTableTaskComponent userTasks={users?.tasks} isDarkMode={isDarkMode} userName={userName} handleEditClick={handleEditClick} handleCancelClick={handleCancelClick} editingTaskId={editingTaskId} />}
+      {activeTab === 'tasks-list' && (
+        isMobile 
+          ? <MobileTableTaskComponent userTasks={users?.tasks} isDarkMode={isDarkMode} userName={userName} handleEditClick={handleEditClick} handleCancelClick={handleCancelClick} editingTaskId={editingTaskId} /> 
+          : <DesktopTableTaskComponent userTasks={users?.tasks} isDarkMode={isDarkMode} userName={userName} handleEditClick={handleEditClick} handleCancelClick={handleCancelClick} editingTaskId={editingTaskId} />
+      )}
       {activeTab === 'add-task' && <TaskFormSection userName={userName} isEditing={editingTaskId !== null} onCancel={handleCancelClick} queryClient={queryClient} isDarkMode={isDarkMode} />}
     </>
   );
