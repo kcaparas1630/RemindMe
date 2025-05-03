@@ -45,7 +45,7 @@ const ModalContent = styled.div<{ isDarkMode: boolean }>`
   max-width: 95vw;
   max-height: 90vh;
   box-sizing: border-box;
-  overflow: auto;
+  overflow: hidden;
 `;
 
 export { ModalOverlay, ModalContent, ModalContentWrapper };
