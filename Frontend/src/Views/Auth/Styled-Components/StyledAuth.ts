@@ -33,7 +33,7 @@ const BannerContainer = styled(motion.div)<{ view: string }>`
       return theme.isDarkMode ? '#0d1b2a' : '#E9ECEF';
     }};
     width: 50%;
-    height: 100%;
+    height: 100vh;
   }
 `;
 
@@ -88,6 +88,7 @@ const FormHolderContainer = styled(motion.div)`
   @media (min-width: 1024px) {
     margin: 0;
     width: 50%;
+    height: 100vh;
     justify-content: center;
     align-items: center;
   }
