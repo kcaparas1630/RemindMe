@@ -17,6 +17,8 @@ import TaskInterface from '../../../Interface/TaskInterface.ts';
 import TableLayout from '../../../types/ViewLayoutTypes.ts';
 import Table from '../../../Commons/Table';
 import Modal from '../../../Commons/Modal';
+import Pagination from '../../../Commons/Pagination';
+
 interface TaskTableProps extends isDarkMode {
     userTasks: TaskInterface[] | undefined;
     userName: string;
@@ -34,6 +36,10 @@ const TaskTable: FC<TaskTableProps> = ({ userTasks, isDarkMode, userName, varian
     }>({ taskName: '', taskPriority: 'LOW', taskDueDate: new Date() });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalTask, setModalTask] = useState<TaskInterface | null>(null);
+    
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     const handleEditClick = (task: TaskInterface) => {
       setEditingTaskId(task.id);
@@ -66,10 +72,24 @@ const TaskTable: FC<TaskTableProps> = ({ userTasks, isDarkMode, userName, varian
         setModalTask(null);
     };
 
+    // Calculate pagination
+    const totalTasks = userTasks?.length || 0;
+    const totalPages = Math.ceil(totalTasks / itemsPerPage);
+    
+    // Get current tasks for the page
+    const indexOfLastTask = currentPage * itemsPerPage;
+    const indexOfFirstTask = indexOfLastTask - itemsPerPage;
+    const currentTasks = userTasks?.slice(indexOfFirstTask, indexOfLastTask);
+    
+    // Handle page change
+    const handlePageChange = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
+
     const bodyContent = () => {
         return (
             <>
-            {userTasks && userTasks.map((task, index) => {
+            {currentTasks && currentTasks.map((task, index) => {
                 return (
                     variant === 'desktop' ? (
                         <TableRow key={task.id}>
@@ -169,7 +189,7 @@ const TaskTable: FC<TaskTableProps> = ({ userTasks, isDarkMode, userName, varian
                     </DataRow>
                   </>
                 )}
-                {index !== userTasks.length - 1 && <MobileDivider />}
+                {index !== currentTasks.length - 1 && <MobileDivider />}
               </div>
                 ): <div>Invalid Layout. Only 'desktop' or 'mobile' are allowed.</div>
                 )
@@ -184,6 +204,16 @@ const TaskTable: FC<TaskTableProps> = ({ userTasks, isDarkMode, userName, varian
                 bodyContent={bodyContent()}
                 layout={variant}
             />
+            
+            {totalPages > 1 && (
+                <Pagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                    isDarkMode={isDarkMode}
+                />
+            )}
+            
             {modalTask && (
                 <Modal isOpen={isModalOpen} isDarkMode={isDarkMode} setIsOpen={setIsModalOpen}>
                     <TaskFormSection
