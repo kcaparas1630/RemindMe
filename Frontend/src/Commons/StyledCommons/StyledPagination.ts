@@ -1,15 +1,23 @@
 import styled from '@emotion/styled';
 import isDarkMode from '../../Interface/General/isDarkMode';
 
+interface PaginationContainerProps extends isDarkMode {
+  isActive?: boolean;
+}
+
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
   margin-top: 20px;
+
+  @media (min-width: 1024px) {
+    margin-right: 25%;
+  }
 `;
 
-const PageButton = styled.button<isDarkMode & { isActive?: boolean }>`
+const PageButton = styled.button<PaginationContainerProps>`
   padding: 8px 12px;
   border: 1px solid ${props => {
     return props.isDarkMode ? '#495057' : '#ced4da';
