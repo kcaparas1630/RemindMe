@@ -11,7 +11,7 @@ import LoadingSpinner from '../../../Commons/LoadingSpinner';
 import TaskTable from './TaskTable';
 import { useMediaQuery } from '@react-hook/media-query';
 
-const AddTasks: FC<GeneralProps> = ({ isDarkMode }) => {
+const TaskView: FC<GeneralProps> = ({ isDarkMode }) => {
   const queryClient = useQueryClient();
   const { userName, token } = getUserFromToken();
   const { users, isPending, isError, error } = GetUser(userName, token);
@@ -75,4 +75,4 @@ const AddTasks: FC<GeneralProps> = ({ isDarkMode }) => {
   );
 };
 
-export default AddTasks;
+export default TaskView;
